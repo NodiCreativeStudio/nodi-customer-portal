@@ -425,7 +425,14 @@ export type Database = {
       onboarding_status: "draft" | "submitted"
       project_status: "planning" | "in_progress" | "completed"
       task_status: "todo" | "in_progress" | "done"
-      tech_category: "whatsapp" | "email" | "web" | "loyalty"
+      tech_category:
+        | "whatsapp"
+        | "email"
+        | "web"
+        | "loyalty"
+        | "calendar"
+        | "analytics"
+        | "sms"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -559,7 +566,15 @@ export const Constants = {
       onboarding_status: ["draft", "submitted"],
       project_status: ["planning", "in_progress", "completed"],
       task_status: ["todo", "in_progress", "done"],
-      tech_category: ["whatsapp", "email", "web", "loyalty"],
+      tech_category: [
+        "whatsapp",
+        "email",
+        "web",
+        "loyalty",
+        "calendar",
+        "analytics",
+        "sms",
+      ],
     },
   },
 } as const
