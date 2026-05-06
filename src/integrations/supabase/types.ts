@@ -16,37 +16,46 @@ export type Database = {
     Tables: {
       clients: {
         Row: {
+          address: string | null
           company_name: string
           contact_email: string | null
           contact_phone: string | null
           contract_date: string | null
           created_at: string
+          employee_count: string | null
           id: string
           industry: Database["public"]["Enums"]["client_industry"] | null
           status: Database["public"]["Enums"]["client_status"]
           updated_at: string
+          website: string | null
         }
         Insert: {
+          address?: string | null
           company_name: string
           contact_email?: string | null
           contact_phone?: string | null
           contract_date?: string | null
           created_at?: string
+          employee_count?: string | null
           id?: string
           industry?: Database["public"]["Enums"]["client_industry"] | null
           status?: Database["public"]["Enums"]["client_status"]
           updated_at?: string
+          website?: string | null
         }
         Update: {
+          address?: string | null
           company_name?: string
           contact_email?: string | null
           contact_phone?: string | null
           contract_date?: string | null
           created_at?: string
+          employee_count?: string | null
           id?: string
           industry?: Database["public"]["Enums"]["client_industry"] | null
           status?: Database["public"]["Enums"]["client_status"]
           updated_at?: string
+          website?: string | null
         }
         Relationships: []
       }
@@ -263,6 +272,7 @@ export type Database = {
           budget: number | null
           client_id: string
           created_at: string
+          description: string | null
           end_date: string | null
           id: string
           project_name: string
@@ -274,6 +284,7 @@ export type Database = {
           budget?: number | null
           client_id: string
           created_at?: string
+          description?: string | null
           end_date?: string | null
           id?: string
           project_name: string
@@ -285,6 +296,7 @@ export type Database = {
           budget?: number | null
           client_id?: string
           created_at?: string
+          description?: string | null
           end_date?: string | null
           id?: string
           project_name?: string
@@ -309,6 +321,7 @@ export type Database = {
           description: string | null
           due_date: string | null
           id: string
+          priority: Database["public"]["Enums"]["task_priority"]
           project_id: string
           status: Database["public"]["Enums"]["task_status"]
           title: string
@@ -320,6 +333,7 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           id?: string
+          priority?: Database["public"]["Enums"]["task_priority"]
           project_id: string
           status?: Database["public"]["Enums"]["task_status"]
           title: string
@@ -331,6 +345,7 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           id?: string
+          priority?: Database["public"]["Enums"]["task_priority"]
           project_id?: string
           status?: Database["public"]["Enums"]["task_status"]
           title?: string
@@ -497,6 +512,7 @@ export type Database = {
         | "other"
       onboarding_status: "draft" | "submitted"
       project_status: "planning" | "in_progress" | "completed"
+      task_priority: "low" | "medium" | "high"
       task_status: "todo" | "in_progress" | "done"
       tech_category:
         | "whatsapp"
@@ -647,6 +663,7 @@ export const Constants = {
       ],
       onboarding_status: ["draft", "submitted"],
       project_status: ["planning", "in_progress", "completed"],
+      task_priority: ["low", "medium", "high"],
       task_status: ["todo", "in_progress", "done"],
       tech_category: [
         "whatsapp",
