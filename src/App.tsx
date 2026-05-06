@@ -44,7 +44,7 @@ const App = () => (
             <Route path="/projects/:id" element={<AppLayout><ProjectDetail /></AppLayout>} />
             <Route path="/uploads" element={<AppLayout><Uploads /></AppLayout>} />
             <Route path="/credentials" element={<AppLayout><Credentials /></AppLayout>} />
-            <Route path="/stack" element={<Wrap title="Tech Stack" description="Active services and renewals." />} />
+            <Route path="/stack" element={<AppLayout><TechStack /></AppLayout>} />
             <Route path="/contacts" element={<Wrap title="Contacts" description="Key contact people." />} />
             <Route path="/downloads" element={<Wrap title="Downloads" description="Reports and resources." />} />
             <Route path="/admin" element={<Wrap title="Admin" description="Agency administration." />} />
