@@ -16,7 +16,13 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { LayoutGrid, List, Search, ArrowRight, Inbox, Mail } from "lucide-react";
+import { LayoutGrid, List, Search, ArrowRight, Inbox, Mail, Plus } from "lucide-react";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 type ProjectStatus = "planning" | "in_progress" | "completed";
 
