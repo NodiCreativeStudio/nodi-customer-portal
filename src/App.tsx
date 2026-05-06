@@ -17,6 +17,7 @@ import ProjectDetail from "./pages/projects/ProjectDetail";
 import Uploads from "./pages/Uploads";
 import Credentials from "./pages/Credentials";
 import TechStack from "./pages/TechStack";
+import Contacts from "./pages/Contacts";
 
 const queryClient = new QueryClient();
 
