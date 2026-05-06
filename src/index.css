@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,27 +34,31 @@
     --neutral: 210 29% 24%;
     --neutral-foreground: 0 0% 100%;
 
-    --success: 142 71% 45%;
-    --warning: 38 92% 50%;
+    --success: 145 63% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 36 90% 51%;
+    --warning-foreground: 0 0% 100%;
 
     --border: 214 20% 89%;
     --input: 214 20% 89%;
     --ring: 213 82% 51%;
 
-    --radius: 0.625rem;
+    --radius: 0.5rem;
 
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --shadow-elegant: 0 4px 20px -4px hsl(var(--primary) / 0.18);
     --shadow-card: 0 1px 3px 0 hsl(210 29% 24% / 0.06), 0 1px 2px -1px hsl(210 29% 24% / 0.06);
+    --shadow-hover: 0 8px 24px -6px hsl(210 29% 24% / 0.12);
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 210 29% 24%;
-    --sidebar-primary: 213 82% 51%;
+    /* Dark sidebar in both modes per design spec */
+    --sidebar-background: 210 29% 24%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 213 82% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 213 82% 95%;
-    --sidebar-accent-foreground: 213 82% 35%;
-    --sidebar-border: 214 20% 91%;
-    --sidebar-ring: 213 82% 51%;
+    --sidebar-accent: 210 29% 30%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 210 29% 18%;
+    --sidebar-ring: 213 82% 60%;
   }
 
   .dark {
@@ -84,29 +90,53 @@
     --neutral: 210 20% 95%;
     --neutral-foreground: 210 29% 14%;
 
-    --success: 142 60% 50%;
-    --warning: 38 92% 55%;
+    --success: 145 60% 50%;
+    --success-foreground: 0 0% 100%;
+    --warning: 36 90% 55%;
+    --warning-foreground: 0 0% 100%;
 
     --border: 210 25% 20%;
     --input: 210 25% 20%;
     --ring: 213 90% 60%;
 
-    --sidebar-background: 210 29% 12%;
+    --sidebar-background: 210 29% 8%;
     --sidebar-foreground: 210 20% 90%;
     --sidebar-primary: 213 90% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 25% 18%;
-    --sidebar-accent-foreground: 213 90% 85%;
-    --sidebar-border: 210 25% 18%;
+    --sidebar-accent: 210 29% 16%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 210 29% 14%;
     --sidebar-ring: 213 90% 60%;
   }
 }
 
 @layer base {
   * { @apply border-border; }
+  html { scroll-behavior: smooth; }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
     font-feature-settings: 'cv11', 'ss01';
+  }
+  h1 { @apply text-3xl font-bold tracking-tight text-neutral; }
+  h2 { @apply text-2xl font-bold tracking-tight text-neutral; }
+  h3 { @apply text-lg font-semibold text-neutral; }
+  a { @apply transition-colors; }
+
+  /* Focus ring for keyboard accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer utilities {
+  .hover-scale { @apply transition-transform duration-200 hover:scale-[1.02]; }
+  .hover-lift {
+    @apply transition-all duration-200;
+    box-shadow: var(--shadow-card);
+  }
+  .hover-lift:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+  .story-link {
+    @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
   }
 }

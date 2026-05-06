@@ -72,7 +72,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               </DropdownMenu>
             </div>
           </header>
-          <main className="flex-1 p-6">{children}</main>
+          <main className="flex-1 p-6 animate-fade-in">{children}</main>
         </div>
       </div>
     </SidebarProvider>
