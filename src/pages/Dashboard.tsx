@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { formatDistanceToNow, format, differenceInDays, isWithinInterval, addDays } from "date-fns";
+import { formatDistanceToNow, format, differenceInDays, addDays } from "date-fns";
 
 type ProjectStatus = "planning" | "in_progress" | "completed";
 type TaskStatus = "todo" | "in_progress" | "done";
