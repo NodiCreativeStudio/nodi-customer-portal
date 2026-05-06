@@ -53,29 +53,41 @@ export type Database = {
       credentials: {
         Row: {
           access_url: string | null
+          category: string
           client_id: string
           created_at: string
           id: string
+          notes: string | null
+          password: string | null
           platform: string | null
           service_name: string
+          updated_at: string
           username: string | null
         }
         Insert: {
           access_url?: string | null
+          category?: string
           client_id: string
           created_at?: string
           id?: string
+          notes?: string | null
+          password?: string | null
           platform?: string | null
           service_name: string
+          updated_at?: string
           username?: string | null
         }
         Update: {
           access_url?: string | null
+          category?: string
           client_id?: string
           created_at?: string
           id?: string
+          notes?: string | null
+          password?: string | null
           platform?: string | null
           service_name?: string
+          updated_at?: string
           username?: string | null
         }
         Relationships: [

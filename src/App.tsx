@@ -15,6 +15,7 @@ import Onboarding from "./pages/Onboarding";
 import ProjectsList from "./pages/projects/ProjectsList";
 import ProjectDetail from "./pages/projects/ProjectDetail";
 import Uploads from "./pages/Uploads";
+import Credentials from "./pages/Credentials";
 
 const queryClient = new QueryClient();
 
@@ -41,7 +42,7 @@ const App = () => (
             <Route path="/projects" element={<AppLayout><ProjectsList /></AppLayout>} />
             <Route path="/projects/:id" element={<AppLayout><ProjectDetail /></AppLayout>} />
             <Route path="/uploads" element={<AppLayout><Uploads /></AppLayout>} />
-            <Route path="/credentials" element={<Wrap title="Credentials" description="Service access details." />} />
+            <Route path="/credentials" element={<AppLayout><Credentials /></AppLayout>} />
             <Route path="/stack" element={<Wrap title="Tech Stack" description="Active services and renewals." />} />
             <Route path="/contacts" element={<Wrap title="Contacts" description="Key contact people." />} />
             <Route path="/downloads" element={<Wrap title="Downloads" description="Reports and resources." />} />
