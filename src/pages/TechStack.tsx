@@ -175,8 +175,8 @@ export default function TechStack() {
           <h1 className="text-3xl font-bold tracking-tight">Your Tech Stack</h1>
           <p className="text-sm text-muted-foreground">Services and tools integrated into your account.</p>
         </div>
-        <Button onClick={() => toast.info("Contact your account manager to add a new service")}>
-          <Plus className="mr-2 h-4 w-4" />Add service
+        <Button onClick={() => setOpenNew(true)}>
+          <Plus className="mr-2 h-4 w-4" />Add Service
         </Button>
       </div>
 
