@@ -426,6 +426,61 @@ export default function TechStack() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={openNew} onOpenChange={setOpenNew}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add Service</DialogTitle>
+            <DialogDescription>Connect a new service to your tech stack.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label>Service Name *</Label>
+              <Input value={newForm.service_name} maxLength={120}
+                onChange={(e) => setNewForm({ ...newForm, service_name: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Category</Label>
+              <Select value={newForm.category} onValueChange={(v) => setNewForm({ ...newForm, category: v as Category })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {CATEGORIES.map((c) => (
+                    <SelectItem key={c.key} value={c.key}>{c.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Monthly Cost (€)</Label>
+                <Input type="number" min="0" step="0.01" value={newForm.cost_monthly}
+                  onChange={(e) => setNewForm({ ...newForm, cost_monthly: e.target.value })} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Renewal Date</Label>
+                <Input type="date" value={newForm.renewal_date}
+                  onChange={(e) => setNewForm({ ...newForm, renewal_date: e.target.value })} />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Status</Label>
+              <Select value={newForm.status} onValueChange={(v) => setNewForm({ ...newForm, status: v as Status })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="trial">Trial</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="error">Error</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenNew(false)}>Cancel</Button>
+            <Button onClick={submitNew} disabled={savingNew}>{savingNew ? "Saving..." : "Add Service"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
