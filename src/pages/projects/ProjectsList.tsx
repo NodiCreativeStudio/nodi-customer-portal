@@ -16,7 +16,13 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { LayoutGrid, List, Search, ArrowRight, Inbox, Mail } from "lucide-react";
+import { LayoutGrid, List, Search, ArrowRight, Inbox, Mail, Plus } from "lucide-react";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 type ProjectStatus = "planning" | "in_progress" | "completed";
 
@@ -58,6 +64,13 @@ function progressOf(p: Project): number {
 export default function ProjectsList() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [companyId, setCompanyId] = useState<string | null>(null);
+  const [openNew, setOpenNew] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    project_name: "", description: "", status: "planning" as ProjectStatus,
+    start_date: "", end_date: "", budget: "",
+  });
   const [projects, setProjects] = useState<Project[]>([]);
   const [view, setView] = useState<"cards" | "table">("cards");
   const [filter, setFilter] = useState<"all" | "active" | "completed" | "archived">("all");
@@ -71,9 +84,11 @@ export default function ProjectsList() {
       setLoading(true);
       const { data: prof } = await supabase
         .from("profiles").select("company_id").eq("id", user.id).maybeSingle();
-      if (!prof?.company_id) { if (!cancel) { setProjects([]); setLoading(false); } return; }
+      const cid = prof?.company_id ?? null;
+      if (!cancel) setCompanyId(cid);
+      if (!cid) { if (!cancel) { setProjects([]); setLoading(false); } return; }
       const { data } = await supabase
-        .from("projects").select("*").eq("client_id", prof.company_id);
+        .from("projects").select("*").eq("client_id", cid);
       if (!cancel) {
         setProjects((data ?? []) as Project[]);
         setLoading(false);
@@ -81,6 +96,33 @@ export default function ProjectsList() {
     })();
     return () => { cancel = true; };
   }, [user]);
+
+  const reload = async () => {
+    if (!companyId) return;
+    const { data } = await supabase.from("projects").select("*").eq("client_id", companyId);
+    setProjects((data ?? []) as Project[]);
+  };
+
+  const submitNew = async () => {
+    if (!form.project_name.trim()) { toast.error("Project name is required"); return; }
+    if (!companyId) { toast.error("Account not linked to a company"); return; }
+    setSaving(true);
+    const { error } = await supabase.from("projects").insert({
+      client_id: companyId,
+      project_name: form.project_name.trim(),
+      description: form.description.trim() || null,
+      status: form.status,
+      start_date: form.start_date || null,
+      end_date: form.end_date || null,
+      budget: form.budget ? Number(form.budget) : null,
+    } as never);
+    setSaving(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("✓ Project created");
+    setOpenNew(false);
+    setForm({ project_name: "", description: "", status: "planning", start_date: "", end_date: "", budget: "" });
+    reload();
+  };
 
   const filtered = useMemo(() => {
     let list = [...projects];
@@ -117,8 +159,64 @@ export default function ProjectsList() {
             variant={view === "table" ? "default" : "outline"} size="sm"
             onClick={() => setView("table")}
           ><List className="h-4 w-4" /></Button>
+          <Button size="sm" onClick={() => setOpenNew(true)}>
+            <Plus className="mr-1 h-4 w-4" />New Project
+          </Button>
         </div>
       </div>
+
+      <Dialog open={openNew} onOpenChange={setOpenNew}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>New Project</DialogTitle>
+            <DialogDescription>Create a new project for your company.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label>Project Name *</Label>
+              <Input value={form.project_name} maxLength={120}
+                onChange={(e) => setForm({ ...form, project_name: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Description</Label>
+              <Textarea value={form.description} maxLength={2000}
+                onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Status</Label>
+              <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as ProjectStatus })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="planning">Planning</SelectItem>
+                  <SelectItem value="in_progress">In progress</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Start Date</Label>
+                <Input type="date" value={form.start_date}
+                  onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>End Date</Label>
+                <Input type="date" value={form.end_date}
+                  onChange={(e) => setForm({ ...form, end_date: e.target.value })} />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Budget (€)</Label>
+              <Input type="number" min="0" value={form.budget}
+                onChange={(e) => setForm({ ...form, budget: e.target.value })} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenNew(false)}>Cancel</Button>
+            <Button onClick={submitNew} disabled={saving}>{saving ? "Saving..." : "Create"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Card>
         <CardContent className="flex flex-col gap-3 p-4 md:flex-row md:items-center">

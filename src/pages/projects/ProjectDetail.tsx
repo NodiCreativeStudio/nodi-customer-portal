@@ -14,8 +14,11 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { format, differenceInDays } from "date-fns";
 import {
@@ -134,6 +137,39 @@ export default function ProjectDetail() {
   const [taskFilter, setTaskFilter] = useState<"all" | TaskStatus>("all");
   const [openTask, setOpenTask] = useState<Task | null>(null);
   const [deliverables, setDeliverables] = useState<{ name: string; date: string; done: boolean }[]>([]);
+  const [openNewTask, setOpenNewTask] = useState(false);
+  const [savingTask, setSavingTask] = useState(false);
+  const [taskForm, setTaskForm] = useState({
+    title: "", description: "", status: "todo" as TaskStatus,
+    due_date: "", priority: "medium" as "low" | "medium" | "high",
+  });
+
+  const reloadTasks = async () => {
+    if (!id) return;
+    const { data } = await supabase.from("tasks").select("*")
+      .eq("project_id", id).order("due_date", { ascending: true });
+    setTasks((data ?? []) as Task[]);
+  };
+
+  const submitNewTask = async () => {
+    if (!id) return;
+    if (!taskForm.title.trim()) { toast.error("Title is required"); return; }
+    setSavingTask(true);
+    const { error } = await supabase.from("tasks").insert({
+      project_id: id,
+      title: taskForm.title.trim(),
+      description: taskForm.description.trim() || null,
+      status: taskForm.status,
+      due_date: taskForm.due_date || null,
+      priority: taskForm.priority,
+    } as never);
+    setSavingTask(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("✓ Task created");
+    setOpenNewTask(false);
+    setTaskForm({ title: "", description: "", status: "todo", due_date: "", priority: "medium" });
+    reloadTasks();
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -269,8 +305,8 @@ export default function ProjectDetail() {
                 <SelectItem value="done">Done</SelectItem>
               </SelectContent>
             </Select>
-            <Button size="sm" onClick={() => toast.info("Task creation coming soon")}>
-              <Plus className="mr-1 h-4 w-4" />Add Task
+            <Button size="sm" onClick={() => setOpenNewTask(true)}>
+              <Plus className="mr-1 h-4 w-4" />New Task
             </Button>
           </div>
         </CardHeader>
@@ -411,6 +447,60 @@ export default function ProjectDetail() {
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={openNewTask} onOpenChange={setOpenNewTask}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>New Task</DialogTitle>
+            <DialogDescription>Create a new task for this project.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label>Title *</Label>
+              <Input value={taskForm.title} maxLength={200}
+                onChange={(e) => setTaskForm({ ...taskForm, title: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Description</Label>
+              <Textarea value={taskForm.description} maxLength={2000}
+                onChange={(e) => setTaskForm({ ...taskForm, description: e.target.value })} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Status</Label>
+                <Select value={taskForm.status} onValueChange={(v) => setTaskForm({ ...taskForm, status: v as TaskStatus })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todo">To-Do</SelectItem>
+                    <SelectItem value="in_progress">In Progress</SelectItem>
+                    <SelectItem value="done">Done</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label>Priority</Label>
+                <Select value={taskForm.priority} onValueChange={(v) => setTaskForm({ ...taskForm, priority: v as "low" | "medium" | "high" })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Due Date</Label>
+              <Input type="date" value={taskForm.due_date}
+                onChange={(e) => setTaskForm({ ...taskForm, due_date: e.target.value })} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenNewTask(false)}>Cancel</Button>
+            <Button onClick={submitNewTask} disabled={savingTask}>{savingTask ? "Saving..." : "Create"}</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

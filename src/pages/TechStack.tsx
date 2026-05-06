@@ -13,6 +13,7 @@ import {
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -85,6 +86,32 @@ export default function TechStack() {
   const [tab, setTab] = useState<"all" | Category>("all");
   const [viewing, setViewing] = useState<Service | null>(null);
   const [confirmDc, setConfirmDc] = useState<Service | null>(null);
+  const [openNew, setOpenNew] = useState(false);
+  const [savingNew, setSavingNew] = useState(false);
+  const [newForm, setNewForm] = useState({
+    service_name: "", category: "whatsapp" as Category,
+    cost_monthly: "", renewal_date: "", status: "active" as Status,
+  });
+
+  const submitNew = async () => {
+    if (!newForm.service_name.trim()) { toast.error("Service name is required"); return; }
+    if (!companyId) { toast.error("Account not linked to a company"); return; }
+    setSavingNew(true);
+    const { error } = await supabase.from("tech_stack").insert({
+      client_id: companyId,
+      service_name: newForm.service_name.trim(),
+      category: newForm.category,
+      status: newForm.status,
+      cost_monthly: newForm.cost_monthly ? Number(newForm.cost_monthly) : null,
+      renewal_date: newForm.renewal_date || null,
+    } as never);
+    setSavingNew(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("✓ Service added");
+    setOpenNew(false);
+    setNewForm({ service_name: "", category: "whatsapp", cost_monthly: "", renewal_date: "", status: "active" });
+    load();
+  };
 
   const load = useCallback(async () => {
     if (!user) return;
@@ -148,8 +175,8 @@ export default function TechStack() {
           <h1 className="text-3xl font-bold tracking-tight">Your Tech Stack</h1>
           <p className="text-sm text-muted-foreground">Services and tools integrated into your account.</p>
         </div>
-        <Button onClick={() => toast.info("Contact your account manager to add a new service")}>
-          <Plus className="mr-2 h-4 w-4" />Add service
+        <Button onClick={() => setOpenNew(true)}>
+          <Plus className="mr-2 h-4 w-4" />Add Service
         </Button>
       </div>
 
@@ -399,6 +426,61 @@ export default function TechStack() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={openNew} onOpenChange={setOpenNew}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add Service</DialogTitle>
+            <DialogDescription>Connect a new service to your tech stack.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label>Service Name *</Label>
+              <Input value={newForm.service_name} maxLength={120}
+                onChange={(e) => setNewForm({ ...newForm, service_name: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Category</Label>
+              <Select value={newForm.category} onValueChange={(v) => setNewForm({ ...newForm, category: v as Category })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {CATEGORIES.map((c) => (
+                    <SelectItem key={c.key} value={c.key}>{c.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Monthly Cost (€)</Label>
+                <Input type="number" min="0" step="0.01" value={newForm.cost_monthly}
+                  onChange={(e) => setNewForm({ ...newForm, cost_monthly: e.target.value })} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Renewal Date</Label>
+                <Input type="date" value={newForm.renewal_date}
+                  onChange={(e) => setNewForm({ ...newForm, renewal_date: e.target.value })} />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Status</Label>
+              <Select value={newForm.status} onValueChange={(v) => setNewForm({ ...newForm, status: v as Status })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="trial">Trial</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="error">Error</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenNew(false)}>Cancel</Button>
+            <Button onClick={submitNew} disabled={savingNew}>{savingNew ? "Saving..." : "Add Service"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
