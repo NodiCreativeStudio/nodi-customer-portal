@@ -64,6 +64,13 @@ function progressOf(p: Project): number {
 export default function ProjectsList() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [companyId, setCompanyId] = useState<string | null>(null);
+  const [openNew, setOpenNew] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    project_name: "", description: "", status: "planning" as ProjectStatus,
+    start_date: "", end_date: "", budget: "",
+  });
   const [projects, setProjects] = useState<Project[]>([]);
   const [view, setView] = useState<"cards" | "table">("cards");
   const [filter, setFilter] = useState<"all" | "active" | "completed" | "archived">("all");
