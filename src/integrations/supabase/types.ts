@@ -88,6 +88,87 @@ export type Database = {
           },
         ]
       }
+      onboarding_moduli: {
+        Row: {
+          additional_requirements: string | null
+          address: string | null
+          agreed_terms: boolean
+          best_time: string | null
+          budget_range: string | null
+          company_name: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          description: string | null
+          employees_range: string | null
+          founding_year: number | null
+          goals: string[]
+          id: string
+          industry: Database["public"]["Enums"]["client_industry"] | null
+          preferred_contact: string | null
+          status: Database["public"]["Enums"]["onboarding_status"]
+          submitted_at: string | null
+          timeline: string | null
+          updated_at: string
+          user_id: string
+          vat_id: string | null
+          vertical_data: Json
+          website: string | null
+        }
+        Insert: {
+          additional_requirements?: string | null
+          address?: string | null
+          agreed_terms?: boolean
+          best_time?: string | null
+          budget_range?: string | null
+          company_name?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          employees_range?: string | null
+          founding_year?: number | null
+          goals?: string[]
+          id?: string
+          industry?: Database["public"]["Enums"]["client_industry"] | null
+          preferred_contact?: string | null
+          status?: Database["public"]["Enums"]["onboarding_status"]
+          submitted_at?: string | null
+          timeline?: string | null
+          updated_at?: string
+          user_id: string
+          vat_id?: string | null
+          vertical_data?: Json
+          website?: string | null
+        }
+        Update: {
+          additional_requirements?: string | null
+          address?: string | null
+          agreed_terms?: boolean
+          best_time?: string | null
+          budget_range?: string | null
+          company_name?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          employees_range?: string | null
+          founding_year?: number | null
+          goals?: string[]
+          id?: string
+          industry?: Database["public"]["Enums"]["client_industry"] | null
+          preferred_contact?: string | null
+          status?: Database["public"]["Enums"]["onboarding_status"]
+          submitted_at?: string | null
+          timeline?: string | null
+          updated_at?: string
+          user_id?: string
+          vat_id?: string | null
+          vertical_data?: Json
+          website?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           company_id: string | null
@@ -323,6 +404,7 @@ export type Database = {
       app_role: "admin" | "client"
       client_industry: "retail" | "wellness" | "repair"
       client_status: "active" | "inactive"
+      onboarding_status: "draft" | "submitted"
       project_status: "planning" | "in_progress" | "completed"
       task_status: "todo" | "in_progress" | "done"
       tech_category: "whatsapp" | "email" | "web" | "loyalty"
@@ -456,6 +538,7 @@ export const Constants = {
       app_role: ["admin", "client"],
       client_industry: ["retail", "wellness", "repair"],
       client_status: ["active", "inactive"],
+      onboarding_status: ["draft", "submitted"],
       project_status: ["planning", "in_progress", "completed"],
       task_status: ["todo", "in_progress", "done"],
       tech_category: ["whatsapp", "email", "web", "loyalty"],
