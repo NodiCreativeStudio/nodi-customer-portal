@@ -12,6 +12,8 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import AppLayout from "./components/AppLayout";
 import Placeholder from "./pages/Placeholder";
 import Onboarding from "./pages/Onboarding";
+import ProjectsList from "./pages/projects/ProjectsList";
+import ProjectDetail from "./pages/projects/ProjectDetail";
 
 const queryClient = new QueryClient();
 
@@ -35,7 +37,8 @@ const App = () => (
             <Route path="/auth/reset-password" element={<ResetPassword />} />
             <Route path="/" element={<Index />} />
             <Route path="/onboarding" element={<AppLayout><Onboarding /></AppLayout>} />
-            <Route path="/projects" element={<Wrap title="Projects" description="Track project status and milestones." />} />
+            <Route path="/projects" element={<AppLayout><ProjectsList /></AppLayout>} />
+            <Route path="/projects/:id" element={<AppLayout><ProjectDetail /></AppLayout>} />
             <Route path="/uploads" element={<Wrap title="Uploads" description="Documents and assets." />} />
             <Route path="/credentials" element={<Wrap title="Credentials" description="Service access details." />} />
             <Route path="/stack" element={<Wrap title="Tech Stack" description="Active services and renewals." />} />
