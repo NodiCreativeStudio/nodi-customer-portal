@@ -15,6 +15,7 @@ import Onboarding from "./pages/Onboarding";
 import ProjectsList from "./pages/projects/ProjectsList";
 import ProjectDetail from "./pages/projects/ProjectDetail";
 import Uploads from "./pages/Uploads";
+import Credentials from "./pages/Credentials";
 
 const queryClient = new QueryClient();
 
