@@ -18,6 +18,7 @@ import Uploads from "./pages/Uploads";
 import Credentials from "./pages/Credentials";
 import TechStack from "./pages/TechStack";
 import Contacts from "./pages/Contacts";
+import Downloads from "./pages/Downloads";
 
 const queryClient = new QueryClient();
 
@@ -47,7 +48,7 @@ const App = () => (
             <Route path="/credentials" element={<AppLayout><Credentials /></AppLayout>} />
             <Route path="/stack" element={<AppLayout><TechStack /></AppLayout>} />
             <Route path="/contacts" element={<AppLayout><Contacts /></AppLayout>} />
-            <Route path="/downloads" element={<Wrap title="Downloads" description="Reports and resources." />} />
+            <Route path="/downloads" element={<AppLayout><Downloads /></AppLayout>} />
             <Route path="/admin" element={<Wrap title="Admin" description="Agency administration." />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

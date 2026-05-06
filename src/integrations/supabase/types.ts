@@ -100,6 +100,48 @@ export type Database = {
           },
         ]
       }
+      documents: {
+        Row: {
+          category: Database["public"]["Enums"]["document_category"]
+          client_id: string
+          created_at: string
+          description: string | null
+          external_url: string | null
+          file_size: number | null
+          id: string
+          mime_type: string | null
+          name: string
+          storage_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["document_category"]
+          client_id: string
+          created_at?: string
+          description?: string | null
+          external_url?: string | null
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          name: string
+          storage_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["document_category"]
+          client_id?: string
+          created_at?: string
+          description?: string | null
+          external_url?: string | null
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          name?: string
+          storage_path?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       onboarding_moduli: {
         Row: {
           additional_requirements: string | null
@@ -446,6 +488,13 @@ export type Database = {
       app_role: "admin" | "client"
       client_industry: "retail" | "wellness" | "repair"
       client_status: "active" | "inactive"
+      document_category:
+        | "report"
+        | "invoice"
+        | "contract"
+        | "deliverable"
+        | "onboarding"
+        | "other"
       onboarding_status: "draft" | "submitted"
       project_status: "planning" | "in_progress" | "completed"
       task_status: "todo" | "in_progress" | "done"
@@ -588,6 +637,14 @@ export const Constants = {
       app_role: ["admin", "client"],
       client_industry: ["retail", "wellness", "repair"],
       client_status: ["active", "inactive"],
+      document_category: [
+        "report",
+        "invoice",
+        "contract",
+        "deliverable",
+        "onboarding",
+        "other",
+      ],
       onboarding_status: ["draft", "submitted"],
       project_status: ["planning", "in_progress", "completed"],
       task_status: ["todo", "in_progress", "done"],
