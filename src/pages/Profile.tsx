@@ -216,9 +216,12 @@ export default function Profile() {
             <CardTitle className="flex items-center gap-2"><Database className="h-5 w-5" /> Test Data</CardTitle>
             <CardDescription>Seed the database with a fake client, project, tasks and tech stack.</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-wrap gap-2">
             <Button onClick={seedTestData} disabled={seeding}>
-              {seeding ? "Creating..." : "Generate test data"}
+              {seeding ? "Working..." : "Generate test data"}
+            </Button>
+            <Button variant="outline" onClick={clearTestData} disabled={seeding}>
+              Clear test data
             </Button>
           </CardContent>
         </Card>
