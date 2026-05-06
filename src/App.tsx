@@ -22,6 +22,7 @@ import Downloads from "./pages/Downloads";
 import AdminGuard from "./components/AdminGuard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminClientDetail from "./pages/admin/AdminClientDetail";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
