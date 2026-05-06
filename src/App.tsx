@@ -19,6 +19,9 @@ import Credentials from "./pages/Credentials";
 import TechStack from "./pages/TechStack";
 import Contacts from "./pages/Contacts";
 import Downloads from "./pages/Downloads";
+import AdminGuard from "./components/AdminGuard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminClientDetail from "./pages/admin/AdminClientDetail";
 
 const queryClient = new QueryClient();
 
@@ -49,7 +52,8 @@ const App = () => (
             <Route path="/stack" element={<AppLayout><TechStack /></AppLayout>} />
             <Route path="/contacts" element={<AppLayout><Contacts /></AppLayout>} />
             <Route path="/downloads" element={<AppLayout><Downloads /></AppLayout>} />
-            <Route path="/admin" element={<Wrap title="Admin" description="Agency administration." />} />
+            <Route path="/admin" element={<AppLayout><AdminGuard><AdminDashboard /></AdminGuard></AppLayout>} />
+            <Route path="/admin/clients/:id" element={<AppLayout><AdminGuard><AdminClientDetail /></AdminGuard></AppLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
