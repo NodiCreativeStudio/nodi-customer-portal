@@ -14,6 +14,7 @@ import Placeholder from "./pages/Placeholder";
 import Onboarding from "./pages/Onboarding";
 import ProjectsList from "./pages/projects/ProjectsList";
 import ProjectDetail from "./pages/projects/ProjectDetail";
+import Uploads from "./pages/Uploads";
 
 const queryClient = new QueryClient();
 
