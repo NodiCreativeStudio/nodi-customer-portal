@@ -137,6 +137,39 @@ export default function ProjectDetail() {
   const [taskFilter, setTaskFilter] = useState<"all" | TaskStatus>("all");
   const [openTask, setOpenTask] = useState<Task | null>(null);
   const [deliverables, setDeliverables] = useState<{ name: string; date: string; done: boolean }[]>([]);
+  const [openNewTask, setOpenNewTask] = useState(false);
+  const [savingTask, setSavingTask] = useState(false);
+  const [taskForm, setTaskForm] = useState({
+    title: "", description: "", status: "todo" as TaskStatus,
+    due_date: "", priority: "medium" as "low" | "medium" | "high",
+  });
+
+  const reloadTasks = async () => {
+    if (!id) return;
+    const { data } = await supabase.from("tasks").select("*")
+      .eq("project_id", id).order("due_date", { ascending: true });
+    setTasks((data ?? []) as Task[]);
+  };
+
+  const submitNewTask = async () => {
+    if (!id) return;
+    if (!taskForm.title.trim()) { toast.error("Title is required"); return; }
+    setSavingTask(true);
+    const { error } = await supabase.from("tasks").insert({
+      project_id: id,
+      title: taskForm.title.trim(),
+      description: taskForm.description.trim() || null,
+      status: taskForm.status,
+      due_date: taskForm.due_date || null,
+      priority: taskForm.priority,
+    } as never);
+    setSavingTask(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("✓ Task created");
+    setOpenNewTask(false);
+    setTaskForm({ title: "", description: "", status: "todo", due_date: "", priority: "medium" });
+    reloadTasks();
+  };
 
   useEffect(() => {
     if (!id) return;
