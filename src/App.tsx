@@ -12,6 +12,8 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import AppLayout from "./components/AppLayout";
 import Placeholder from "./pages/Placeholder";
 import Onboarding from "./pages/Onboarding";
+import ProjectsList from "./pages/projects/ProjectsList";
+import ProjectDetail from "./pages/projects/ProjectDetail";
 
 const queryClient = new QueryClient();
 
