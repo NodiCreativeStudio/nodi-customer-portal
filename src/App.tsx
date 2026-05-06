@@ -42,7 +42,7 @@ const App = () => (
             <Route path="/projects" element={<AppLayout><ProjectsList /></AppLayout>} />
             <Route path="/projects/:id" element={<AppLayout><ProjectDetail /></AppLayout>} />
             <Route path="/uploads" element={<AppLayout><Uploads /></AppLayout>} />
-            <Route path="/credentials" element={<Wrap title="Credentials" description="Service access details." />} />
+            <Route path="/credentials" element={<AppLayout><Credentials /></AppLayout>} />
             <Route path="/stack" element={<Wrap title="Tech Stack" description="Active services and renewals." />} />
             <Route path="/contacts" element={<Wrap title="Contacts" description="Key contact people." />} />
             <Route path="/downloads" element={<Wrap title="Downloads" description="Reports and resources." />} />
