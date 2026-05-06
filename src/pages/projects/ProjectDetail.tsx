@@ -305,8 +305,8 @@ export default function ProjectDetail() {
                 <SelectItem value="done">Done</SelectItem>
               </SelectContent>
             </Select>
-            <Button size="sm" onClick={() => toast.info("Task creation coming soon")}>
-              <Plus className="mr-1 h-4 w-4" />Add Task
+            <Button size="sm" onClick={() => setOpenNewTask(true)}>
+              <Plus className="mr-1 h-4 w-4" />New Task
             </Button>
           </div>
         </CardHeader>
