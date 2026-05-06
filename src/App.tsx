@@ -46,7 +46,7 @@ const App = () => (
             <Route path="/uploads" element={<AppLayout><Uploads /></AppLayout>} />
             <Route path="/credentials" element={<AppLayout><Credentials /></AppLayout>} />
             <Route path="/stack" element={<AppLayout><TechStack /></AppLayout>} />
-            <Route path="/contacts" element={<Wrap title="Contacts" description="Key contact people." />} />
+            <Route path="/contacts" element={<AppLayout><Contacts /></AppLayout>} />
             <Route path="/downloads" element={<Wrap title="Downloads" description="Reports and resources." />} />
             <Route path="/admin" element={<Wrap title="Admin" description="Agency administration." />} />
             <Route path="*" element={<NotFound />} />
