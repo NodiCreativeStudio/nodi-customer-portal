@@ -24,7 +24,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!user) return <Navigate to="/auth" replace />;
+  if (!user) return <Navigate to="/auth/login" replace />;
 
   const initials = (user.email ?? "?").slice(0, 2).toUpperCase();
 
