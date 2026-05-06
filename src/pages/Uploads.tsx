@@ -139,7 +139,7 @@ export default function Uploads() {
         uploaded_by: user.id,
         storage_path: path,
         folder: folderName,
-      });
+      } as never);
       setProgress({ name: f.name, pct: 100 });
       if (dbErr) toast.error(`Saved file but record failed: ${dbErr.message}`);
       else toast.success(`✓ ${f.name} uploaded`);
