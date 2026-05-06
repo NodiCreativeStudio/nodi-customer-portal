@@ -159,8 +159,64 @@ export default function ProjectsList() {
             variant={view === "table" ? "default" : "outline"} size="sm"
             onClick={() => setView("table")}
           ><List className="h-4 w-4" /></Button>
+          <Button size="sm" onClick={() => setOpenNew(true)}>
+            <Plus className="mr-1 h-4 w-4" />New Project
+          </Button>
         </div>
       </div>
+
+      <Dialog open={openNew} onOpenChange={setOpenNew}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>New Project</DialogTitle>
+            <DialogDescription>Create a new project for your company.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label>Project Name *</Label>
+              <Input value={form.project_name} maxLength={120}
+                onChange={(e) => setForm({ ...form, project_name: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Description</Label>
+              <Textarea value={form.description} maxLength={2000}
+                onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Status</Label>
+              <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as ProjectStatus })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="planning">Planning</SelectItem>
+                  <SelectItem value="in_progress">In progress</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Start Date</Label>
+                <Input type="date" value={form.start_date}
+                  onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>End Date</Label>
+                <Input type="date" value={form.end_date}
+                  onChange={(e) => setForm({ ...form, end_date: e.target.value })} />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Budget (€)</Label>
+              <Input type="number" min="0" value={form.budget}
+                onChange={(e) => setForm({ ...form, budget: e.target.value })} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenNew(false)}>Cancel</Button>
+            <Button onClick={submitNew} disabled={saving}>{saving ? "Saving..." : "Create"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Card>
         <CardContent className="flex flex-col gap-3 p-4 md:flex-row md:items-center">
