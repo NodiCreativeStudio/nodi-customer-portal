@@ -84,9 +84,11 @@ export default function ProjectsList() {
       setLoading(true);
       const { data: prof } = await supabase
         .from("profiles").select("company_id").eq("id", user.id).maybeSingle();
-      if (!prof?.company_id) { if (!cancel) { setProjects([]); setLoading(false); } return; }
+      const cid = prof?.company_id ?? null;
+      if (!cancel) setCompanyId(cid);
+      if (!cid) { if (!cancel) { setProjects([]); setLoading(false); } return; }
       const { data } = await supabase
-        .from("projects").select("*").eq("client_id", prof.company_id);
+        .from("projects").select("*").eq("client_id", cid);
       if (!cancel) {
         setProjects((data ?? []) as Project[]);
         setLoading(false);
@@ -94,6 +96,33 @@ export default function ProjectsList() {
     })();
     return () => { cancel = true; };
   }, [user]);
+
+  const reload = async () => {
+    if (!companyId) return;
+    const { data } = await supabase.from("projects").select("*").eq("client_id", companyId);
+    setProjects((data ?? []) as Project[]);
+  };
+
+  const submitNew = async () => {
+    if (!form.project_name.trim()) { toast.error("Project name is required"); return; }
+    if (!companyId) { toast.error("Account not linked to a company"); return; }
+    setSaving(true);
+    const { error } = await supabase.from("projects").insert({
+      client_id: companyId,
+      project_name: form.project_name.trim(),
+      description: form.description.trim() || null,
+      status: form.status,
+      start_date: form.start_date || null,
+      end_date: form.end_date || null,
+      budget: form.budget ? Number(form.budget) : null,
+    } as never);
+    setSaving(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("✓ Project created");
+    setOpenNew(false);
+    setForm({ project_name: "", description: "", status: "planning", start_date: "", end_date: "", budget: "" });
+    reload();
+  };
 
   const filtered = useMemo(() => {
     let list = [...projects];
