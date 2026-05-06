@@ -86,6 +86,32 @@ export default function TechStack() {
   const [tab, setTab] = useState<"all" | Category>("all");
   const [viewing, setViewing] = useState<Service | null>(null);
   const [confirmDc, setConfirmDc] = useState<Service | null>(null);
+  const [openNew, setOpenNew] = useState(false);
+  const [savingNew, setSavingNew] = useState(false);
+  const [newForm, setNewForm] = useState({
+    service_name: "", category: "whatsapp" as Category,
+    cost_monthly: "", renewal_date: "", status: "active" as Status,
+  });
+
+  const submitNew = async () => {
+    if (!newForm.service_name.trim()) { toast.error("Service name is required"); return; }
+    if (!companyId) { toast.error("Account not linked to a company"); return; }
+    setSavingNew(true);
+    const { error } = await supabase.from("tech_stack").insert({
+      client_id: companyId,
+      service_name: newForm.service_name.trim(),
+      category: newForm.category,
+      status: newForm.status,
+      cost_monthly: newForm.cost_monthly ? Number(newForm.cost_monthly) : null,
+      renewal_date: newForm.renewal_date || null,
+    } as never);
+    setSavingNew(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("✓ Service added");
+    setOpenNew(false);
+    setNewForm({ service_name: "", category: "whatsapp", cost_monthly: "", renewal_date: "", status: "active" });
+    load();
+  };
 
   const load = useCallback(async () => {
     if (!user) return;
