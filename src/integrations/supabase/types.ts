@@ -306,31 +306,55 @@ export type Database = {
       }
       tech_stack: {
         Row: {
+          auto_renew: boolean
           category: Database["public"]["Enums"]["tech_category"] | null
           client_id: string
+          connected_account: string | null
+          cost_annual: number | null
           cost_monthly: number | null
           created_at: string
+          description: string | null
+          external_url: string | null
           id: string
+          last_sync_at: string | null
           renewal_date: string | null
           service_name: string
+          status: Database["public"]["Enums"]["tech_status"]
+          updated_at: string
         }
         Insert: {
+          auto_renew?: boolean
           category?: Database["public"]["Enums"]["tech_category"] | null
           client_id: string
+          connected_account?: string | null
+          cost_annual?: number | null
           cost_monthly?: number | null
           created_at?: string
+          description?: string | null
+          external_url?: string | null
           id?: string
+          last_sync_at?: string | null
           renewal_date?: string | null
           service_name: string
+          status?: Database["public"]["Enums"]["tech_status"]
+          updated_at?: string
         }
         Update: {
+          auto_renew?: boolean
           category?: Database["public"]["Enums"]["tech_category"] | null
           client_id?: string
+          connected_account?: string | null
+          cost_annual?: number | null
           cost_monthly?: number | null
           created_at?: string
+          description?: string | null
+          external_url?: string | null
           id?: string
+          last_sync_at?: string | null
           renewal_date?: string | null
           service_name?: string
+          status?: Database["public"]["Enums"]["tech_status"]
+          updated_at?: string
         }
         Relationships: [
           {
@@ -425,7 +449,15 @@ export type Database = {
       onboarding_status: "draft" | "submitted"
       project_status: "planning" | "in_progress" | "completed"
       task_status: "todo" | "in_progress" | "done"
-      tech_category: "whatsapp" | "email" | "web" | "loyalty"
+      tech_category:
+        | "whatsapp"
+        | "email"
+        | "web"
+        | "loyalty"
+        | "calendar"
+        | "analytics"
+        | "sms"
+      tech_status: "active" | "inactive" | "trial" | "error"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -559,7 +591,16 @@ export const Constants = {
       onboarding_status: ["draft", "submitted"],
       project_status: ["planning", "in_progress", "completed"],
       task_status: ["todo", "in_progress", "done"],
-      tech_category: ["whatsapp", "email", "web", "loyalty"],
+      tech_category: [
+        "whatsapp",
+        "email",
+        "web",
+        "loyalty",
+        "calendar",
+        "analytics",
+        "sms",
+      ],
+      tech_status: ["active", "inactive", "trial", "error"],
     },
   },
 } as const
