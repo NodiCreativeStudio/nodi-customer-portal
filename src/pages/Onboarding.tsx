@@ -135,13 +135,14 @@ export default function Onboarding() {
     const result = draftId
       ? await supabase.from("onboarding_moduli").update(payload).eq("id", draftId)
       : await supabase.from("onboarding_moduli").insert(payload);
+    if (result.error) { setBusy(false); toast.error(result.error.message); return; }
+    await supabase.from("profiles").update({ onboarding_completed: true }).eq("id", user.id);
     setBusy(false);
-    if (result.error) { toast.error(result.error.message); return; }
     setSubmitted(true);
     toast.success("Onboarding submitted!");
     const pdf = generateOnboardingPdf(form);
     pdf.save(`NODI-onboarding-${(form.company_name || "summary").replace(/\s+/g, "-")}.pdf`);
-    setTimeout(() => navigate("/"), 3000);
+    setTimeout(() => navigate("/"), 2000);
   };
 
   const downloadPdf = () => {
