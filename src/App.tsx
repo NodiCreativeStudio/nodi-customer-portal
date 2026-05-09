@@ -23,6 +23,7 @@ import AdminGuard from "./components/AdminGuard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminClientDetail from "./pages/admin/AdminClientDetail";
 import Profile from "./pages/Profile";
+import { ProtectedOnboardingRoute } from "./components/ProtectedOnboardingRoute";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,12 @@ const Wrap = ({ title, description }: { title: string; description?: string }) =
   <AppLayout>
     <Placeholder title={title} description={description} />
   </AppLayout>
+);
+
+const Guarded = ({ children }: { children: React.ReactNode }) => (
+  <ProtectedOnboardingRoute>
+    <AppLayout>{children}</AppLayout>
+  </ProtectedOnboardingRoute>
 );
 
 const App = () => (
@@ -44,16 +51,16 @@ const App = () => (
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/signup" element={<Signup />} />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<ProtectedOnboardingRoute><Index /></ProtectedOnboardingRoute>} />
             <Route path="/onboarding" element={<AppLayout><Onboarding /></AppLayout>} />
-            <Route path="/projects" element={<AppLayout><ProjectsList /></AppLayout>} />
-            <Route path="/projects/:id" element={<AppLayout><ProjectDetail /></AppLayout>} />
-            <Route path="/uploads" element={<AppLayout><Uploads /></AppLayout>} />
-            <Route path="/credentials" element={<AppLayout><Credentials /></AppLayout>} />
-            <Route path="/stack" element={<AppLayout><TechStack /></AppLayout>} />
-            <Route path="/contacts" element={<AppLayout><Contacts /></AppLayout>} />
-            <Route path="/downloads" element={<AppLayout><Downloads /></AppLayout>} />
-            <Route path="/profile" element={<AppLayout><Profile /></AppLayout>} />
+            <Route path="/projects" element={<Guarded><ProjectsList /></Guarded>} />
+            <Route path="/projects/:id" element={<Guarded><ProjectDetail /></Guarded>} />
+            <Route path="/uploads" element={<Guarded><Uploads /></Guarded>} />
+            <Route path="/credentials" element={<Guarded><Credentials /></Guarded>} />
+            <Route path="/stack" element={<Guarded><TechStack /></Guarded>} />
+            <Route path="/contacts" element={<Guarded><Contacts /></Guarded>} />
+            <Route path="/downloads" element={<Guarded><Downloads /></Guarded>} />
+            <Route path="/profile" element={<Guarded><Profile /></Guarded>} />
             <Route path="/admin" element={<AppLayout><AdminGuard><AdminDashboard /></AdminGuard></AppLayout>} />
             <Route path="/admin/clients/:id" element={<AppLayout><AdminGuard><AdminClientDetail /></AdminGuard></AppLayout>} />
             <Route path="*" element={<NotFound />} />
