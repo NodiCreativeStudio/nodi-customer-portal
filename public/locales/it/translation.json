@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "projects": "Progetti",
+    "uploads": "Caricamenti",
+    "credentials": "Credenziali",
+    "stack": "Stack Tecnologico",
+    "contacts": "Contatti",
+    "downloads": "Scaricamenti",
+    "onboarding": "Onboarding",
+    "profile": "Profilo",
+    "admin": "Admin",
+    "settings": "Impostazioni"
+  },
+  "common": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "create": "Crea",
+    "add": "Aggiungi",
+    "search": "Cerca",
+    "filter": "Filtra",
+    "sort": "Ordina",
+    "download": "Scarica",
+    "upload": "Carica",
+    "share": "Condividi",
+    "close": "Chiudi",
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "success": "Successo",
+    "warning": "Avvertimento",
+    "confirm": "Conferma",
+    "areYouSure": "Sei sicuro?",
+    "noData": "Nessun dato trovato",
+    "fillRequired": "Compila tutti i campi obbligatori",
+    "language": "Lingua"
+  },
+  "projects": {
+    "title": "I tuoi Progetti",
+    "new": "Nuovo Progetto",
+    "name": "Nome Progetto",
+    "status": "Stato",
+    "startDate": "Data Inizio",
+    "endDate": "Data Fine"
+  },
+  "uploads": {
+    "title": "I tuoi File",
+    "dragOrClick": "Trascina o clicca per caricare",
+    "fileSize": "Dimensione File",
+    "uploadedBy": "Caricato da",
+    "date": "Data"
+  },
+  "credentials": {
+    "title": "Credenziali Account",
+    "serviceName": "Nome Servizio",
+    "username": "Nome Utente",
+    "password": "Password",
+    "platform": "Piattaforma"
+  },
+  "stack": {
+    "title": "Il tuo Stack Tecnologico",
+    "service": "Servizio",
+    "category": "Categoria",
+    "monthlyCost": "Costo Mensile",
+    "renewalDate": "Data Rinnovo"
+  },
+  "contacts": {
+    "title": "Contatta il Supporto",
+    "email": "Email",
+    "phone": "Telefono",
+    "whatsapp": "WhatsApp",
+    "scheduleCall": "Pianifica Chiamata"
+  }
+}

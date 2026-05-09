@@ -11,10 +11,16 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/hooks/useTheme";
+import { useTranslation } from "react-i18next";
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const { user, loading, signOut, role } = useAuth();
   const { theme, toggle } = useTheme();
+  const { i18n, t } = useTranslation();
+  const changeLang = (lng: string) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem("i18nextLng", lng);
+  };
 
   if (loading) {
     return (
@@ -41,6 +47,17 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               </span>
             </div>
             <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="font-medium uppercase">
+                    {i18n.language?.startsWith("it") ? "IT" : "EN"}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => changeLang("it")}>Italiano</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => changeLang("en")}>English</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button variant="ghost" size="icon" onClick={toggle} aria-label="Toggle theme">
                 {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
@@ -63,10 +80,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/profile"><UserIcon className="mr-2 h-4 w-4" /> Profile</Link>
+                    <Link to="/profile"><UserIcon className="mr-2 h-4 w-4" /> {t("nav.profile")}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={signOut}>
-                    <LogOut className="mr-2 h-4 w-4" /> Sign out
+                    <LogOut className="mr-2 h-4 w-4" /> {t("common.close")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
