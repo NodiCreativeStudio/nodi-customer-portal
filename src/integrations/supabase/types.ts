@@ -151,6 +151,45 @@ export type Database = {
         }
         Relationships: []
       }
+      folders: {
+        Row: {
+          client_id: string
+          created_at: string
+          folder_name: string
+          id: string
+          parent_id: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          folder_name: string
+          id?: string
+          parent_id?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          folder_name?: string
+          id?: string
+          parent_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "folders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "folders_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       onboarding_moduli: {
         Row: {
           additional_requirements: string | null
@@ -433,6 +472,7 @@ export type Database = {
           file_size: number | null
           file_type: string | null
           folder: string
+          folder_id: string | null
           id: string
           storage_path: string | null
           uploaded_at: string
@@ -444,6 +484,7 @@ export type Database = {
           file_size?: number | null
           file_type?: string | null
           folder?: string
+          folder_id?: string | null
           id?: string
           storage_path?: string | null
           uploaded_at?: string
@@ -455,6 +496,7 @@ export type Database = {
           file_size?: number | null
           file_type?: string | null
           folder?: string
+          folder_id?: string | null
           id?: string
           storage_path?: string | null
           uploaded_at?: string
@@ -466,6 +508,13 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "uploads_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "folders"
             referencedColumns: ["id"]
           },
         ]
