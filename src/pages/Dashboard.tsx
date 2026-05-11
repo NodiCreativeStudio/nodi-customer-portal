@@ -170,7 +170,7 @@ export default function Dashboard() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Welcome back, {firstName}!
+            {t('dashboard.welcome')}, {firstName}!
           </h1>
           <p className="text-muted-foreground">
             {format(now, "EEEE, MMMM d, yyyy")} · {format(now, "HH:mm")}
