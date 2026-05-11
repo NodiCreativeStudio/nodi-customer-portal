@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -75,6 +76,7 @@ function taskPriority(due: string | null): { label: string; tone: string } {
 }
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const { user, role } = useAuth();
   const [now, setNow] = useState(new Date());
   const [loading, setLoading] = useState(true);

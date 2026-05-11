@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,6 +58,7 @@ type SortKey = "date" | "name" | "size" | "type";
 type DateRange = "30" | "90" | "all";
 
 export default function Downloads() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [docs, setDocs] = useState<DocRow[]>([]);
@@ -171,7 +173,7 @@ export default function Downloads() {
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-6">
       <header className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Downloads &amp; Reports</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('downloads.title')}</h1>
         <p className="text-muted-foreground">Access your documents, reports, and invoices.</p>
       </header>
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +11,7 @@ import { ShieldCheck, User as UserIcon, Database } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
+  const { t } = useTranslation();
   const { user, role } = useAuth();
   const [switching, setSwitching] = useState(false);
   const [seeding, setSeeding] = useState(false);
@@ -168,7 +170,7 @@ export default function Profile() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Profile & Settings</h1>
+        <h1 className="text-2xl font-bold">{t('profile.title')}</h1>
         <p className="text-sm text-muted-foreground">Manage your account and testing tools.</p>
       </div>
 

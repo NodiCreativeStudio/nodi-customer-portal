@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,6 +63,7 @@ function progressOf(p: Project): number {
 }
 
 export default function ProjectsList() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [companyId, setCompanyId] = useState<string | null>(null);
@@ -147,7 +149,7 @@ export default function ProjectsList() {
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Your Projects</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('projects.title')}</h1>
           <p className="text-sm text-muted-foreground">Browse, filter and open project details.</p>
         </div>
         <div className="flex items-center gap-2">

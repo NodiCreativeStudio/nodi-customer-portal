@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -83,6 +84,7 @@ async function copy(text: string, label = "Copied to clipboard") {
 }
 
 export default function Credentials() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [items, setItems] = useState<Credential[]>([]);
@@ -194,7 +196,7 @@ export default function Credentials() {
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Account Credentials & Access</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('credentials.title')}</h1>
           <p className="text-sm text-muted-foreground">
             Securely store logins and access information for your accounts.
           </p>

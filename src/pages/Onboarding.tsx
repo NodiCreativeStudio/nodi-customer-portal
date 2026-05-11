@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +31,7 @@ import { generateOnboardingPdf } from "@/lib/onboarding-pdf";
 const TOTAL = 3;
 
 export default function Onboarding() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
@@ -177,7 +179,7 @@ export default function Onboarding() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Client Onboarding</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('onboarding.title')}</h1>
         <p className="text-muted-foreground">Tell us about your business so we can tailor your workspace.</p>
       </div>
 

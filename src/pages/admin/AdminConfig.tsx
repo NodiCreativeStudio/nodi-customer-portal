@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import { toast } from "sonner";
 import { downloadCsv } from "@/lib/csv-export";
 
 export default function AdminConfig() {
+  const { t } = useTranslation();
   const [config, setConfig] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -135,7 +137,7 @@ export default function AdminConfig() {
     <div className="container mx-auto p-4 md:p-8 space-y-6 max-w-[1400px]">
       <header className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('admin.settings')}</h1>
           <p className="text-muted-foreground">
             {config?.updated_at ? `Last updated ${format(new Date(config.updated_at), "MMM d, yyyy 'at' h:mm a")}` : "Agency configuration"}
           </p>

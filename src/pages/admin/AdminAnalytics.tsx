@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,6 +16,7 @@ import { toast } from "sonner";
 import { downloadCsv } from "@/lib/csv-export";
 
 export default function AdminAnalytics() {
+  const { t } = useTranslation();
   const [profiles, setProfiles] = useState<any[]>([]);
   const [projects, setProjects] = useState<any[]>([]);
   const [uploads, setUploads] = useState<any[]>([]);
@@ -118,7 +120,7 @@ export default function AdminAnalytics() {
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-6 max-w-[1400px]">
       <header>
-        <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('admin.analytics')}</h1>
         <p className="text-muted-foreground">Users, onboarding funnel, and adoption</p>
       </header>
 

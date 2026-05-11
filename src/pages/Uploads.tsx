@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -82,6 +83,7 @@ function fmtSize(n?: number | null): string {
 }
 
 export default function Uploads() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [files, setFiles] = useState<UploadRow[]>([]);
@@ -371,7 +373,7 @@ export default function Uploads() {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Project Files & Documents</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('uploads.title')}</h1>
         <p className="text-sm text-muted-foreground">Organize files into folders, drag to move, right-click for actions.</p>
       </div>
 
