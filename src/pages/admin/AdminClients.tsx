@@ -175,6 +175,9 @@ export default function AdminClients() {
 
   const toggleActive = async (r: ClientRow) => {
     const next = r.status === "active" ? "inactive" : "active";
+    if (next === "active" && (!r.monthly_fee || Number(r.monthly_fee) <= 0)) {
+      return toast.error("Set monthly fee before activating client");
+    }
     const { error } = await supabase.from("clients").update({ status: next as any }).eq("id", r.id);
     if (error) return toast.error(error.message);
     toast.success(`Client ${next}`);
@@ -192,9 +195,9 @@ export default function AdminClients() {
 
   const exportCsv = () => {
     downloadCsv("clients", [
-      ["Company", "Industry", "Status", "Email", "Phone", "Website", "Created"],
+      ["Company", "Industry", "Status", "Monthly Fee EUR", "Email", "Phone", "Website", "Created"],
       ...filtered.map((c) => [
-        c.company_name, c.industry ?? "", c.status, c.contact_email ?? "",
+        c.company_name, c.industry ?? "", c.status, c.monthly_fee ?? 0, c.contact_email ?? "",
         c.contact_phone ?? "", c.website ?? "", c.created_at,
       ]),
     ]);
