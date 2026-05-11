@@ -1,0 +1,1 @@
+ALTER TABLE public.clients ADD COLUMN monthly_fee NUMERIC(10,2) NOT NULL DEFAULT 0;

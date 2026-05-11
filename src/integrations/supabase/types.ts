@@ -142,6 +142,7 @@ export type Database = {
           employee_count: string | null
           id: string
           industry: Database["public"]["Enums"]["client_industry"] | null
+          monthly_fee: number
           status: Database["public"]["Enums"]["client_status"]
           updated_at: string
           website: string | null
@@ -156,6 +157,7 @@ export type Database = {
           employee_count?: string | null
           id?: string
           industry?: Database["public"]["Enums"]["client_industry"] | null
+          monthly_fee?: number
           status?: Database["public"]["Enums"]["client_status"]
           updated_at?: string
           website?: string | null
@@ -170,6 +172,7 @@ export type Database = {
           employee_count?: string | null
           id?: string
           industry?: Database["public"]["Enums"]["client_industry"] | null
+          monthly_fee?: number
           status?: Database["public"]["Enums"]["client_status"]
           updated_at?: string
           website?: string | null
