@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +13,7 @@ import { resetSchema } from "@/lib/auth-validation";
 import AuthShell from "@/components/auth/AuthShell";
 
 export default function ResetPassword() {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -45,9 +47,9 @@ export default function ResetPassword() {
     <AuthShell>
       <Card className="shadow-[var(--shadow-elegant)]">
         <CardHeader>
-          <CardTitle>Reset your password</CardTitle>
+          <CardTitle>{t('auth.resetTitle')}</CardTitle>
           <CardDescription>
-            Enter your email and we'll send you a link to reset your password.
+            {t('auth.resetDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -67,19 +69,19 @@ export default function ResetPassword() {
                 </Alert>
               )}
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('auth.email')}</Label>
                 <Input
                   id="email" type="email" autoComplete="email" required
                   value={email} onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <Button type="submit" className="w-full" disabled={busy}>
-                {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Send reset link
+                {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} {t('auth.sendResetLink')}
               </Button>
             </form>
           )}
           <Link to="/auth/login" className="mt-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-3 w-3" /> Back to sign in
+            <ArrowLeft className="h-3 w-3" /> {t('auth.backToSignIn')}
           </Link>
         </CardContent>
       </Card>

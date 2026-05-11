@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +18,7 @@ const strengthLabels = ["Too weak", "Weak", "Fair", "Good", "Strong"];
 const strengthColors = ["bg-destructive", "bg-destructive", "bg-warning", "bg-primary", "bg-success"];
 
 export default function Signup() {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
@@ -71,8 +73,8 @@ export default function Signup() {
     <AuthShell>
       <Card className="shadow-[var(--shadow-elegant)]">
         <CardHeader>
-          <CardTitle>Create your account</CardTitle>
-          <CardDescription>Get started with the NODI client portal.</CardDescription>
+          <CardTitle>{t('auth.signUpTitle')}</CardTitle>
+          <CardDescription>{t('auth.signUpDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -89,7 +91,7 @@ export default function Signup() {
               </Alert>
             )}
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full name</Label>
+              <Label htmlFor="fullName">{t('auth.fullName')}</Label>
               <Input id="fullName" autoComplete="name" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
             </div>
             <div className="space-y-2">
@@ -97,11 +99,11 @@ export default function Signup() {
               <Input id="company" value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('auth.email')}</Label>
               <Input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('auth.password')}</Label>
               <div className="relative">
                 <Input
                   id="password" type={showPw ? "text" : "password"} autoComplete="new-password" required
@@ -135,7 +137,7 @@ export default function Signup() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirm">Confirm password</Label>
+              <Label htmlFor="confirm">{t('auth.confirmPassword')}</Label>
               <Input
                 id="confirm" type={showPw ? "text" : "password"} autoComplete="new-password" required
                 value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
@@ -148,12 +150,12 @@ export default function Signup() {
               </Label>
             </div>
             <Button type="submit" className="w-full" disabled={busy}>
-              {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Create account
+              {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} {t('auth.createAccount')}
             </Button>
           </form>
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link to="/auth/login" className="font-medium text-primary hover:underline">Sign in</Link>
+            {t('auth.haveAccount')}{" "}
+            <Link to="/auth/login" className="font-medium text-primary hover:underline">{t('auth.signIn')}</Link>
           </p>
         </CardContent>
       </Card>
