@@ -134,8 +134,10 @@ export default function AdminClientDetail() {
             </div>
           </div>
           <div className="space-y-2 md:border-l md:pl-6">
-            <div className="flex justify-between text-sm"><span className="text-muted-foreground">MRR</span><span className="font-semibold">€{mrr.toLocaleString()}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Monthly Fee</span><span className="font-semibold">€{monthlyFee.toLocaleString()}</span></div>
             <div className="flex justify-between text-sm"><span className="text-muted-foreground">ARR</span><span className="font-semibold">€{arr.toLocaleString()}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Costs</span><span className="text-warning">€{monthlyCosts.toLocaleString()}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Margin</span><span className={cn("font-semibold", margin >= 0 ? "text-success" : "text-destructive")}>€{margin.toLocaleString()}</span></div>
             {nextRenewal && (
               <div className={cn("flex justify-between text-sm pt-2 border-t",
                 renewalDays !== null && renewalDays <= 14 && "text-warning")}>
