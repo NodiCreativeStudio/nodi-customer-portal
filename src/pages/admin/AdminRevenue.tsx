@@ -29,7 +29,7 @@ export default function AdminRevenue() {
       setLoading(true);
       const [t, c] = await Promise.all([
         supabase.from("tech_stack").select("*"),
-        supabase.from("clients").select("id, company_name, status"),
+        supabase.from("clients").select("id, company_name, status, monthly_fee"),
       ]);
       if (t.error || c.error) toast.error("Failed to load revenue data");
       setTech(t.data ?? []);
