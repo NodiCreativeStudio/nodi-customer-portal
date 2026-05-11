@@ -121,9 +121,9 @@ export default function AdminRevenue() {
                 <div>
                   <p className="text-xs uppercase text-muted-foreground tracking-wide">MRR</p>
                   <p className="text-3xl font-bold mt-2">€{stats.mrr.toLocaleString()}</p>
-                  <p className={cn("text-xs mt-2 flex items-center gap-1", stats.growth >= 0 ? "text-success" : "text-destructive")}>
-                    {stats.growth >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                    €{Math.abs(Math.round(stats.growth)).toLocaleString()} vs last month
+                  <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
+                    <TrendingUp className="h-3 w-3" />
+                    {stats.activeClientCount} active client{stats.activeClientCount === 1 ? "" : "s"}
                   </p>
                 </div>
                 <div className="h-11 w-11 rounded-lg bg-primary/10 flex items-center justify-center"><DollarSign className="h-5 w-5 text-primary" /></div>
@@ -142,9 +142,9 @@ export default function AdminRevenue() {
             <Card className="hover-lift"><CardContent className="p-5">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs uppercase text-muted-foreground tracking-wide">Renewals This Month</p>
-                  <p className="text-3xl font-bold mt-2 text-warning">{stats.renewalsThisMonthCount}</p>
-                  <p className="text-xs text-muted-foreground mt-2">Services renewing</p>
+                  <p className="text-xs uppercase text-muted-foreground tracking-wide">Total Client Costs</p>
+                  <p className="text-3xl font-bold mt-2 text-warning">€{stats.costs.toLocaleString()}</p>
+                  <p className="text-xs text-muted-foreground mt-2">Third-party services / month</p>
                 </div>
                 <div className="h-11 w-11 rounded-lg bg-warning/10 flex items-center justify-center"><AlertTriangle className="h-5 w-5 text-warning" /></div>
               </div>
@@ -152,11 +152,15 @@ export default function AdminRevenue() {
             <Card className="hover-lift"><CardContent className="p-5">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs uppercase text-muted-foreground tracking-wide">Avg / Client</p>
-                  <p className="text-3xl font-bold mt-2">€{Math.round(stats.arpc).toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground mt-2">Per active client</p>
+                  <p className="text-xs uppercase text-muted-foreground tracking-wide">Gross Margin</p>
+                  <p className={cn("text-3xl font-bold mt-2", stats.margin >= 0 ? "text-success" : "text-destructive")}>
+                    €{stats.margin.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">MRR − costs · avg €{Math.round(stats.arpc).toLocaleString()}/client</p>
                 </div>
-                <div className="h-11 w-11 rounded-lg bg-accent/30 flex items-center justify-center"><UsersIcon className="h-5 w-5 text-accent-foreground" /></div>
+                <div className="h-11 w-11 rounded-lg bg-accent/30 flex items-center justify-center">
+                  {stats.margin >= 0 ? <TrendingUp className="h-5 w-5 text-success" /> : <TrendingDown className="h-5 w-5 text-destructive" />}
+                </div>
               </div>
             </CardContent></Card>
           </>
@@ -187,26 +191,37 @@ export default function AdminRevenue() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader><CardTitle>Top services by revenue</CardTitle></CardHeader>
-        <CardContent className="h-[280px]">
-          {revenueByService.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center pt-12">No services yet</p>
-          ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={revenueByService} layout="vertical" margin={{ left: 30 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => `€${v}`} />
-                <YAxis type="category" dataKey="service" stroke="hsl(var(--muted-foreground))" fontSize={12} width={120} />
-                <Tooltip
-                  contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
-                  formatter={(v: any) => [`€${Number(v).toLocaleString()}`, "Monthly"]}
-                />
-                <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[0, 6, 6, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          )}
-        </CardContent>
+      <Card className="overflow-hidden">
+        <CardHeader><CardTitle>Breakdown by client</CardTitle></CardHeader>
+        <div className="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 px-4 py-3 text-xs font-medium text-muted-foreground border-b bg-muted/30">
+          <span>Client</span><span>Status</span><span>Monthly Fee</span><span>Costs</span><span>Margin</span>
+        </div>
+        {clientBreakdown.length === 0 ? (
+          <div className="p-12 text-center text-muted-foreground">No clients yet.</div>
+        ) : (
+          <>
+            {clientBreakdown.map((c) => (
+              <Link
+                key={c.id} to={`/admin/clients/${c.id}`}
+                className="grid md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 px-4 py-3 items-center border-b last:border-0 hover:bg-muted/20"
+              >
+                <span className="font-medium">{c.name}</span>
+                <Badge variant="outline" className="capitalize w-fit">{c.status}</Badge>
+                <span className="text-sm font-semibold">€{c.fee.toLocaleString()}</span>
+                <span className="text-sm text-warning">€{c.cost.toLocaleString()}</span>
+                <span className={cn("text-sm font-semibold", c.margin >= 0 ? "text-success" : "text-destructive")}>
+                  €{c.margin.toLocaleString()}
+                </span>
+              </Link>
+            ))}
+            <div className="grid md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 px-4 py-3 items-center bg-muted/30 font-semibold text-sm">
+              <span>Total</span><span />
+              <span>€{stats.mrr.toLocaleString()}</span>
+              <span className="text-warning">€{stats.costs.toLocaleString()}</span>
+              <span className={stats.margin >= 0 ? "text-success" : "text-destructive"}>€{stats.margin.toLocaleString()}</span>
+            </div>
+          </>
+        )}
       </Card>
 
       <Card className="overflow-hidden">
