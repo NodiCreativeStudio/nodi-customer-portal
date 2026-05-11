@@ -1,0 +1,124 @@
+{
+  "verticale": "retail",
+  "nome_verticale": "Retail Specialistico",
+  "colore": "#855F0B",
+  "icona": "shopping-bag",
+  "descrizione": "Boutique, gioiellerie, profumerie, negozi regalo",
+  "pagine": [
+    {
+      "numero": 1,
+      "titolo": "Situazione Attuale",
+      "sezioni": [
+        {"id": "profilo_negozio", "nome": "Profilo Negozio", "campi": [
+          {"id": "cosa_vende_principale", "label": "Cosa vende principalmente?", "tipo": "textarea", "obbligatorio": true, "rows": 2},
+          {"id": "categorie_piu_richieste", "label": "Categorie più richieste?", "tipo": "textarea", "obbligatorio": false, "rows": 2},
+          {"id": "categorie_piu_profittevoli", "label": "Categorie più profittevoli?", "tipo": "textarea", "obbligatorio": false, "rows": 2},
+          {"id": "periodi_forti", "label": "Periodi di vendita più forti?", "tipo": "text", "obbligatorio": false},
+          {"id": "periodi_deboli", "label": "Periodi di vendita più deboli?", "tipo": "text", "obbligatorio": false},
+          {"id": "modello_vendita", "label": "Modello di vendita prevalente?", "tipo": "select", "obbligatorio": true, "opzioni": ["impulsiva", "assistita", "mista"]},
+          {"id": "relazione_personale", "label": "Quanto conta la relazione personale nella vendita?", "tipo": "select", "obbligatorio": true, "opzioni": ["poco", "medio", "molto"]},
+          {"id": "bisogno_vs_impulso", "label": "Il cliente compra più per bisogno o per impulso?", "tipo": "select", "obbligatorio": true, "opzioni": ["bisogno", "impulso", "entrambi"]},
+          {"id": "competizione", "label": "Il negozio compete più su prezzo, stile, qualità o servizio?", "tipo": "text", "obbligatorio": true},
+          {"id": "punto_forza_principale", "label": "Qual è oggi il principale punto di forza del negozio?", "tipo": "textarea", "obbligatorio": true, "rows": 2}
+        ]},
+        {"id": "numeri_attuali", "nome": "Numeri Attuali", "campi": [
+          {"id": "fatturato_annuo", "label": "Fatturato annuo (€)?", "tipo": "number", "obbligatorio": false},
+          {"id": "costi_annui", "label": "Principali costi annui (€)?", "tipo": "number", "obbligatorio": false},
+          {"id": "costo_personale", "label": "Costo mensile del personale (€)?", "tipo": "number", "obbligatorio": false},
+          {"id": "incidenza_merce", "label": "Incidenza del costo merce sul fatturato (%)?", "tipo": "number", "obbligatorio": false},
+          {"id": "scontrino_medio", "label": "Scontrino medio (€)?", "tipo": "number", "obbligatorio": false},
+          {"id": "clienti_medi_mese", "label": "Clienti medi mensili?", "tipo": "number", "obbligatorio": false},
+          {"id": "mesi_picco_deboli", "label": "Mesi di picco e mesi più deboli?", "tipo": "text", "obbligatorio": false},
+          {"id": "percentuale_clienti", "label": "% clienti nuovi / % clienti fidelizzati?", "tipo": "text", "obbligatorio": false},
+          {"id": "prodotti_fatturato", "label": "Prodotti che fatturano di più?", "tipo": "text", "obbligatorio": false},
+          {"id": "prodotti_margine", "label": "Prodotti con margine più alto?", "tipo": "text", "obbligatorio": false}
+        ]},
+        {"id": "cliente_relazione", "nome": "Cliente e Relazione", "campi": [
+          {"id": "clienti_acquistano_spesso", "label": "Chi sono oggi i clienti che acquistano più spesso da te?", "tipo": "textarea", "obbligatorio": false, "rows": 2},
+          {"id": "fascia_eta", "label": "Qual è la fascia d'età prevalente dei tuoi clienti?", "tipo": "text", "obbligatorio": false},
+          {"id": "genere_clienti", "label": "Sono soprattutto uomini, donne o entrambi?", "tipo": "text", "obbligatorio": false},
+          {"id": "motivo_acquisto", "label": "Per quale motivo comprano da te?", "tipo": "select", "obbligatorio": true, "opzioni": ["qualita", "stile", "prezzo", "brand", "consulenza", "comodita", "altro"]},
+          {"id": "categorie_venduti_meglio", "label": "Quali categorie vendi meglio?", "tipo": "text", "obbligatorio": false},
+          {"id": "spesa_media", "label": "Spesa media per acquisto (€)?", "tipo": "number", "obbligatorio": false},
+          {"id": "occasioni", "label": "Comprano per occasioni specifiche o quotidiano?", "tipo": "text", "obbligatorio": false},
+          {"id": "provenienti_da", "label": "Da dove arrivano principalmente i clienti?", "tipo": "select", "obbligatorio": true, "opzioni": ["passaparola", "vetrina", "social", "pubblicita", "sito", "marketplace"]},
+          {"id": "dubbi_obiezioni", "label": "Quali dubbi prima di acquistare?", "tipo": "textarea", "obbligatorio": false, "rows": 2},
+          {"id": "cliente_vorei_attirare", "label": "Che tipo di cliente vorresti attirare?", "tipo": "textarea", "obbligatorio": false, "rows": 2},
+          {"id": "database_clienti", "label": "Raccogli dati dei clienti?", "tipo": "select", "obbligatorio": true, "opzioni": ["si", "no", "parziale"]},
+          {"id": "richiedi_recensioni", "label": "Richiedi recensioni?", "tipo": "select", "obbligatorio": true, "opzioni": ["si", "no", "saltuaria", "sistematica"]}
+        ]},
+        {"id": "team", "nome": "Team", "campi": [
+          {"id": "numero_team", "label": "Da quante persone è composto il team?", "tipo": "number", "obbligatorio": true},
+          {"id": "livello_esperienza", "label": "Livello di esperienza media?", "tipo": "select", "obbligatorio": true, "opzioni": ["scarso", "medio", "buono", "eccellente"]},
+          {"id": "titolare_presente", "label": "Il titolare è sempre presente?", "tipo": "select", "obbligatorio": true, "opzioni": ["si", "no", "spesso", "raramente"]},
+          {"id": "standard_operativi", "label": "Il team ha standard operativi?", "tipo": "select", "obbligatorio": true, "opzioni": ["si", "no", "parziale"]},
+          {"id": "aderenza_standard", "label": "Livello di aderenza ai standard?", "tipo": "select", "obbligatorio": true, "opzioni": ["bassa", "media", "alta"]}
+        ]},
+        {"id": "strumenti", "nome": "Strumenti Attuali", "campi": [
+          {"id": "ha_gestionale", "label": "Gestionale", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "ha_crm", "label": "CRM clienti", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "ha_google_business", "label": "Google Business Profile", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "ha_apple_business", "label": "Apple Business Profile", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "ha_whatsapp", "label": "Whatsapp Business", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "ha_sito", "label": "Sito web aziendale", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "ha_sistema_recensioni", "label": "Sistema richiesta recensioni", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "ha_loyalty_card", "label": "Sistema Loyalty Card", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "ha_dashboard", "label": "Dashboard statistiche", "tipo": "checkbox", "obbligatorio": false}
+        ]},
+        {"id": "problemi_percepiti", "nome": "Problemi Percepiti", "campi": [
+          {"id": "fattori_ostacolano", "label": "Fattori che ti ostacolano?", "tipo": "textarea", "obbligatorio": false, "rows": 2},
+          {"id": "tre_problemi_12mesi", "label": "3 problemi da risolvere nei 12 mesi?", "tipo": "textarea", "obbligatorio": false, "rows": 3}
+        ]}
+      ]
+    },
+    {
+      "numero": 2,
+      "titolo": "Obiettivi e KPI",
+      "sezioni": [
+        {"id": "kpi_principali", "nome": "KPI Principali", "campi": [
+          {"id": "fatturato_totale", "label": "Fatturato totale", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "crescita_fatturato", "label": "Crescita fatturato", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "scontrino_medio_kpi", "label": "Scontrino medio", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "numero_transazioni", "label": "Numero transazioni", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "margine_lordo", "label": "Margine lordo %", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "costo_merce", "label": "Costo merce / fatturato", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "clienti_nuovi_kpi", "label": "% clienti nuovi", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "clienti_fidelizzati_kpi", "label": "% clienti fidelizzati", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "tasso_conversione", "label": "Tasso di conversione", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "rotazione_magazzino", "label": "Rotazione magazzino", "tipo": "checkbox", "obbligatorio": false}
+        ]},
+        {"id": "obiettivi_90_12", "nome": "Obiettivi 90gg e 12 Mesi", "campi": [
+          {"id": "migliorare_90gg", "label": "Migliorare nei prossimi 90 giorni?", "tipo": "textarea", "obbligatorio": true, "rows": 2},
+          {"id": "risultati_12mesi", "label": "Risultati in 12 mesi?", "tipo": "textarea", "obbligatorio": true, "rows": 2},
+          {"id": "enfasi", "label": "Più clienti, più ritorni o più valore?", "tipo": "select", "obbligatorio": true, "opzioni": ["piu_clienti", "piu_ritorni", "piu_valore_medio", "equilibrio"]},
+          {"id": "importanza_fidelizzazione", "label": "Importanza fidelizzazione?", "tipo": "select", "obbligatorio": true, "opzioni": ["bassa", "media", "alta", "critica"]},
+          {"id": "priorita_1", "label": "Priorità 1 (90gg)", "tipo": "textarea", "obbligatorio": true, "rows": 2},
+          {"id": "priorita_2", "label": "Priorità 2 (90gg)", "tipo": "textarea", "obbligatorio": true, "rows": 2},
+          {"id": "priorita_3", "label": "Priorità 3 (90gg)", "tipo": "textarea", "obbligatorio": false, "rows": 2}
+        ]}
+      ]
+    },
+    {
+      "numero": 3,
+      "titolo": "Implementazione Tecnologica",
+      "sezioni": [
+        {"id": "strumenti_da_attivare", "nome": "Strumenti da Attivare", "campi": [
+          {"id": "attiva_gestionale", "label": "Gestionale", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "attiva_crm", "label": "CRM clienti", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "attiva_google_business", "label": "Google Business Profile", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "attiva_apple_business", "label": "Apple Business Profile", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "attiva_whatsapp", "label": "Whatsapp Business", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "attiva_sito", "label": "Sito web", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "attiva_recensioni", "label": "Sistema recensioni", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "attiva_loyalty", "label": "Loyalty Card", "tipo": "checkbox", "obbligatorio": false},
+          {"id": "attiva_dashboard", "label": "Dashboard", "tipo": "checkbox", "obbligatorio": false}
+        ]},
+        {"id": "budget", "nome": "Budget e Costi", "campi": [
+          {"id": "budget_marketing", "label": "Budget Marketing (€/mese)", "tipo": "number", "obbligatorio": false},
+          {"id": "budget_strumenti", "label": "Budget Strumenti (€/mese)", "tipo": "number", "obbligatorio": false},
+          {"id": "note_budget", "label": "Note", "tipo": "textarea", "obbligatorio": false, "rows": 2}
+        ]}
+      ]
+    }
+  ]
+}
