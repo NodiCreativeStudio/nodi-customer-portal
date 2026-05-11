@@ -327,6 +327,15 @@ export default function AdminClients() {
               <div><Label>Phone</Label><Input value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} /></div>
             </div>
             <div><Label>Website</Label><Input value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} /></div>
+            <div>
+              <Label>Monthly Contract Value * (€)</Label>
+              <Input
+                type="number" min="0" step="0.01" placeholder="2000"
+                value={form.monthly_fee}
+                onChange={(e) => setForm({ ...form, monthly_fee: e.target.value })}
+              />
+              <p className="text-xs text-muted-foreground mt-1">The monthly amount this client pays you for your services.</p>
+            </div>
             <div><Label>Notes</Label><Textarea rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
           </div>
           <DialogFooter>
