@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import {
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid,
-  BarChart, Bar,
 } from "recharts";
 import { format, formatDistanceToNow, startOfMonth, subMonths, differenceInDays, endOfMonth } from "date-fns";
 import { toast } from "sonner";
