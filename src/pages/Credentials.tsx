@@ -48,20 +48,20 @@ interface Credential {
 const CATEGORIES = [
   { value: "social", label: "Social Media" },
   { value: "email", label: "Email" },
-  { value: "review", label: "Review Platform" },
+  { value: "review", label: "Piattaforma recensioni" },
   { value: "cloud", label: "Cloud Storage" },
   { value: "cms", label: "CMS" },
-  { value: "other", label: "Other" },
+  { value: "other", label: "Altro" },
 ] as const;
 
 const categoryLabel = (v: string | null) =>
-  CATEGORIES.find((c) => c.value === v)?.label ?? "Other";
+  CATEGORIES.find((c) => c.value === v)?.label ?? "Altro";
 
 const schema = z.object({
-  service_name: z.string().trim().min(1, "Required").max(120),
+  service_name: z.string().trim().min(1, "Obbligatorio").max(120),
   category: z.string().min(1),
-  username: z.string().trim().min(1, "Required").max(255),
-  password: z.string().min(1, "Required").max(500),
+  username: z.string().trim().min(1, "Obbligatorio").max(255),
+  password: z.string().min(1, "Obbligatorio").max(500),
   access_url: z.string().trim().max(500).optional().or(z.literal("")),
   notes: z.string().max(2000).optional().or(z.literal("")),
 });
@@ -78,9 +78,9 @@ function maskUser(u?: string | null) {
   return u.slice(0, 2) + "•".repeat(Math.max(3, u.length - 2));
 }
 
-async function copy(text: string, label = "Copied to clipboard") {
+async function copy(text: string, label = "Copiato negli appunti") {
   try { await navigator.clipboard.writeText(text); toast.success(`✓ ${label}`); }
-  catch { toast.error("Could not copy"); }
+  catch { toast.error("Impossibile copiare"); }
 }
 
 export default function Credentials() {
@@ -162,7 +162,7 @@ export default function Credentials() {
       parsed.error.issues.forEach((i) => { e[i.path[0] as string] = i.message; });
       setErrors(e); return;
     }
-    if (!companyId) { toast.error("Account not linked to a company"); return; }
+    if (!companyId) { toast.error("Account non collegato a un'azienda"); return; }
     const payload = {
       ...parsed.data,
       access_url: parsed.data.access_url || null,
@@ -174,11 +174,11 @@ export default function Credentials() {
       const { error } = await supabase.from("credentials")
         .update(payload as never).eq("id", editing.id);
       if (error) toast.error(error.message);
-      else toast.success("✓ Credential updated");
+      else toast.success("✓ Credenziale aggiornata");
     } else {
       const { error } = await supabase.from("credentials").insert(payload as never);
       if (error) toast.error(error.message);
-      else toast.success("✓ Credential added");
+      else toast.success("✓ Credenziale aggiunta");
     }
     setOpenForm(false);
     load();
@@ -186,8 +186,8 @@ export default function Credentials() {
 
   const remove = async (c: Credential) => {
     const { error } = await supabase.from("credentials").delete().eq("id", c.id);
-    if (error) toast.error("✗ Delete failed");
-    else { toast.success("Credential deleted"); load(); }
+    if (error) toast.error("✗ Eliminazione non riuscita");
+    else { toast.success("Credenziale eliminata"); load(); }
     setConfirmDelete(null);
     if (viewing?.id === c.id) setViewing(null);
   };
@@ -198,10 +198,10 @@ export default function Credentials() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t('credentials.title')}</h1>
           <p className="text-sm text-muted-foreground">
-            Securely store logins and access information for your accounts.
+            Salva in modo sicuro login e credenziali di accesso ai tuoi account.
           </p>
         </div>
-        <Button onClick={openAdd}><Plus className="mr-2 h-4 w-4" />Add credential</Button>
+        <Button onClick={openAdd}><Plus className="mr-2 h-4 w-4" />Aggiungi credenziale</Button>
       </div>
 
       <Card>
@@ -209,14 +209,14 @@ export default function Credentials() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search by service name..." value={search}
+              placeholder="Cerca per nome servizio..." value={search}
               onChange={(e) => setSearch(e.target.value)} className="pl-9"
             />
           </div>
           <Select value={filter} onValueChange={setFilter}>
             <SelectTrigger className="md:w-52"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All categories</SelectItem>
+              <SelectItem value="all">Tutte le categorie</SelectItem>
               {CATEGORIES.map((c) => (
                 <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
               ))}
@@ -233,11 +233,11 @@ export default function Credentials() {
             <div className="rounded-full bg-primary/10 p-4">
               <KeyRound className="h-7 w-7 text-primary" />
             </div>
-            <h3 className="text-lg font-semibold">No credentials stored yet</h3>
+            <h3 className="text-lg font-semibold">Nessuna credenziale salvata</h3>
             <p className="text-sm text-muted-foreground max-w-sm">
-              Add your first account access information to keep it secure and organized.
+              Aggiungi le credenziali del primo account per tenerle al sicuro e organizzate.
             </p>
-            <Button onClick={openAdd}><Plus className="mr-2 h-4 w-4" />Add credential</Button>
+            <Button onClick={openAdd}><Plus className="mr-2 h-4 w-4" />Aggiungi credenziale</Button>
           </CardContent>
         </Card>
       ) : (
@@ -247,11 +247,11 @@ export default function Credentials() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Service</TableHead>
+                  <TableHead>Servizio</TableHead>
                   <TableHead>Username</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Last updated</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>Categoria</TableHead>
+                  <TableHead>Ultima modifica</TableHead>
+                  <TableHead className="text-right">Azioni</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -280,7 +280,7 @@ export default function Credentials() {
                       <Button size="sm" variant="ghost" onClick={() => openEdit(c)}>
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={() => copy(c.username ?? "", "Username copied")}>
+                      <Button size="sm" variant="ghost" onClick={() => copy(c.username ?? "", "Username copiato")}>
                         <Copy className="h-4 w-4" />
                       </Button>
                       <Button size="sm" variant="ghost" className="text-destructive hover:text-destructive"
@@ -309,7 +309,7 @@ export default function Credentials() {
                   </div>
                   <p className="text-sm font-mono text-muted-foreground">{maskUser(c.username)}</p>
                   <p className="text-xs text-muted-foreground">
-                    Updated {formatDistanceToNow(new Date(c.updated_at), { addSuffix: true })}
+                    Aggiornato {formatDistanceToNow(new Date(c.updated_at), { addSuffix: true })}
                   </p>
                   <div className="flex gap-1 pt-1 border-t" onClick={(e) => e.stopPropagation()}>
                     <Button size="sm" variant="ghost" onClick={() => { setViewing(c); setShowPwView(false); }}>
@@ -348,7 +348,7 @@ export default function Credentials() {
                 <Field label="Username">
                   <div className="flex gap-2">
                     <Input readOnly value={viewing.username ?? ""} className="font-mono text-sm" />
-                    <Button size="icon" variant="outline" onClick={() => copy(viewing.username ?? "", "Username copied")}>
+                    <Button size="icon" variant="outline" onClick={() => copy(viewing.username ?? "", "Username copiato")}>
                       <Copy className="h-4 w-4" />
                     </Button>
                   </div>
@@ -381,23 +381,23 @@ export default function Credentials() {
                 )}
 
                 {viewing.notes && (
-                  <Field label="Notes">
+                  <Field label="Note">
                     <p className="text-sm whitespace-pre-wrap text-muted-foreground">{viewing.notes}</p>
                   </Field>
                 )}
 
                 <p className="text-xs text-muted-foreground">
-                  Last updated {formatDistanceToNow(new Date(viewing.updated_at), { addSuffix: true })}
+                  Ultima modifica {formatDistanceToNow(new Date(viewing.updated_at), { addSuffix: true })}
                 </p>
               </div>
 
               <DialogFooter className="gap-2 sm:gap-2">
                 <Button variant="outline" className="text-destructive"
                   onClick={() => setConfirmDelete(viewing)}>
-                  <Trash2 className="mr-2 h-4 w-4" />Delete
+                  <Trash2 className="mr-2 h-4 w-4" />Elimina
                 </Button>
                 <Button onClick={() => { const c = viewing; setViewing(null); openEdit(c); }}>
-                  <Pencil className="mr-2 h-4 w-4" />Edit
+                  <Pencil className="mr-2 h-4 w-4" />Modifica
                 </Button>
               </DialogFooter>
             </>
@@ -409,18 +409,18 @@ export default function Credentials() {
       <Dialog open={openForm} onOpenChange={setOpenForm}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>{editing ? "Edit credential" : "Add credential"}</DialogTitle>
+            <DialogTitle>{editing ? "Modifica credenziale" : "Aggiungi credenziale"}</DialogTitle>
             <DialogDescription>
-              All fields marked with * are required. Data is stored securely.
+              I campi con * sono obbligatori. I dati vengono salvati in modo sicuro.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3">
-            <Field label="Service name *" error={errors.service_name}>
+            <Field label="Nome servizio *" error={errors.service_name}>
               <Input value={form.service_name} maxLength={120}
                 onChange={(e) => setForm({ ...form, service_name: e.target.value })} />
             </Field>
-            <Field label="Category *">
+            <Field label="Categoria *">
               <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -447,19 +447,19 @@ export default function Credentials() {
                 </Button>
               </div>
             </Field>
-            <Field label="URL / access link">
+            <Field label="URL / link di accesso">
               <Input value={form.access_url} maxLength={500} placeholder="https://..."
                 onChange={(e) => setForm({ ...form, access_url: e.target.value })} />
             </Field>
-            <Field label="Notes">
+            <Field label="Note">
               <Textarea value={form.notes} maxLength={2000} rows={3}
                 onChange={(e) => setForm({ ...form, notes: e.target.value })} />
             </Field>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpenForm(false)}>Cancel</Button>
-            <Button onClick={submit}>{editing ? "Update" : "Save"}</Button>
+            <Button variant="outline" onClick={() => setOpenForm(false)}>Annulla</Button>
+            <Button onClick={submit}>{editing ? "Aggiorna" : "Salva"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -468,17 +468,17 @@ export default function Credentials() {
       <AlertDialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this credential?</AlertDialogTitle>
+            <AlertDialogTitle>Eliminare questa credenziale?</AlertDialogTitle>
             <AlertDialogDescription>
-              {confirmDelete?.service_name} will be permanently removed. This cannot be undone.
+              {confirmDelete?.service_name} verrà rimossa definitivamente. L'azione è irreversibile.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => confirmDelete && remove(confirmDelete)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >Delete</AlertDialogAction>
+            >Elimina</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -487,17 +487,17 @@ export default function Credentials() {
       <AlertDialog open={!!confirmCopyPw} onOpenChange={(o) => !o && setConfirmCopyPw(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Copy password to clipboard?</AlertDialogTitle>
+            <AlertDialogTitle>Copiare la password negli appunti?</AlertDialogTitle>
             <AlertDialogDescription>
-              The password will be copied to your clipboard. Be sure to clear it afterwards.
+              La password verrà copiata negli appunti. Ricorda di cancellarli al termine.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
             <AlertDialogAction onClick={() => {
-              if (confirmCopyPw?.password) copy(confirmCopyPw.password, "Password copied");
+              if (confirmCopyPw?.password) copy(confirmCopyPw.password, "Password copiata");
               setConfirmCopyPw(null);
-            }}>Copy</AlertDialogAction>
+            }}>Copia</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
