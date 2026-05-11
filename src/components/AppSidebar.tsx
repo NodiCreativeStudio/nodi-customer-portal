@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Rocket, FolderKanban, Upload, KeyRound,
-  Layers, Contact, Download, Shield,
+  Layers, Contact, Download, Shield, Users, DollarSign, BarChart3, Settings,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -19,6 +19,14 @@ const mainItems = [
   { title: "Stack", url: "/stack", icon: Layers },
   { title: "Contacts", url: "/contacts", icon: Contact },
   { title: "Downloads", url: "/downloads", icon: Download },
+];
+
+const adminItems = [
+  { title: "Dashboard", url: "/admin", icon: Shield, exact: true },
+  { title: "Clients", url: "/admin/clients", icon: Users },
+  { title: "Revenue", url: "/admin/revenue", icon: DollarSign },
+  { title: "Analytics", url: "/admin/analytics", icon: BarChart3 },
+  { title: "Settings", url: "/admin/config", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -66,14 +74,21 @@ export function AppSidebar() {
             <SidebarGroupLabel>Administration</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild isActive={pathname === "/admin"}>
-                    <NavLink to="/admin" className="flex items-center gap-2">
-                      <Shield className="h-4 w-4" />
-                      <span>Admin</span>
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                {adminItems.map((item) => {
+                  const active = item.exact
+                    ? pathname === item.url
+                    : pathname === item.url || pathname.startsWith(item.url + "/");
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild isActive={active}>
+                        <NavLink to={item.url} end={item.exact} className="flex items-center gap-2">
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.title}</span>
+                        </NavLink>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
