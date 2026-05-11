@@ -154,7 +154,7 @@ export default function AdminDashboard() {
             <StatCard icon={FolderKanban} label="Active Projects" value={stats.activeProjects}
               hint="Currently running" accent="success" />
             <StatCard icon={DollarSign} label="Monthly Revenue" value={`€${stats.mrr.toLocaleString()}`}
-              hint="MRR from tech stack" accent="accent-foreground" />
+              hint="MRR from tech stack" accent="accent" />
             <StatCard icon={CheckCircle} label="Onboarding" value={`${stats.rate}%`}
               hint={`${profiles.filter(p => p.onboarding_completed).length} of ${profiles.length}`} accent="warning" />
           </>
