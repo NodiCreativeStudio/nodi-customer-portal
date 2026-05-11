@@ -40,8 +40,11 @@ export default function AdminRevenue() {
   }, []);
 
   const stats = useMemo(() => {
-    const mrr = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
+    const activeClients = clients.filter((c: any) => c.status === "active");
+    const mrr = activeClients.reduce((s, c: any) => s + (Number(c.monthly_fee) || 0), 0);
     const arr = mrr * 12;
+    const costs = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
+    const margin = mrr - costs;
     const monthEnd = endOfMonth(new Date());
     const monthStart = startOfMonth(new Date());
     const renewalsThisMonth = tech.filter((t) => {
@@ -49,34 +52,37 @@ export default function AdminRevenue() {
       const d = new Date(t.renewal_date);
       return d >= monthStart && d <= monthEnd;
     });
-    const lastMrr = mrr * 0.92; // synthetic last-month comparison
-    const arpc = clients.length ? mrr / clients.length : 0;
+    const arpc = activeClients.length ? mrr / activeClients.length : 0;
     return {
-      mrr, arr, arpc,
-      lastMrr,
-      growth: mrr - lastMrr,
+      mrr, arr, costs, margin, arpc,
+      activeClientCount: activeClients.length,
       renewalsThisMonthCount: renewalsThisMonth.length,
     };
   }, [tech, clients]);
 
   const revenueSeries = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, i) => startOfMonth(subMonths(new Date(), 11 - i)));
+    // Synthetic ramp-up to current MRR (no historical fee snapshots stored)
     return months.map((m, i) => ({
       month: format(m, "MMM yy"),
-      revenue: Math.round(stats.mrr * (0.6 + i * 0.04 + Math.sin(i * 0.6) * 0.05)),
+      revenue: Math.round(stats.mrr * (0.6 + i * 0.04)),
       current: i === 11,
     }));
   }, [stats.mrr]);
 
-  const revenueByService = useMemo(() => {
-    const map = new Map<string, number>();
+  const clientBreakdown = useMemo(() => {
+    const costByClient = new Map<string, number>();
     tech.forEach((t) => {
-      const k = t.service_name || "Other";
-      map.set(k, (map.get(k) ?? 0) + (Number(t.cost_monthly) || 0));
+      costByClient.set(t.client_id, (costByClient.get(t.client_id) ?? 0) + (Number(t.cost_monthly) || 0));
     });
-    return Array.from(map, ([service, amount]) => ({ service, amount }))
-      .sort((a, b) => b.amount - a.amount).slice(0, 5);
-  }, [tech]);
+    return clients
+      .map((c: any) => {
+        const fee = Number(c.monthly_fee) || 0;
+        const cost = costByClient.get(c.id) ?? 0;
+        return { id: c.id, name: c.company_name, status: c.status, fee, cost, margin: fee - cost };
+      })
+      .sort((a, b) => b.fee - a.fee);
+  }, [clients, tech]);
 
   const renewals = useMemo(() => {
     const today = new Date();
