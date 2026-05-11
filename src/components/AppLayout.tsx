@@ -39,7 +39,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
         <div className="flex flex-1 flex-col">
-          <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/80 px-4 backdrop-blur">
+          <header className="glass sticky top-0 z-30 flex h-14 items-center justify-between rounded-none border-x-0 border-t-0 px-4">
             <div className="flex items-center gap-2">
               <SidebarTrigger />
               <span className="text-sm font-medium text-muted-foreground">
@@ -89,7 +89,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               </DropdownMenu>
             </div>
           </header>
-          <main className="flex-1 p-6 animate-fade-in">{children}</main>
+          <main key={typeof window !== "undefined" ? window.location.pathname : "main"} className="flex-1 p-6 animate-fade-in">{children}</main>
         </div>
       </div>
     </SidebarProvider>
