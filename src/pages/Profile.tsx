@@ -24,10 +24,10 @@ export default function Profile() {
     const { error } = await supabase.rpc("set_my_role", { _role: newRole });
     setSwitching(false);
     if (error) {
-      toast.error("Failed to switch role: " + error.message);
+      toast.error("Cambio ruolo non riuscito: " + error.message);
       return;
     }
-    toast.success(`Switched to ${newRole} mode. Reloading...`);
+    toast.success(`Modalità ${newRole === "admin" ? "admin" : "cliente"} attivata. Ricaricamento...`);
     setTimeout(() => window.location.reload(), 600);
   };
 
@@ -129,10 +129,10 @@ export default function Profile() {
       const { error: uErr } = await supabase.from("uploads").insert(uploadsPayload as never);
       if (uErr) throw uErr;
 
-      toast.success("✓ Test data created successfully");
+      toast.success("✓ Dati di test creati con successo");
       setTimeout(() => window.location.reload(), 800);
     } catch (e: any) {
-      toast.error("Seed failed: " + e.message);
+      toast.error("Generazione non riuscita: " + e.message);
     } finally {
       setSeeding(false);
     }
@@ -140,7 +140,7 @@ export default function Profile() {
 
   const clearTestData = async () => {
     if (!user) return;
-    if (!confirm("Delete all test clients (matching 'Test ') and their related data?")) return;
+    if (!confirm("Eliminare tutti i clienti di test (con prefisso 'Test ') e i dati collegati?")) return;
     setSeeding(true);
     try {
       const { data: clients } = await supabase
@@ -158,10 +158,10 @@ export default function Profile() {
         await supabase.from("profiles").update({ company_id: null }).eq("id", user.id).in("company_id", ids);
         await supabase.from("clients").delete().in("id", ids);
       }
-      toast.success("✓ Test data cleared");
+      toast.success("✓ Dati di test rimossi");
       setTimeout(() => window.location.reload(), 600);
     } catch (e: any) {
-      toast.error("Clear failed: " + e.message);
+      toast.error("Pulizia non riuscita: " + e.message);
     } finally {
       setSeeding(false);
     }
@@ -171,7 +171,7 @@ export default function Profile() {
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold">{t('profile.title')}</h1>
-        <p className="text-sm text-muted-foreground">Manage your account and testing tools.</p>
+        <p className="text-sm text-muted-foreground">Gestisci il tuo account e gli strumenti di test.</p>
       </div>
 
       <Card>
@@ -181,7 +181,7 @@ export default function Profile() {
         <CardContent className="space-y-2 text-sm">
           <div className="flex justify-between"><span className="text-muted-foreground">Email</span><span>{user?.email}</span></div>
           <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">Current role</span>
+            <span className="text-muted-foreground">Ruolo attuale</span>
             <Badge variant={isAdmin ? "default" : "secondary"}>{role}</Badge>
           </div>
         </CardContent>
@@ -189,24 +189,24 @@ export default function Profile() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><ShieldCheck className="h-5 w-5" /> Admin Mode</CardTitle>
+          <CardTitle className="flex items-center gap-2"><ShieldCheck className="h-5 w-5" /> Modalità Admin</CardTitle>
           <CardDescription>
-            Toggle between client and admin to test admin features without creating a separate account.
+            Passa da modalità cliente a admin per testare le funzionalità senza creare un nuovo account.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between rounded-lg border p-4">
             <div>
-              <p className="font-medium">{isAdmin ? "Admin mode active" : "Client mode active"}</p>
+              <p className="font-medium">{isAdmin ? "Modalità admin attiva" : "Modalità cliente attiva"}</p>
               <p className="text-xs text-muted-foreground">
-                {isAdmin ? "You have full administrative access." : "Switch on to access the admin panel."}
+                {isAdmin ? "Hai pieno accesso amministrativo." : "Attiva per accedere al pannello admin."}
               </p>
             </div>
             <Switch checked={isAdmin} disabled={switching} onCheckedChange={toggleRole} />
           </div>
           {isAdmin && (
             <Button variant="outline" onClick={() => navigate("/admin")} className="w-full">
-              Open Admin Panel
+              Apri pannello admin
             </Button>
           )}
         </CardContent>
@@ -215,15 +215,15 @@ export default function Profile() {
       {isAdmin && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Database className="h-5 w-5" /> Test Data</CardTitle>
-            <CardDescription>Seed the database with a fake client, project, tasks and tech stack.</CardDescription>
+            <CardTitle className="flex items-center gap-2"><Database className="h-5 w-5" /> Dati di test</CardTitle>
+            <CardDescription>Popola il database con un cliente, progetti, task e tech stack di esempio.</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2">
             <Button onClick={seedTestData} disabled={seeding}>
-              {seeding ? "Working..." : "Generate test data"}
+              {seeding ? "In corso..." : "Genera dati di test"}
             </Button>
             <Button variant="outline" onClick={clearTestData} disabled={seeding}>
-              Clear test data
+              Rimuovi dati di test
             </Button>
           </CardContent>
         </Card>
