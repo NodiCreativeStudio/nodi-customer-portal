@@ -14,16 +14,11 @@ import {
   PieChart, Pie, Cell, BarChart, Bar, Legend,
 } from "recharts";
 import { format, formatDistanceToNow, startOfMonth, subMonths } from "date-fns";
+import { it as itLocale, enUS } from "date-fns/locale";
 import { toast } from "sonner";
 import { downloadCsv } from "@/lib/csv-export";
 
 const COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--secondary))"];
-const STATUS_LABELS: Record<string, string> = {
-  planning: "Planning",
-  in_progress: "In Progress",
-  completed: "Completed",
-  paused: "Paused",
-};
 
 const ACCENTS: Record<string, { text: string; bg: string }> = {
   primary: { text: "text-primary", bg: "bg-primary/10" },
@@ -53,7 +48,14 @@ function StatCard({ icon: Icon, label, value, hint, accent = "primary" }: any) {
 }
 
 export default function AdminDashboard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dfLocale = i18n.language?.startsWith("it") ? itLocale : enUS;
+  const STATUS_LABELS: Record<string, string> = {
+    planning: t("projects.planning"),
+    in_progress: t("projects.inProgress"),
+    completed: t("projects.completed"),
+    paused: t("projects.paused"),
+  };
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState<any[]>([]);
@@ -127,7 +129,7 @@ export default function AdminDashboard() {
       ["MRR (EUR)", stats.mrr],
       ["Onboarding Completion %", stats.rate],
     ]);
-    toast.success("Summary exported");
+    toast.success(t("admin.summaryExported"));
   };
 
   return (
@@ -136,46 +138,44 @@ export default function AdminDashboard() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t('admin.dashboard')}</h1>
           <p className="text-muted-foreground">
-            {stats.totalClients} clients · {stats.activeProjects} active projects · €{stats.mrr.toLocaleString()} MRR
+            {stats.totalClients} {t("admin.clients").toLowerCase()} · {stats.activeProjects} {t("admin.activeProjects").toLowerCase()} · €{stats.mrr.toLocaleString()} MRR
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={load} disabled={loading}>
-            <RefreshCcw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />Refresh
+            <RefreshCcw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />{t("common.refresh")}
           </Button>
           <Button variant="outline" onClick={exportAll}>
-            <DownloadIcon className="h-4 w-4 mr-2" />Export
+            <DownloadIcon className="h-4 w-4 mr-2" />{t("common.export")}
           </Button>
         </div>
       </header>
 
-      {/* Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
           Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-28" />)
         ) : (
           <>
-            <StatCard icon={Users} label="Total Clients" value={stats.totalClients}
-              hint={stats.newClientsMonth ? `+${stats.newClientsMonth} this month` : "Active clients"} accent="primary" />
-            <StatCard icon={FolderKanban} label="Active Projects" value={stats.activeProjects}
-              hint="Currently running" accent="success" />
-            <StatCard icon={DollarSign} label="Monthly Recurring Revenue" value={`€${stats.mrr.toLocaleString()}`}
-              hint="Sum of active client fees" accent="accent" />
-            <StatCard icon={CheckCircle} label="Onboarding" value={`${stats.rate}%`}
-              hint={`${profiles.filter(p => p.onboarding_completed).length} of ${profiles.length}`} accent="warning" />
-            <StatCard icon={DollarSign} label="Total Client Costs" value={`€${stats.costs.toLocaleString()}`}
-              hint="Third-party services / month" accent="warning" />
-            <StatCard icon={DollarSign} label="Gross Margin" value={`€${stats.margin.toLocaleString()}`}
-              hint="MRR − costs" accent={stats.margin >= 0 ? "success" : "primary"} />
+            <StatCard icon={Users} label={t("admin.totalClients")} value={stats.totalClients}
+              hint={stats.newClientsMonth ? `+${stats.newClientsMonth} ${t("admin.thisMonth")}` : t("admin.statuses.active")} accent="primary" />
+            <StatCard icon={FolderKanban} label={t("admin.activeProjects")} value={stats.activeProjects}
+              hint={t("admin.currentlyRunning")} accent="success" />
+            <StatCard icon={DollarSign} label={t("admin.mrr")} value={`€${stats.mrr.toLocaleString()}`}
+              hint={t("admin.sumActiveFees")} accent="accent" />
+            <StatCard icon={CheckCircle} label={t("admin.onboarding")} value={`${stats.rate}%`}
+              hint={`${profiles.filter(p => p.onboarding_completed).length} ${t("common.of")} ${profiles.length}`} accent="warning" />
+            <StatCard icon={DollarSign} label={t("admin.totalCosts")} value={`€${stats.costs.toLocaleString()}`}
+              hint={t("admin.thirdPartyServices")} accent="warning" />
+            <StatCard icon={DollarSign} label={t("admin.grossMargin")} value={`€${stats.margin.toLocaleString()}`}
+              hint={t("admin.mrrMinusCosts")} accent={stats.margin >= 0 ? "success" : "primary"} />
           </>
         )}
       </div>
 
-      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Revenue trend (last 12 months)</CardTitle>
+            <CardTitle>{t("admin.revenueTrend")}</CardTitle>
           </CardHeader>
           <CardContent className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
                 <Tooltip
                   contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
-                  formatter={(v: any) => [`€${Number(v).toLocaleString()}`, "Revenue"]}
+                  formatter={(v: any) => [`€${Number(v).toLocaleString()}`, t("admin.revenue")]}
                 />
                 <Area type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" fill="url(#rev)" strokeWidth={2} />
               </AreaChart>
@@ -200,10 +200,10 @@ export default function AdminDashboard() {
         </Card>
 
         <Card>
-          <CardHeader><CardTitle>Clients by industry</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t("admin.clientsByIndustry")}</CardTitle></CardHeader>
           <CardContent className="h-[260px]">
             {industryData.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center pt-12">No data</p>
+              <p className="text-sm text-muted-foreground text-center pt-12">{t("common.noData")}</p>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -219,10 +219,10 @@ export default function AdminDashboard() {
         </Card>
 
         <Card>
-          <CardHeader><CardTitle>Project status</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t("admin.projectStatus")}</CardTitle></CardHeader>
           <CardContent className="h-[260px]">
             {projectStatusData.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center pt-12">No projects</p>
+              <p className="text-sm text-muted-foreground text-center pt-12">{t("common.noData")}</p>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={projectStatusData} layout="vertical" margin={{ left: 20 }}>
@@ -238,13 +238,12 @@ export default function AdminDashboard() {
         </Card>
       </div>
 
-      {/* Activity + Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
-          <CardHeader><CardTitle className="flex items-center gap-2"><Activity className="h-5 w-5" />Recent Activity</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="flex items-center gap-2"><Activity className="h-5 w-5" />{t("admin.recentActivity")}</CardTitle></CardHeader>
           <CardContent>
             {activity.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-8 text-center">No recent activity yet.</p>
+              <p className="text-sm text-muted-foreground py-8 text-center">{t("admin.noActivity")}</p>
             ) : (
               <div className="space-y-3">
                 {activity.map((e) => (
@@ -260,7 +259,7 @@ export default function AdminDashboard() {
                       </p>
                     </div>
                     <span className="text-xs text-muted-foreground whitespace-nowrap ml-3">
-                      {formatDistanceToNow(new Date(e.created_at), { addSuffix: true })}
+                      {formatDistanceToNow(new Date(e.created_at), { addSuffix: true, locale: dfLocale })}
                     </span>
                   </button>
                 ))}
@@ -270,22 +269,22 @@ export default function AdminDashboard() {
         </Card>
 
         <Card>
-          <CardHeader><CardTitle>Quick Actions</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t("admin.quickActions")}</CardTitle></CardHeader>
           <CardContent className="space-y-2">
             <Button asChild className="w-full justify-start" variant="default">
-              <Link to="/admin/clients"><Plus className="h-4 w-4 mr-2" />New Client</Link>
+              <Link to="/admin/clients"><Plus className="h-4 w-4 mr-2" />{t("admin.newClient")}</Link>
             </Button>
             <Button asChild className="w-full justify-between" variant="outline">
-              <Link to="/admin/clients">View All Clients <ArrowRight className="h-4 w-4" /></Link>
+              <Link to="/admin/clients">{t("admin.viewAllClients")} <ArrowRight className="h-4 w-4" /></Link>
             </Button>
             <Button asChild className="w-full justify-between" variant="outline">
-              <Link to="/admin/revenue">Revenue Report <ArrowRight className="h-4 w-4" /></Link>
+              <Link to="/admin/revenue">{t("admin.revenueReport")} <ArrowRight className="h-4 w-4" /></Link>
             </Button>
             <Button asChild className="w-full justify-between" variant="outline">
-              <Link to="/admin/analytics">Analytics <ArrowRight className="h-4 w-4" /></Link>
+              <Link to="/admin/analytics">{t("admin.analytics")} <ArrowRight className="h-4 w-4" /></Link>
             </Button>
             <Button asChild className="w-full justify-between" variant="outline">
-              <Link to="/admin/config">Agency Config <ArrowRight className="h-4 w-4" /></Link>
+              <Link to="/admin/config">{t("admin.agencyConfig")} <ArrowRight className="h-4 w-4" /></Link>
             </Button>
           </CardContent>
         </Card>
