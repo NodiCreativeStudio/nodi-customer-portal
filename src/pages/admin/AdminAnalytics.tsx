@@ -37,7 +37,7 @@ export default function AdminAnalytics() {
         supabase.from("tech_stack").select("service_name, client_id"),
         supabase.from("activity_log").select("*"),
       ]);
-      if (pr.error) toast.error("Failed to load analytics");
+      if (pr.error) toast.error("Caricamento analytics non riuscito");
       setProfiles(pr.data ?? []);
       setProjects(p.data ?? []);
       setUploads(u.data ?? []);
@@ -71,9 +71,9 @@ export default function AdminAnalytics() {
     const started = profiles.filter((p) => !p.onboarding_completed).length + profiles.filter((p) => p.onboarding_completed).length;
     const done = profiles.filter((p) => p.onboarding_completed).length;
     return [
-      { stage: "Signed Up", count: total },
-      { stage: "Started Onboarding", count: started },
-      { stage: "Completed", count: done },
+      { stage: "Registrati", count: total },
+      { stage: "Onboarding iniziato", count: started },
+      { stage: "Completato", count: done },
     ];
   }, [profiles]);
 
@@ -111,8 +111,8 @@ export default function AdminAnalytics() {
   }, [from, to, profiles, projects, uploads, activity]);
 
   const exportTable = () => {
-    downloadCsv(`analytics-${from}-to-${to}`, [
-      ["Date", "Signups", "Onboarding Completed", "Projects Created", "Files Uploaded"],
+    downloadCsv(`analytics-${from}-${to}`, [
+      ["Data", "Registrazioni", "Onboarding completati", "Progetti creati", "File caricati"],
       ...dailyTable.map((r) => [r.date, r.signups, r.onboarded, r.projects, r.uploads]),
     ]);
   };
@@ -121,26 +121,26 @@ export default function AdminAnalytics() {
     <div className="container mx-auto p-4 md:p-8 space-y-6 max-w-[1400px]">
       <header>
         <h1 className="text-3xl font-bold tracking-tight">{t('admin.analytics')}</h1>
-        <p className="text-muted-foreground">Users, onboarding funnel, and adoption</p>
+        <p className="text-muted-foreground">Utenti, funnel di onboarding e adozione</p>
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24" />) : (
           <>
             <Card><CardContent className="p-5 flex items-start justify-between">
-              <div><p className="text-xs uppercase text-muted-foreground">Total Users</p><p className="text-3xl font-bold mt-2">{stats.total}</p></div>
+              <div><p className="text-xs uppercase text-muted-foreground">Utenti totali</p><p className="text-3xl font-bold mt-2">{stats.total}</p></div>
               <div className="h-11 w-11 rounded-lg bg-primary/10 flex items-center justify-center"><UsersIcon className="h-5 w-5 text-primary" /></div>
             </CardContent></Card>
             <Card><CardContent className="p-5 flex items-start justify-between">
-              <div><p className="text-xs uppercase text-muted-foreground">Onboarded</p><p className="text-3xl font-bold mt-2 text-success">{stats.onboarded}</p></div>
+              <div><p className="text-xs uppercase text-muted-foreground">Onboarding completato</p><p className="text-3xl font-bold mt-2 text-success">{stats.onboarded}</p></div>
               <div className="h-11 w-11 rounded-lg bg-success/10 flex items-center justify-center"><CheckCircle className="h-5 w-5 text-success" /></div>
             </CardContent></Card>
             <Card><CardContent className="p-5 flex items-start justify-between">
-              <div><p className="text-xs uppercase text-muted-foreground">Pending</p><p className="text-3xl font-bold mt-2 text-warning">{stats.pending}</p></div>
+              <div><p className="text-xs uppercase text-muted-foreground">In attesa</p><p className="text-3xl font-bold mt-2 text-warning">{stats.pending}</p></div>
               <div className="h-11 w-11 rounded-lg bg-warning/10 flex items-center justify-center"><Clock className="h-5 w-5 text-warning" /></div>
             </CardContent></Card>
             <Card><CardContent className="p-5 flex items-start justify-between">
-              <div><p className="text-xs uppercase text-muted-foreground">Completion Rate</p><p className="text-3xl font-bold mt-2">{stats.rate}%</p></div>
+              <div><p className="text-xs uppercase text-muted-foreground">Tasso di completamento</p><p className="text-3xl font-bold mt-2">{stats.rate}%</p></div>
               <div className="h-11 w-11 rounded-lg bg-accent/30 flex items-center justify-center"><UserPlus className="h-5 w-5 text-accent-foreground" /></div>
             </CardContent></Card>
           </>
@@ -149,7 +149,7 @@ export default function AdminAnalytics() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
-          <CardHeader><CardTitle>User growth (12 months)</CardTitle></CardHeader>
+          <CardHeader><CardTitle>Crescita utenti (12 mesi)</CardTitle></CardHeader>
           <CardContent className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={growthSeries}>
@@ -164,7 +164,7 @@ export default function AdminAnalytics() {
         </Card>
 
         <Card>
-          <CardHeader><CardTitle>Onboarding funnel</CardTitle></CardHeader>
+          <CardHeader><CardTitle>Funnel di onboarding</CardTitle></CardHeader>
           <CardContent className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={funnel}>
@@ -179,10 +179,10 @@ export default function AdminAnalytics() {
         </Card>
 
         <Card className="lg:col-span-2">
-          <CardHeader><CardTitle>Service adoption</CardTitle></CardHeader>
+          <CardHeader><CardTitle>Adozione dei servizi</CardTitle></CardHeader>
           <CardContent className="h-[300px]">
             {serviceAdoption.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center pt-12">No services yet</p>
+              <p className="text-sm text-muted-foreground text-center pt-12">Nessun servizio</p>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={serviceAdoption} layout="vertical" margin={{ left: 30 }}>
@@ -191,7 +191,7 @@ export default function AdminAnalytics() {
                   <YAxis type="category" dataKey="service" stroke="hsl(var(--muted-foreground))" fontSize={12} width={140} />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8 }} />
                   <Legend />
-                  <Bar dataKey="clients" name="Clients using" fill="hsl(var(--primary))" radius={[0, 6, 6, 0]} />
+                  <Bar dataKey="clients" name="Clienti che lo usano" fill="hsl(var(--primary))" radius={[0, 6, 6, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -201,18 +201,18 @@ export default function AdminAnalytics() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
-          <CardTitle>Daily breakdown</CardTitle>
+          <CardTitle>Dettaglio giornaliero</CardTitle>
           <div className="flex items-end gap-2">
-            <div><Label className="text-xs">From</Label><Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="h-9" /></div>
-            <div><Label className="text-xs">To</Label><Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="h-9" /></div>
-            <Button variant="outline" size="sm" onClick={exportTable}><DownloadIcon className="h-4 w-4 mr-2" />Export</Button>
+            <div><Label className="text-xs">Da</Label><Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="h-9" /></div>
+            <div><Label className="text-xs">A</Label><Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="h-9" /></div>
+            <Button variant="outline" size="sm" onClick={exportTable}><DownloadIcon className="h-4 w-4 mr-2" />Esporta</Button>
           </div>
         </CardHeader>
         <CardContent className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b text-left text-muted-foreground text-xs">
-                <th className="py-2">Date</th><th>Signups</th><th>Onboarded</th><th>Projects</th><th>Uploads</th>
+                <th className="py-2">Data</th><th>Registrazioni</th><th>Onboarding</th><th>Progetti</th><th>Upload</th>
               </tr>
             </thead>
             <tbody>
@@ -226,7 +226,7 @@ export default function AdminAnalytics() {
                 </tr>
               ))}
               {dailyTable.length === 0 && (
-                <tr><td colSpan={5} className="py-8 text-center text-muted-foreground">Pick a date range</td></tr>
+                <tr><td colSpan={5} className="py-8 text-center text-muted-foreground">Seleziona un intervallo di date</td></tr>
               )}
             </tbody>
           </table>

@@ -50,17 +50,17 @@ interface Service {
 }
 
 const CATEGORIES: { key: Category; label: string; icon: typeof MessageCircle; tone: string }[] = [
-  { key: "whatsapp", label: "WhatsApp & Messaging", icon: MessageCircle, tone: "text-success" },
-  { key: "email", label: "Email & Communications", icon: Mail, tone: "text-primary" },
+  { key: "whatsapp", label: "WhatsApp & Messaggistica", icon: MessageCircle, tone: "text-success" },
+  { key: "email", label: "Email & Comunicazioni", icon: Mail, tone: "text-primary" },
   { key: "loyalty", label: "Loyalty & Engagement", icon: Gift, tone: "text-secondary" },
-  { key: "web", label: "Websites & Portals", icon: Globe, tone: "text-primary" },
-  { key: "calendar", label: "Calendar & Scheduling", icon: Calendar, tone: "text-warning" },
-  { key: "analytics", label: "Analytics & Monitoring", icon: BarChart3, tone: "text-secondary" },
+  { key: "web", label: "Siti web & Portali", icon: Globe, tone: "text-primary" },
+  { key: "calendar", label: "Calendario & Prenotazioni", icon: Calendar, tone: "text-warning" },
+  { key: "analytics", label: "Analytics & Monitoraggio", icon: BarChart3, tone: "text-secondary" },
   { key: "sms", label: "SMS", icon: MessageCircle, tone: "text-warning" },
 ];
 
 const catMeta = (k: Category | null) =>
-  CATEGORIES.find((c) => c.key === k) ?? { key: "web" as Category, label: "Other", icon: Layers, tone: "text-muted-foreground" };
+  CATEGORIES.find((c) => c.key === k) ?? { key: "web" as Category, label: "Altro", icon: Layers, tone: "text-muted-foreground" };
 
 const statusBadge: Record<Status, string> = {
   active: "bg-success/15 text-success border-success/30",
@@ -69,7 +69,7 @@ const statusBadge: Record<Status, string> = {
   error: "bg-destructive/15 text-destructive border-destructive/30",
 };
 const statusLabel: Record<Status, string> = {
-  active: "Active", inactive: "Inactive", trial: "Trial", error: "Error",
+  active: "Attivo", inactive: "Inattivo", trial: "Trial", error: "Errore",
 };
 
 function fmtMoney(v: number | null | undefined) {
@@ -96,8 +96,8 @@ export default function TechStack() {
   });
 
   const submitNew = async () => {
-    if (!newForm.service_name.trim()) { toast.error("Service name is required"); return; }
-    if (!companyId) { toast.error("Account not linked to a company"); return; }
+    if (!newForm.service_name.trim()) { toast.error("Il nome del servizio è obbligatorio"); return; }
+    if (!companyId) { toast.error("Account non collegato a un'azienda"); return; }
     setSavingNew(true);
     const { error } = await supabase.from("tech_stack").insert({
       client_id: companyId,
@@ -109,7 +109,7 @@ export default function TechStack() {
     } as never);
     setSavingNew(false);
     if (error) { toast.error(error.message); return; }
-    toast.success("✓ Service added");
+    toast.success("✓ Servizio aggiunto");
     setOpenNew(false);
     setNewForm({ service_name: "", category: "whatsapp", cost_monthly: "", renewal_date: "", status: "active" });
     load();
@@ -165,7 +165,7 @@ export default function TechStack() {
   const disconnect = async (s: Service) => {
     const { error } = await supabase.from("tech_stack").delete().eq("id", s.id);
     if (error) toast.error(error.message);
-    else { toast.success("Service disconnected"); load(); }
+    else { toast.success("Servizio disconnesso"); load(); }
     setConfirmDc(null);
     if (viewing?.id === s.id) setViewing(null);
   };
@@ -175,10 +175,10 @@ export default function TechStack() {
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t('stack.title')}</h1>
-          <p className="text-sm text-muted-foreground">Services and tools integrated into your account.</p>
+          <p className="text-sm text-muted-foreground">Servizi e strumenti integrati nel tuo account.</p>
         </div>
         <Button onClick={() => setOpenNew(true)}>
-          <Plus className="mr-2 h-4 w-4" />Add Service
+          <Plus className="mr-2 h-4 w-4" />Aggiungi servizio
         </Button>
       </div>
 
@@ -187,8 +187,8 @@ export default function TechStack() {
           <CardContent className="flex items-center gap-3 p-4">
             <AlertTriangle className="h-5 w-5 text-warning shrink-0" />
             <p className="text-sm">
-              <span className="font-medium">{totals.expiringSoon.length} service(s)</span>{" "}
-              renewing within 7 days. Review before auto-renewal.
+              <span className="font-medium">{totals.expiringSoon.length} servizio/i</span>{" "}
+              in rinnovo entro 7 giorni. Verifica prima dell'auto-rinnovo.
             </p>
           </CardContent>
         </Card>
@@ -199,18 +199,18 @@ export default function TechStack() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search services..." value={search}
+              placeholder="Cerca servizi..." value={search}
               onChange={(e) => setSearch(e.target.value)} className="pl-9"
             />
           </div>
           <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as typeof statusFilter)}>
             <SelectTrigger className="md:w-44"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="all">Tutti gli stati</SelectItem>
+              <SelectItem value="active">Attivo</SelectItem>
               <SelectItem value="trial">Trial</SelectItem>
-              <SelectItem value="inactive">Inactive</SelectItem>
-              <SelectItem value="error">Error</SelectItem>
+              <SelectItem value="inactive">Inattivo</SelectItem>
+              <SelectItem value="error">Errore</SelectItem>
             </SelectContent>
           </Select>
         </CardContent>
@@ -218,7 +218,7 @@ export default function TechStack() {
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
         <TabsList className="flex flex-wrap h-auto justify-start">
-          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="all">Tutti</TabsTrigger>
           {CATEGORIES.map((c) => (
             <TabsTrigger key={c.key} value={c.key} className="gap-1.5">
               <c.icon className="h-3.5 w-3.5" />{c.label}
@@ -235,7 +235,7 @@ export default function TechStack() {
             <Card>
               <CardContent className="py-16 text-center text-muted-foreground">
                 <Layers className="mx-auto h-10 w-10 mb-3 opacity-40" />
-                <p>No services in this view.</p>
+                <p>Nessun servizio in questa visualizzazione.</p>
               </CardContent>
             </Card>
           ) : (
@@ -265,13 +265,13 @@ export default function TechStack() {
 
                       <div className="grid grid-cols-2 gap-3 text-sm">
                         <div>
-                          <p className="text-xs text-muted-foreground">Monthly</p>
+                          <p className="text-xs text-muted-foreground">Mensile</p>
                           <p className="font-medium">{fmtMoney(s.cost_monthly)}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-muted-foreground">Renews</p>
+                          <p className="text-xs text-muted-foreground">Rinnovo</p>
                           <p className={cn("font-medium", renewSoon && "text-warning")}>
-                            {s.renewal_date ? format(new Date(s.renewal_date), "MMM d, yyyy") : "—"}
+                            {s.renewal_date ? format(new Date(s.renewal_date), "d MMM yyyy") : "—"}
                           </p>
                         </div>
                       </div>
@@ -280,18 +280,18 @@ export default function TechStack() {
                         <div className="text-xs text-muted-foreground space-y-0.5 border-t pt-3">
                           {s.connected_account && <p>Account: <span className="text-foreground">{s.connected_account}</span></p>}
                           {s.last_sync_at && (
-                            <p>Last sync: {formatDistanceToNow(new Date(s.last_sync_at), { addSuffix: true })}</p>
+                            <p>Ultima sincronizzazione: {formatDistanceToNow(new Date(s.last_sync_at), { addSuffix: true })}</p>
                           )}
                         </div>
                       )}
 
                       <div className="flex gap-1 pt-1">
-                        <Button size="sm" variant="outline" onClick={() => setViewing(s)}>View</Button>
-                        <Button size="sm" variant="ghost" onClick={() => toast.info("Configuration coming soon")}>
+                        <Button size="sm" variant="outline" onClick={() => setViewing(s)}>Dettagli</Button>
+                        <Button size="sm" variant="ghost" onClick={() => toast.info("Configurazione in arrivo")}>
                           <Settings2 className="h-4 w-4" />
                         </Button>
                         <Button size="sm" variant="ghost"
-                          onClick={() => s.external_url ? window.open(s.external_url, "_blank") : toast.info("No support link configured")}>
+                          onClick={() => s.external_url ? window.open(s.external_url, "_blank") : toast.info("Nessun link di supporto configurato")}>
                           <HelpCircle className="h-4 w-4" />
                         </Button>
                         <Button size="sm" variant="ghost" className="ml-auto text-destructive hover:text-destructive"
@@ -313,33 +313,33 @@ export default function TechStack() {
         <CardContent className="p-5 space-y-4">
           <div className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-primary" />
-            <h2 className="font-semibold">Cost summary</h2>
+            <h2 className="font-semibold">Riepilogo costi</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-lg border p-4">
-              <p className="text-xs text-muted-foreground">Total monthly</p>
+              <p className="text-xs text-muted-foreground">Totale mensile</p>
               <p className="text-2xl font-bold">{fmtMoney(totals.monthly)}</p>
             </div>
             <div className="rounded-lg border p-4">
-              <p className="text-xs text-muted-foreground">Total annual</p>
+              <p className="text-xs text-muted-foreground">Totale annuale</p>
               <p className="text-2xl font-bold">{fmtMoney(totals.annual)}</p>
             </div>
             <div className="rounded-lg border p-4">
-              <p className="text-xs text-muted-foreground">Next renewal</p>
+              <p className="text-xs text-muted-foreground">Prossimo rinnovo</p>
               <p className="text-lg font-semibold">
-                {totals.next?.renewal_date ? format(new Date(totals.next.renewal_date), "MMM d, yyyy") : "—"}
+                {totals.next?.renewal_date ? format(new Date(totals.next.renewal_date), "d MMM yyyy") : "—"}
               </p>
               <p className="text-xs text-muted-foreground truncate">{totals.next?.service_name ?? ""}</p>
             </div>
           </div>
           {Object.keys(totals.byCat).length > 0 && (
             <div className="space-y-1.5">
-              <p className="text-xs font-medium uppercase text-muted-foreground">Breakdown by category</p>
+              <p className="text-xs font-medium uppercase text-muted-foreground">Dettaglio per categoria</p>
               <div className="grid gap-1.5 sm:grid-cols-2">
                 {Object.entries(totals.byCat).map(([k, v]) => (
                   <div key={k} className="flex justify-between text-sm border-b py-1.5">
                     <span className="text-muted-foreground">{k}</span>
-                    <span className="font-medium">{fmtMoney(v)}/mo</span>
+                    <span className="font-medium">{fmtMoney(v)}/mese</span>
                   </div>
                 ))}
               </div>
@@ -376,31 +376,31 @@ export default function TechStack() {
                 )}
 
                 <div className="grid grid-cols-2 gap-3 text-sm">
-                  <Info label="Monthly cost" value={fmtMoney(viewing.cost_monthly)} />
-                  <Info label="Annual cost" value={fmtMoney(viewing.cost_annual ?? (viewing.cost_monthly ?? 0) * 12)} />
-                  <Info label="Renews on" value={viewing.renewal_date ? format(new Date(viewing.renewal_date), "MMM d, yyyy") : "—"} />
-                  <Info label="Auto-renew" value={viewing.auto_renew ? "Enabled" : "Disabled"} />
-                  <Info label="Connected account" value={viewing.connected_account ?? "—"} />
-                  <Info label="Last sync" value={viewing.last_sync_at ? formatDistanceToNow(new Date(viewing.last_sync_at), { addSuffix: true }) : "—"} />
+                  <Info label="Costo mensile" value={fmtMoney(viewing.cost_monthly)} />
+                  <Info label="Costo annuale" value={fmtMoney(viewing.cost_annual ?? (viewing.cost_monthly ?? 0) * 12)} />
+                  <Info label="Rinnovo" value={viewing.renewal_date ? format(new Date(viewing.renewal_date), "d MMM yyyy") : "—"} />
+                  <Info label="Auto-rinnovo" value={viewing.auto_renew ? "Attivo" : "Disattivato"} />
+                  <Info label="Account collegato" value={viewing.connected_account ?? "—"} />
+                  <Info label="Ultima sincronizzazione" value={viewing.last_sync_at ? formatDistanceToNow(new Date(viewing.last_sync_at), { addSuffix: true }) : "—"} />
                 </div>
 
                 <div className="rounded-md border p-3 flex items-center gap-2 text-sm">
                   {viewing.status === "error" ? (
-                    <><AlertTriangle className="h-4 w-4 text-destructive" /><span className="text-destructive">Connection error — reconnect required</span></>
+                    <><AlertTriangle className="h-4 w-4 text-destructive" /><span className="text-destructive">Errore di connessione — riconnessione necessaria</span></>
                   ) : (
-                    <><CheckCircle2 className="h-4 w-4 text-success" /><span>Service is healthy</span></>
+                    <><CheckCircle2 className="h-4 w-4 text-success" /><span>Servizio attivo e funzionante</span></>
                   )}
                 </div>
 
                 <DialogFooter className="gap-2 sm:gap-2">
                   <Button variant="outline" className="text-destructive"
                     onClick={() => setConfirmDc(viewing)}>
-                    <Unplug className="mr-2 h-4 w-4" />Disconnect
+                    <Unplug className="mr-2 h-4 w-4" />Disconnetti
                   </Button>
                   {viewing.external_url && (
                     <Button asChild>
                       <a href={viewing.external_url} target="_blank" rel="noreferrer">
-                        Open service<ExternalLink className="ml-2 h-4 w-4" />
+                        Apri servizio<ExternalLink className="ml-2 h-4 w-4" />
                       </a>
                     </Button>
                   )}
@@ -414,17 +414,17 @@ export default function TechStack() {
       <AlertDialog open={!!confirmDc} onOpenChange={(o) => !o && setConfirmDc(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Disconnect {confirmDc?.service_name}?</AlertDialogTitle>
+            <AlertDialogTitle>Disconnettere {confirmDc?.service_name}?</AlertDialogTitle>
             <AlertDialogDescription>
-              This service will be removed from your account and stop syncing. You can re-add it later.
+              Il servizio verrà rimosso dal tuo account e smetterà di sincronizzarsi. Potrai ricollegarlo in seguito.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => confirmDc && disconnect(confirmDc)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >Disconnect</AlertDialogAction>
+            >Disconnetti</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -432,17 +432,17 @@ export default function TechStack() {
       <Dialog open={openNew} onOpenChange={setOpenNew}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Add Service</DialogTitle>
-            <DialogDescription>Connect a new service to your tech stack.</DialogDescription>
+            <DialogTitle>Aggiungi servizio</DialogTitle>
+            <DialogDescription>Collega un nuovo servizio al tuo tech stack.</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5">
-              <Label>Service Name *</Label>
+              <Label>Nome servizio *</Label>
               <Input value={newForm.service_name} maxLength={120}
                 onChange={(e) => setNewForm({ ...newForm, service_name: e.target.value })} />
             </div>
             <div className="space-y-1.5">
-              <Label>Category</Label>
+              <Label>Categoria</Label>
               <Select value={newForm.category} onValueChange={(v) => setNewForm({ ...newForm, category: v as Category })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -454,32 +454,32 @@ export default function TechStack() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label>Monthly Cost (€)</Label>
+                <Label>Costo mensile (€)</Label>
                 <Input type="number" min="0" step="0.01" value={newForm.cost_monthly}
                   onChange={(e) => setNewForm({ ...newForm, cost_monthly: e.target.value })} />
               </div>
               <div className="space-y-1.5">
-                <Label>Renewal Date</Label>
+                <Label>Data di rinnovo</Label>
                 <Input type="date" value={newForm.renewal_date}
                   onChange={(e) => setNewForm({ ...newForm, renewal_date: e.target.value })} />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label>Status</Label>
+              <Label>Stato</Label>
               <Select value={newForm.status} onValueChange={(v) => setNewForm({ ...newForm, status: v as Status })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="active">Attivo</SelectItem>
                   <SelectItem value="trial">Trial</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                  <SelectItem value="error">Error</SelectItem>
+                  <SelectItem value="inactive">Inattivo</SelectItem>
+                  <SelectItem value="error">Errore</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpenNew(false)}>Cancel</Button>
-            <Button onClick={submitNew} disabled={savingNew}>{savingNew ? "Saving..." : "Add Service"}</Button>
+            <Button variant="outline" onClick={() => setOpenNew(false)}>Annulla</Button>
+            <Button onClick={submitNew} disabled={savingNew}>{savingNew ? "Salvataggio..." : "Aggiungi"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

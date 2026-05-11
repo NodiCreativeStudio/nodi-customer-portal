@@ -74,10 +74,10 @@ export default function AdminClientDetail() {
       industry: form.industry,
       status: form.status,
     }).eq("id", id!);
-    if (error) return toast.error("Update failed");
+    if (error) return toast.error("Aggiornamento non riuscito");
     setClient({ ...client, ...form });
     setEditOpen(false);
-    toast.success("Client updated");
+    toast.success("Cliente aggiornato");
   };
 
   const exportData = () => {
@@ -92,16 +92,16 @@ export default function AdminClientDetail() {
     return <div className="container mx-auto p-8 space-y-4"><Skeleton className="h-8 w-64" /><Skeleton className="h-40 w-full" /></div>;
   }
   if (!client) {
-    return <div className="container mx-auto p-8">Client not found.</div>;
+    return <div className="container mx-auto p-8">Cliente non trovato.</div>;
   }
 
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <Button variant="ghost" asChild><Link to="/admin"><ArrowLeft className="h-4 w-4 mr-2" />Back</Link></Button>
+        <Button variant="ghost" asChild><Link to="/admin"><ArrowLeft className="h-4 w-4 mr-2" />Indietro</Link></Button>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setEditOpen(true)}><Edit className="h-4 w-4 mr-2" />Edit</Button>
-          <Button variant="outline" onClick={exportData}><DownloadIcon className="h-4 w-4 mr-2" />Export</Button>
+          <Button variant="outline" onClick={() => setEditOpen(true)}><Edit className="h-4 w-4 mr-2" />Modifica</Button>
+          <Button variant="outline" onClick={exportData}><DownloadIcon className="h-4 w-4 mr-2" />Esporta</Button>
           <Button asChild><a href={`mailto:${client.contact_email}`}><Mail className="h-4 w-4 mr-2" />Email</a></Button>
         </div>
       </div>
@@ -128,24 +128,24 @@ export default function AdminClientDetail() {
               )}
               {client.contract_date && (
                 <span className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />Contract: {format(new Date(client.contract_date), "MMM d, yyyy")}
+                  <Calendar className="h-4 w-4" />Contratto: {format(new Date(client.contract_date), "d MMM yyyy")}
                 </span>
               )}
             </div>
           </div>
           <div className="space-y-2 md:border-l md:pl-6">
-            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Monthly Fee</span><span className="font-semibold">€{monthlyFee.toLocaleString()}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Canone mensile</span><span className="font-semibold">€{monthlyFee.toLocaleString()}</span></div>
             <div className="flex justify-between text-sm"><span className="text-muted-foreground">ARR</span><span className="font-semibold">€{arr.toLocaleString()}</span></div>
-            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Costs</span><span className="text-warning">€{monthlyCosts.toLocaleString()}</span></div>
-            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Margin</span><span className={cn("font-semibold", margin >= 0 ? "text-success" : "text-destructive")}>€{margin.toLocaleString()}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Costi</span><span className="text-warning">€{monthlyCosts.toLocaleString()}</span></div>
+            <div className="flex justify-between text-sm"><span className="text-muted-foreground">Margine</span><span className={cn("font-semibold", margin >= 0 ? "text-success" : "text-destructive")}>€{margin.toLocaleString()}</span></div>
             {nextRenewal && (
               <div className={cn("flex justify-between text-sm pt-2 border-t",
                 renewalDays !== null && renewalDays <= 14 && "text-warning")}>
                 <span className="flex items-center gap-1">
                   {renewalDays !== null && renewalDays <= 14 && <AlertTriangle className="h-3 w-3" />}
-                  Next renewal
+                  Prossimo rinnovo
                 </span>
-                <span>{format(nextRenewal, "MMM d, yyyy")}</span>
+                <span>{format(nextRenewal, "d MMM yyyy")}</span>
               </div>
             )}
           </div>
@@ -155,12 +155,12 @@ export default function AdminClientDetail() {
       {/* Projects */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2"><FolderKanban className="h-5 w-5" />Projects ({projects.length})</CardTitle>
-          <Button size="sm" variant="outline"><Plus className="h-4 w-4 mr-2" />New project</Button>
+          <CardTitle className="flex items-center gap-2"><FolderKanban className="h-5 w-5" />Progetti ({projects.length})</CardTitle>
+          <Button size="sm" variant="outline"><Plus className="h-4 w-4 mr-2" />Nuovo progetto</Button>
         </CardHeader>
         <CardContent>
           {projects.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-4 text-center">No projects yet.</p>
+            <p className="text-sm text-muted-foreground py-4 text-center">Nessun progetto.</p>
           ) : (
             <div className="space-y-2">
               {projects.map(p => (
@@ -169,7 +169,7 @@ export default function AdminClientDetail() {
                   <div>
                     <p className="font-medium">{p.project_name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {p.end_date ? `Ends ${format(new Date(p.end_date), "MMM d, yyyy")}` : "No end date"}
+                      {p.end_date ? `Fine ${format(new Date(p.end_date), "d MMM yyyy")}` : "Senza data di fine"}
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -189,7 +189,7 @@ export default function AdminClientDetail() {
           <CardHeader><CardTitle className="flex items-center gap-2"><Users className="h-5 w-5" />Team ({team.length})</CardTitle></CardHeader>
           <CardContent>
             {team.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">No team members linked.</p>
+              <p className="text-sm text-muted-foreground py-4 text-center">Nessun membro del team collegato.</p>
             ) : (
               <div className="space-y-2">
                 {team.map(m => (
@@ -207,11 +207,11 @@ export default function AdminClientDetail() {
 
         {/* Activity */}
         <Card>
-          <CardHeader><CardTitle>Recent activity</CardTitle></CardHeader>
+          <CardHeader><CardTitle>Attività recente</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {[...projects.map(p => ({ id: p.id, text: `Project "${p.project_name}" updated`, when: p.updated_at })),
-                { id: "client", text: "Client record updated", when: client.updated_at }]
+              {[...projects.map(p => ({ id: p.id, text: `Progetto "${p.project_name}" aggiornato`, when: p.updated_at })),
+                { id: "client", text: "Scheda cliente aggiornata", when: client.updated_at }]
                 .sort((a, b) => new Date(b.when).getTime() - new Date(a.when).getTime())
                 .slice(0, 6)
                 .map(item => (
@@ -228,17 +228,17 @@ export default function AdminClientDetail() {
       {/* Edit modal */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Edit client</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Modifica cliente</DialogTitle></DialogHeader>
           <div className="space-y-3">
-            <div><Label>Company name</Label><Input value={form.company_name ?? ""} onChange={e => setForm({ ...form, company_name: e.target.value })} /></div>
+            <div><Label>Ragione sociale</Label><Input value={form.company_name ?? ""} onChange={e => setForm({ ...form, company_name: e.target.value })} /></div>
             <div><Label>Email</Label><Input value={form.contact_email ?? ""} onChange={e => setForm({ ...form, contact_email: e.target.value })} /></div>
-            <div><Label>Phone</Label><Input value={form.contact_phone ?? ""} onChange={e => setForm({ ...form, contact_phone: e.target.value })} /></div>
-            <div><Label>Industry</Label><Input value={form.industry ?? ""} onChange={e => setForm({ ...form, industry: e.target.value })} /></div>
-            <div><Label>Status</Label><Input value={form.status ?? ""} onChange={e => setForm({ ...form, status: e.target.value })} /></div>
+            <div><Label>Telefono</Label><Input value={form.contact_phone ?? ""} onChange={e => setForm({ ...form, contact_phone: e.target.value })} /></div>
+            <div><Label>Settore</Label><Input value={form.industry ?? ""} onChange={e => setForm({ ...form, industry: e.target.value })} /></div>
+            <div><Label>Stato</Label><Input value={form.status ?? ""} onChange={e => setForm({ ...form, status: e.target.value })} /></div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditOpen(false)}>Cancel</Button>
-            <Button onClick={saveEdit}>Save</Button>
+            <Button variant="outline" onClick={() => setEditOpen(false)}>Annulla</Button>
+            <Button onClick={saveEdit}>Salva</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

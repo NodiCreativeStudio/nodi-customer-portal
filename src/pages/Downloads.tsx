@@ -40,11 +40,11 @@ interface DocRow {
 
 const CATEGORY_META: Record<Category, { label: string; icon: typeof FileText; cls: string }> = {
   report:      { label: "Report",      icon: FileText,      cls: "bg-primary/10 text-primary border-primary/20" },
-  invoice:     { label: "Invoice",     icon: Receipt,       cls: "bg-success/10 text-success border-success/20" },
-  contract:    { label: "Contract",    icon: FileSignature, cls: "bg-warning/10 text-warning border-warning/20" },
+  invoice:     { label: "Fattura",     icon: Receipt,       cls: "bg-success/10 text-success border-success/20" },
+  contract:    { label: "Contratto",   icon: FileSignature, cls: "bg-warning/10 text-warning border-warning/20" },
   deliverable: { label: "Deliverable", icon: Package,       cls: "bg-secondary/10 text-secondary-foreground border-secondary/30" },
   onboarding:  { label: "Onboarding",  icon: ClipboardList, cls: "bg-accent/10 text-accent-foreground border-accent/30" },
-  other:       { label: "Other",       icon: FileIcon,      cls: "bg-muted text-muted-foreground border-border" },
+  other:       { label: "Altro",       icon: FileIcon,      cls: "bg-muted text-muted-foreground border-border" },
 };
 
 function fmtSize(n?: number | null) {
@@ -83,7 +83,7 @@ export default function Downloads() {
     setLoading(true);
     const { data, error } = await supabase
       .from("documents").select("*").order("created_at", { ascending: false });
-    if (error) toast.error("Failed to load documents");
+    if (error) toast.error("Caricamento documenti non riuscito");
     setDocs((data ?? []) as DocRow[]);
     setLoading(false);
   };
@@ -116,18 +116,18 @@ export default function Downloads() {
     if (!doc.storage_path) return null;
     const { data, error } = await supabase.storage
       .from("uploads").createSignedUrl(doc.storage_path, 300);
-    if (error) { toast.error("Could not get file link"); return null; }
+    if (error) { toast.error("Impossibile generare il link al file"); return null; }
     return data.signedUrl;
   };
 
   const handleDownload = async (doc: DocRow) => {
-    toast("Downloading…");
+    toast("Download in corso…");
     const url = await getUrl(doc);
     if (!url) return;
     const a = document.createElement("a");
     a.href = url; a.download = doc.name; a.target = "_blank";
     document.body.appendChild(a); a.click(); a.remove();
-    toast.success("Downloaded");
+    toast.success("Download completato");
   };
 
   const handlePreview = async (doc: DocRow) => {
@@ -141,13 +141,13 @@ export default function Downloads() {
     const url = await getUrl(doc);
     if (!url) return;
     await navigator.clipboard.writeText(url);
-    toast.success("Share link copied to clipboard");
+    toast.success("Link di condivisione copiato negli appunti");
   };
 
   const handleDelete = async (doc: DocRow) => {
     const { error } = await supabase.from("documents").delete().eq("id", doc.id);
-    if (error) { toast.error("Delete failed"); return; }
-    toast.success("Document deleted");
+    if (error) { toast.error("Eliminazione non riuscita"); return; }
+    toast.success("Documento eliminato");
     setConfirmDelete(null);
     setDocs(prev => prev.filter(d => d.id !== doc.id));
   };
@@ -174,20 +174,20 @@ export default function Downloads() {
     <div className="container mx-auto p-4 md:p-8 space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">{t('downloads.title')}</h1>
-        <p className="text-muted-foreground">Access your documents, reports, and invoices.</p>
+        <p className="text-muted-foreground">Accedi ai tuoi documenti, report e fatture.</p>
       </header>
 
       <Card>
         <CardContent className="p-4 flex flex-col md:flex-row gap-3 md:items-center">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search documents…" value={search}
+            <Input placeholder="Cerca documenti…" value={search}
               onChange={e => setSearch(e.target.value)} className="pl-9" />
           </div>
           <Select value={filter} onValueChange={v => setFilter(v as any)}>
-            <SelectTrigger className="md:w-[160px]"><SelectValue placeholder="Type" /></SelectTrigger>
+            <SelectTrigger className="md:w-[160px]"><SelectValue placeholder="Tipo" /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All types</SelectItem>
+              <SelectItem value="all">Tutti i tipi</SelectItem>
               {(Object.keys(CATEGORY_META) as Category[]).map(c => (
                 <SelectItem key={c} value={c}>{CATEGORY_META[c].label}</SelectItem>
               ))}
@@ -196,18 +196,18 @@ export default function Downloads() {
           <Select value={range} onValueChange={v => setRange(v as DateRange)}>
             <SelectTrigger className="md:w-[160px]"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="30">Last 30 days</SelectItem>
-              <SelectItem value="90">Last 90 days</SelectItem>
-              <SelectItem value="all">All time</SelectItem>
+              <SelectItem value="30">Ultimi 30 giorni</SelectItem>
+              <SelectItem value="90">Ultimi 90 giorni</SelectItem>
+              <SelectItem value="all">Tutto il periodo</SelectItem>
             </SelectContent>
           </Select>
           <Select value={sort} onValueChange={v => setSort(v as SortKey)}>
             <SelectTrigger className="md:w-[140px]"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="date">Date</SelectItem>
-              <SelectItem value="name">Name</SelectItem>
-              <SelectItem value="size">Size</SelectItem>
-              <SelectItem value="type">Type</SelectItem>
+              <SelectItem value="date">Data</SelectItem>
+              <SelectItem value="name">Nome</SelectItem>
+              <SelectItem value="size">Dimensione</SelectItem>
+              <SelectItem value="type">Tipo</SelectItem>
             </SelectContent>
           </Select>
         </CardContent>
@@ -215,11 +215,11 @@ export default function Downloads() {
 
       {selected.size > 0 && (
         <div className="flex items-center gap-3 px-1">
-          <span className="text-sm text-muted-foreground">{selected.size} selected</span>
+          <span className="text-sm text-muted-foreground">{selected.size} selezionati</span>
           <Button size="sm" variant="outline" onClick={downloadSelected}>
-            <Download className="h-4 w-4 mr-2" />Download all
+            <Download className="h-4 w-4 mr-2" />Scarica tutti
           </Button>
-          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>Clear</Button>
+          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>Deseleziona</Button>
         </div>
       )}
 
@@ -227,7 +227,7 @@ export default function Downloads() {
         <TabsList className="flex flex-wrap h-auto">
           {tabs.map(t => (
             <TabsTrigger key={t} value={t} className="capitalize">
-              {t === "all" ? "All" : CATEGORY_META[t as Category].label + "s"}
+              {t === "all" ? "Tutti" : CATEGORY_META[t as Category].label + (t === "invoice" ? "" : "")}
             </TabsTrigger>
           ))}
         </TabsList>
@@ -240,8 +240,8 @@ export default function Downloads() {
           ) : filtered.length === 0 ? (
             <Card><CardContent className="p-12 text-center space-y-2">
               <FileIcon className="h-10 w-10 mx-auto text-muted-foreground" />
-              <p className="font-medium">No documents available yet</p>
-              <p className="text-sm text-muted-foreground">Your reports will appear here once generated.</p>
+              <p className="font-medium">Nessun documento disponibile</p>
+              <p className="text-sm text-muted-foreground">I tuoi report appariranno qui appena generati.</p>
             </CardContent></Card>
           ) : (
             <>
@@ -249,11 +249,11 @@ export default function Downloads() {
               <Card className="hidden md:block overflow-hidden">
                 <div className="grid grid-cols-[40px_1fr_140px_140px_100px_220px] gap-3 px-4 py-3 text-xs font-medium text-muted-foreground border-b bg-muted/30">
                   <span></span>
-                  <span>Document</span>
-                  <span>Type</span>
-                  <span>Date</span>
-                  <span>Size</span>
-                  <span className="text-right">Actions</span>
+                  <span>Documento</span>
+                  <span>Tipo</span>
+                  <span>Data</span>
+                  <span>Dimensione</span>
+                  <span className="text-right">Azioni</span>
                 </div>
                 {filtered.map(doc => {
                   const meta = CATEGORY_META[doc.category];
@@ -272,10 +272,10 @@ export default function Downloads() {
                       </span>
                       <span className="text-sm">{fmtSize(doc.file_size)}</span>
                       <div className="flex justify-end gap-1">
-                        <Button size="icon" variant="ghost" onClick={() => handlePreview(doc)} title="Preview"><Eye className="h-4 w-4" /></Button>
+                        <Button size="icon" variant="ghost" onClick={() => handlePreview(doc)} title="Anteprima"><Eye className="h-4 w-4" /></Button>
                         <Button size="icon" variant="ghost" onClick={() => handleDownload(doc)} title="Download"><Download className="h-4 w-4" /></Button>
-                        <Button size="icon" variant="ghost" onClick={() => handleShare(doc)} title="Share"><Share2 className="h-4 w-4" /></Button>
-                        <Button size="icon" variant="ghost" onClick={() => setConfirmDelete(doc)} title="Delete"><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                        <Button size="icon" variant="ghost" onClick={() => handleShare(doc)} title="Condividi"><Share2 className="h-4 w-4" /></Button>
+                        <Button size="icon" variant="ghost" onClick={() => setConfirmDelete(doc)} title="Elimina"><Trash2 className="h-4 w-4 text-destructive" /></Button>
                       </div>
                     </div>
                   );
@@ -348,7 +348,7 @@ export default function Downloads() {
                 ) : (
                   <div className="text-center text-muted-foreground p-6">
                     <FileIcon className="h-12 w-12 mx-auto mb-2" />
-                    <p>Preview not available for this file type.</p>
+                    <p>Anteprima non disponibile per questo tipo di file.</p>
                   </div>
                 )}
               </div>
@@ -356,7 +356,7 @@ export default function Downloads() {
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => preview && handleShare(preview)}>
-              <Share2 className="h-4 w-4 mr-2" />Share
+              <Share2 className="h-4 w-4 mr-2" />Condividi
             </Button>
             <Button onClick={() => preview && handleDownload(preview)}>
               <Download className="h-4 w-4 mr-2" />Download
@@ -368,15 +368,15 @@ export default function Downloads() {
       <AlertDialog open={!!confirmDelete} onOpenChange={o => !o && setConfirmDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete document?</AlertDialogTitle>
+            <AlertDialogTitle>Eliminare il documento?</AlertDialogTitle>
             <AlertDialogDescription>
-              "{confirmDelete?.name}" will be permanently removed. This cannot be undone.
+              "{confirmDelete?.name}" verrà rimosso definitivamente. L'azione è irreversibile.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
             <AlertDialogAction onClick={() => confirmDelete && handleDelete(confirmDelete)}>
-              Delete
+              Elimina
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
