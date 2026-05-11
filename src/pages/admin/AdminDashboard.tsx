@@ -24,18 +24,26 @@ const STATUS_LABELS: Record<string, string> = {
   paused: "Paused",
 };
 
+const ACCENTS: Record<string, { text: string; bg: string }> = {
+  primary: { text: "text-primary", bg: "bg-primary/10" },
+  success: { text: "text-success", bg: "bg-success/10" },
+  warning: { text: "text-warning", bg: "bg-warning/10" },
+  accent: { text: "text-accent-foreground", bg: "bg-accent/40" },
+};
+
 function StatCard({ icon: Icon, label, value, hint, accent = "primary" }: any) {
+  const a = ACCENTS[accent] ?? ACCENTS.primary;
   return (
     <Card className="hover-lift">
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm text-muted-foreground uppercase tracking-wide">{label}</p>
-            <p className={`text-3xl font-bold mt-2 text-${accent}`}>{value}</p>
+            <p className={`text-3xl font-bold mt-2 ${a.text}`}>{value}</p>
             {hint && <p className="text-xs text-muted-foreground mt-2">{hint}</p>}
           </div>
-          <div className={`h-11 w-11 rounded-lg bg-${accent}/10 flex items-center justify-center`}>
-            <Icon className={`h-5 w-5 text-${accent}`} />
+          <div className={`h-11 w-11 rounded-lg ${a.bg} flex items-center justify-center`}>
+            <Icon className={`h-5 w-5 ${a.text}`} />
           </div>
         </div>
       </CardContent>
