@@ -144,27 +144,27 @@ export default function AdminClients() {
 
   const save = async () => {
     if (!form.company_name.trim()) return toast.error("Company name is required");
+    const fee = form.monthly_fee === "" ? 0 : Number(form.monthly_fee);
+    if (Number.isNaN(fee) || fee < 0) return toast.error("Monthly fee must be a non-negative number");
+    if (form.status === "active" && fee <= 0) {
+      return toast.error("Set monthly fee before activating client");
+    }
     setSaving(true);
+    const payload = {
+      company_name: form.company_name,
+      industry: form.industry as any,
+      contact_email: form.contact_email || null,
+      contact_phone: form.contact_phone || null,
+      website: form.website || null,
+      status: form.status as any,
+      monthly_fee: fee,
+    };
     if (editingId) {
-      const { error } = await supabase.from("clients").update({
-        company_name: form.company_name,
-        industry: form.industry as any,
-        contact_email: form.contact_email || null,
-        contact_phone: form.contact_phone || null,
-        website: form.website || null,
-        status: form.status as any,
-      }).eq("id", editingId);
+      const { error } = await supabase.from("clients").update(payload).eq("id", editingId);
       if (error) { setSaving(false); return toast.error(error.message); }
       toast.success("Client updated");
     } else {
-      const { error } = await supabase.from("clients").insert({
-        company_name: form.company_name,
-        industry: form.industry as any,
-        contact_email: form.contact_email || null,
-        contact_phone: form.contact_phone || null,
-        website: form.website || null,
-        status: form.status as any,
-      });
+      const { error } = await supabase.from("clients").insert(payload);
       if (error) { setSaving(false); return toast.error(error.message); }
       toast.success("Client created");
     }
