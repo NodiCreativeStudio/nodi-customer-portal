@@ -44,6 +44,7 @@ interface ClientRow {
   contact_email: string | null;
   contact_phone: string | null;
   website: string | null;
+  monthly_fee: number | null;
   created_at: string;
 }
 
@@ -54,6 +55,7 @@ const emptyForm = {
   contact_phone: "",
   website: "",
   status: "active",
+  monthly_fee: "",
   notes: "",
 };
 
