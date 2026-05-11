@@ -83,13 +83,17 @@ export default function AdminDashboard() {
   useEffect(() => { load(); }, []);
 
   const stats = useMemo(() => {
-    const mrr = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
+    const mrr = clients
+      .filter((c) => c.status === "active")
+      .reduce((s, c) => s + (Number(c.monthly_fee) || 0), 0);
+    const costs = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
+    const margin = mrr - costs;
     const activeProjects = projects.filter((p) => p.status !== "completed").length;
     const onboarded = profiles.filter((p) => p.onboarding_completed).length;
     const rate = profiles.length ? Math.round((onboarded / profiles.length) * 100) : 0;
     const monthAgo = subMonths(new Date(), 1);
     const newClientsMonth = clients.filter((c) => new Date(c.created_at) >= monthAgo).length;
-    return { mrr, activeProjects, rate, newClientsMonth, totalClients: clients.length };
+    return { mrr, costs, margin, activeProjects, rate, newClientsMonth, totalClients: clients.length };
   }, [clients, projects, tech, profiles]);
 
   const revenueSeries = useMemo(() => {
