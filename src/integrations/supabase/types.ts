@@ -330,9 +330,11 @@ export type Database = {
           additional_requirements: string | null
           address: string | null
           agreed_terms: boolean
+          anagrafica: Json
           best_time: string | null
           budget_range: string | null
           company_name: string | null
+          completato_il: string | null
           contact_email: string | null
           contact_phone: string | null
           created_at: string
@@ -342,7 +344,11 @@ export type Database = {
           goals: string[]
           id: string
           industry: Database["public"]["Enums"]["client_industry"] | null
+          pagina_1_dati: Json
+          pagina_2_dati: Json
+          pagina_3_dati: Json
           preferred_contact: string | null
+          ragione_sociale: string | null
           status: Database["public"]["Enums"]["onboarding_status"]
           submitted_at: string | null
           timeline: string | null
@@ -350,15 +356,18 @@ export type Database = {
           user_id: string
           vat_id: string | null
           vertical_data: Json
+          verticale: string | null
           website: string | null
         }
         Insert: {
           additional_requirements?: string | null
           address?: string | null
           agreed_terms?: boolean
+          anagrafica?: Json
           best_time?: string | null
           budget_range?: string | null
           company_name?: string | null
+          completato_il?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
@@ -368,7 +377,11 @@ export type Database = {
           goals?: string[]
           id?: string
           industry?: Database["public"]["Enums"]["client_industry"] | null
+          pagina_1_dati?: Json
+          pagina_2_dati?: Json
+          pagina_3_dati?: Json
           preferred_contact?: string | null
+          ragione_sociale?: string | null
           status?: Database["public"]["Enums"]["onboarding_status"]
           submitted_at?: string | null
           timeline?: string | null
@@ -376,15 +389,18 @@ export type Database = {
           user_id: string
           vat_id?: string | null
           vertical_data?: Json
+          verticale?: string | null
           website?: string | null
         }
         Update: {
           additional_requirements?: string | null
           address?: string | null
           agreed_terms?: boolean
+          anagrafica?: Json
           best_time?: string | null
           budget_range?: string | null
           company_name?: string | null
+          completato_il?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
@@ -394,7 +410,11 @@ export type Database = {
           goals?: string[]
           id?: string
           industry?: Database["public"]["Enums"]["client_industry"] | null
+          pagina_1_dati?: Json
+          pagina_2_dati?: Json
+          pagina_3_dati?: Json
           preferred_contact?: string | null
+          ragione_sociale?: string | null
           status?: Database["public"]["Enums"]["onboarding_status"]
           submitted_at?: string | null
           timeline?: string | null
@@ -402,6 +422,7 @@ export type Database = {
           user_id?: string
           vat_id?: string | null
           vertical_data?: Json
+          verticale?: string | null
           website?: string | null
         }
         Relationships: []

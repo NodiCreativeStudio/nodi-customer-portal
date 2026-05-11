@@ -1,0 +1,938 @@
+{
+  "verticale": "repair",
+  "nome_verticale": "Repair (Centri Assistenza)",
+  "colore": "#BA2625",
+  "icona": "wrench",
+  "descrizione": "Centri assistenza smartphone, tablet, PC, laboratori tech",
+  "pagine": [
+    {
+      "numero": 1,
+      "titolo": "Situazione Attuale",
+      "sezioni": [
+        {
+          "id": "profilo_attivita",
+          "nome": "Profilo Attività",
+          "campi": [
+            {
+              "id": "dispositivi_ripari",
+              "label": "Quali dispositivi ripari principalmente?",
+              "tipo": "textarea",
+              "obbligatorio": true,
+              "rows": 2
+            },
+            {
+              "id": "interventi_spesso",
+              "label": "Quali interventi esegui più spesso?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            },
+            {
+              "id": "interventi_redditizi",
+              "label": "Quali interventi sono più redditizi?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            },
+            {
+              "id": "privati_vs_aziende",
+              "label": "Lavori più su privati o su aziende?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "privati",
+                "aziende",
+                "entrambi"
+              ]
+            },
+            {
+              "id": "tipo_dispositivi",
+              "label": "Tratti più smartphone, computer o altri dispositivi?",
+              "tipo": "text",
+              "obbligatorio": false
+            },
+            {
+              "id": "solo_riparazioni",
+              "label": "Ti occupi solo di riparazioni o anche di vendita e servizi accessori?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "solo_riparazioni",
+                "anche_vendita",
+                "anche_servizi",
+                "tutto"
+              ]
+            },
+            {
+              "id": "specializzazione",
+              "label": "Lavori su tutte le marche o sei specializzato?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "tutte_marche",
+                "specializzato"
+              ]
+            },
+            {
+              "id": "motivo_scelta",
+              "label": "Il cliente ti sceglie più per prezzo, velocità o affidabilità?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "prezzo",
+                "velocita",
+                "affidabilita",
+                "equilibrio"
+              ]
+            },
+            {
+              "id": "volume_vs_premium",
+              "label": "L'attività lavora più su volume o su servizio premium?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "volume",
+                "premium",
+                "equilibrio"
+              ]
+            },
+            {
+              "id": "punto_forza_principale",
+              "label": "Qual è oggi il principale punto di forza del centro?",
+              "tipo": "textarea",
+              "obbligatorio": true,
+              "rows": 2
+            }
+          ]
+        },
+        {
+          "id": "numeri_attuali",
+          "nome": "Numeri Attuali",
+          "campi": [
+            {
+              "id": "fatturato_totale",
+              "label": "Fatturato totale (€)?",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "numero_pratiche",
+              "label": "Numero pratiche gestite?",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "ticket_medio",
+              "label": "Ticket medio (€)?",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "percentuale_preventivi_accettati",
+              "label": "% preventivi accettati?",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "tempo_medio_chiusura",
+              "label": "Tempo medio di chiusura pratica (giorni)?",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "numero_pratiche_aperte",
+              "label": "Numero pratiche aperte o ferme?",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "fatturato_riparazioni",
+              "label": "Fatturato da riparazioni (€)?",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "fatturato_accessori",
+              "label": "Fatturato da accessori e prodotti (€)?",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "numero_recensioni",
+              "label": "Numero recensioni / livello soddisfazione clienti?",
+              "tipo": "text",
+              "obbligatorio": false
+            },
+            {
+              "id": "percentuale_rientrate",
+              "label": "% riparazioni rientrate?",
+              "tipo": "number",
+              "obbligatorio": false
+            }
+          ]
+        },
+        {
+          "id": "cliente_relazione",
+          "nome": "Cliente e Relazione",
+          "campi": [
+            {
+              "id": "clienti_spesso",
+              "label": "Chi sono oggi i clienti che si rivolgono più spesso a te?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            },
+            {
+              "id": "tipo_clienti",
+              "label": "Lavori soprattutto con privati, professionisti o microimprese?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "privati",
+                "professionisti",
+                "microimprese",
+                "mix"
+              ]
+            },
+            {
+              "id": "fascia_eta",
+              "label": "Qual è la fascia d'età prevalente dei tuoi clienti?",
+              "tipo": "text",
+              "obbligatorio": false
+            },
+            {
+              "id": "dispositivi_portati",
+              "label": "Quali dispositivi portano più spesso in assistenza?",
+              "tipo": "text",
+              "obbligatorio": false
+            },
+            {
+              "id": "motivo_scelta_cliente",
+              "label": "Per quale motivo ti scelgono?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "prezzo",
+                "velocita",
+                "fiducia",
+                "competenza",
+                "comodita"
+              ]
+            },
+            {
+              "id": "peso_urgenza",
+              "label": "Quanto pesa l'urgenza nella decisione di acquisto del servizio?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "poco",
+                "medio",
+                "molto",
+                "critico"
+              ]
+            },
+            {
+              "id": "problemi_richiesti",
+              "label": "Quali problemi o guasti richiedono più spesso?",
+              "tipo": "text",
+              "obbligatorio": false
+            },
+            {
+              "id": "dubbi_obiezioni",
+              "label": "Quali dubbi o obiezioni fanno più spesso prima di accettare la riparazione?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            },
+            {
+              "id": "raccolta_dati_strutturata",
+              "label": "Raccogli i dati dei clienti in modo strutturato?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "parziale"
+              ]
+            },
+            {
+              "id": "followup_riattivazione",
+              "label": "Fai follow-up post riparazione o attività di riattivazione cliente?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "saltuario"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "team_organizzazione",
+          "nome": "Team e Organizzazione",
+          "campi": [
+            {
+              "id": "numero_persone_totali",
+              "label": "Da quante persone è composto il team?",
+              "tipo": "number",
+              "obbligatorio": true
+            },
+            {
+              "id": "numero_tecnici",
+              "label": "Quanti tecnici operano in laboratorio?",
+              "tipo": "number",
+              "obbligatorio": true
+            },
+            {
+              "id": "numero_front_desk",
+              "label": "Quante persone gestiscono front desk e accoglienza?",
+              "tipo": "number",
+              "obbligatorio": true
+            },
+            {
+              "id": "livello_esperienza",
+              "label": "Qual è il livello medio di esperienza del team?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "scarso",
+                "medio",
+                "buono",
+                "eccellente"
+              ]
+            },
+            {
+              "id": "titolare_presente",
+              "label": "Il titolare è sempre presente operativamente?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "spesso",
+                "raramente"
+              ]
+            },
+            {
+              "id": "ruoli_distinti",
+              "label": "I ruoli tra front desk e laboratorio sono chiaramente distinti?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "parziale"
+              ]
+            },
+            {
+              "id": "responsabile_ruoli",
+              "label": "Chi è responsabile di presa in carico, preventivi e chiusura pratiche?",
+              "tipo": "text",
+              "obbligatorio": true
+            },
+            {
+              "id": "standard_operativi",
+              "label": "Il team ha standard operativi e procedure definite?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "parziale"
+              ]
+            },
+            {
+              "id": "aderenza_standard",
+              "label": "Qual è il livello di aderenza del team a questi standard?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "bassa",
+                "media",
+                "alta"
+              ]
+            },
+            {
+              "id": "colli_bottiglia",
+              "label": "Ci sono colli di bottiglia, sovrapposizioni o carenze organizzative?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            }
+          ]
+        },
+        {
+          "id": "processo_operativo",
+          "nome": "Processo Operativo",
+          "campi": [
+            {
+              "id": "chi_presa_carico",
+              "label": "Chi prende in carico cliente e dispositivo?",
+              "tipo": "text",
+              "obbligatorio": true
+            },
+            {
+              "id": "presa_carico_strutturata",
+              "label": "La presa in carico è strutturata?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "parziale"
+              ]
+            },
+            {
+              "id": "dati_completi_raccolti",
+              "label": "Raccogli dati completi di cliente e dispositivo?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "parziale"
+              ]
+            },
+            {
+              "id": "storico_dispositivi",
+              "label": "Hai uno storico dispositivi/interventi?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "parziale"
+              ]
+            },
+            {
+              "id": "chi_diagnosi",
+              "label": "Chi gestisce diagnosi e preventivi?",
+              "tipo": "text",
+              "obbligatorio": true
+            },
+            {
+              "id": "come_presenti_preventivi",
+              "label": "Come presenti i preventivi?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "strutturata",
+                "improvvisata",
+                "debole"
+              ]
+            },
+            {
+              "id": "preventivi_rifiutati",
+              "label": "Come gestisci i preventivi rifiutati?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            },
+            {
+              "id": "aggiornamento_stato",
+              "label": "Aggiorni lo stato pratica con frequenza?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "frequente",
+                "saltuario",
+                "raro"
+              ]
+            },
+            {
+              "id": "comunicazione_cliente",
+              "label": "Comunichi bene lo stato pratica al cliente?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "parziale",
+                "no"
+              ]
+            },
+            {
+              "id": "pratiche_ferme",
+              "label": "Come gestisci le pratiche ferme?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            },
+            {
+              "id": "tempi_standard",
+              "label": "Hai tempi standard per diagnosi e chiusura?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no"
+              ]
+            },
+            {
+              "id": "attesa_ricambi",
+              "label": "Come gestisci l'attesa ricambi?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            },
+            {
+              "id": "servizi_accessori",
+              "label": "Proponi servizi accessori coerenti?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "saltuario"
+              ]
+            },
+            {
+              "id": "richiedi_recensioni_sistematico",
+              "label": "Richiedi recensioni in modo sistematico?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "saltuario"
+              ]
+            },
+            {
+              "id": "followup_post_riparazione",
+              "label": "Fai follow-up post riparazione?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "si",
+                "no",
+                "saltuario"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "strumenti",
+          "nome": "Strumenti Attuali",
+          "campi": [
+            {
+              "id": "ha_gestionale",
+              "label": "Gestionale",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_sistema_prenotazione",
+              "label": "Sistema di prenotazione / agenda",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_crm",
+              "label": "CRM Clienti",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_reminder",
+              "label": "Sistema di reminder/notifica automatica",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_google_business",
+              "label": "Google Business Profile",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_apple_business",
+              "label": "Apple Business Profile",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_whatsapp",
+              "label": "Whatsapp Business",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_recensioni",
+              "label": "Sistema richiesta recensioni",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_loyalty",
+              "label": "Sistema Loyalty Card",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_dashboard",
+              "label": "Dashboard statistiche",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_sito",
+              "label": "Sito web aziendale",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_ricorrenze",
+              "label": "Sistema gestione ricorrenze/compleanni",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ha_comunicazioni",
+              "label": "Sistema comunicazioni reminder e follow-up",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            }
+          ]
+        },
+        {
+          "id": "problemi_percepiti",
+          "nome": "Problemi Percepiti",
+          "campi": [
+            {
+              "id": "fattori_ostacolano",
+              "label": "Quali sono i fattori che oggi ti impediscono di performare come vorresti?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            },
+            {
+              "id": "tre_problemi_12mesi",
+              "label": "Quali sono i 3 problemi della tua attività che vorresti risolvere nei prossimi 12 mesi?",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "titolo": "Obiettivi e KPI",
+      "sezioni": [
+        {
+          "id": "kpi_economici",
+          "nome": "KPI Economico-Finanziari",
+          "campi": [
+            {
+              "id": "fatturato_totale",
+              "label": "Fatturato totale",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "fatturato_riparazioni",
+              "label": "Fatturato da riparazioni",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "fatturato_prodotti",
+              "label": "Fatturato da vendita prodotti e accessori",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "fatturato_servizi_aggiuntivi",
+              "label": "Fatturato da servizi aggiuntivi",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "numero_pratiche",
+              "label": "Numero totale di pratiche / dispositivi gestiti",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "ticket_medio_riparazione",
+              "label": "Ticket medio per riparazione",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "margine_medio",
+              "label": "Margine medio per riparazione",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "margine_prodotti",
+              "label": "Margine su prodotti e accessori",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "incidenza_ricambi",
+              "label": "Incidenza del costo ricambi sul fatturato",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "percentuale_preventivi_accettati",
+              "label": "% preventivi accettati",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            }
+          ]
+        },
+        {
+          "id": "kpi_operazionali",
+          "nome": "KPI Eccellenza Operativa",
+          "campi": [
+            {
+              "id": "tat_medio",
+              "label": "TAT medio (presa in carico → riconsegna)",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "tempo_medio_preventivazione",
+              "label": "Tempo medio di preventivazione",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "tempo_medio_ricambi",
+              "label": "Tempo medio di attesa ricambi",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "percentuale_pratiche_sla",
+              "label": "% pratiche concluse entro SLA",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "backlog_laboratorio",
+              "label": "Backlog laboratorio (pratiche aperte/non chiuse)",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "first_time_fix",
+              "label": "First-time fix rate",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "repeat_repair",
+              "label": "Repeat repair rate",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "tasso_irreparabilita",
+              "label": "Tasso di irreparabilità",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "produttivita_tecnico",
+              "label": "Produttività per tecnico",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "customer_satisfaction",
+              "label": "Customer satisfaction",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            }
+          ]
+        },
+        {
+          "id": "obiettivi_90_12",
+          "nome": "Obiettivi 90gg e 12 Mesi",
+          "campi": [
+            {
+              "id": "migliorare_90gg",
+              "label": "Quali sono gli aspetti della tua attività che vorresti migliorare nei prossimi 90 giorni?",
+              "tipo": "textarea",
+              "obbligatorio": true,
+              "rows": 2
+            },
+            {
+              "id": "risultati_12mesi",
+              "label": "Quali sono invece i risultati che vorresti ottenere nei prossimi 12 mesi?",
+              "tipo": "textarea",
+              "obbligatorio": true,
+              "rows": 2
+            },
+            {
+              "id": "enfasi",
+              "label": "Più riparazioni, più servizi o più conversione?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "piu_riparazioni",
+                "piu_servizi",
+                "piu_conversione",
+                "equilibrio"
+              ]
+            },
+            {
+              "id": "importanza_reputazione",
+              "label": "Quanto è importante la reputazione?",
+              "tipo": "select",
+              "obbligatorio": true,
+              "opzioni": [
+                "bassa",
+                "media",
+                "alta",
+                "critica"
+              ]
+            },
+            {
+              "id": "priorita_1",
+              "label": "Priorità 1 (prossimi 90gg)",
+              "tipo": "textarea",
+              "obbligatorio": true,
+              "rows": 2
+            },
+            {
+              "id": "priorita_2",
+              "label": "Priorità 2 (prossimi 90gg)",
+              "tipo": "textarea",
+              "obbligatorio": true,
+              "rows": 2
+            },
+            {
+              "id": "priorita_3",
+              "label": "Priorità 3 (prossimi 90gg)",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "titolo": "Implementazione Tecnologica",
+      "sezioni": [
+        {
+          "id": "strumenti_da_attivare",
+          "nome": "Strumenti da Attivare",
+          "campi": [
+            {
+              "id": "attiva_gestionale",
+              "label": "Gestionale",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_sistema_prenotazione",
+              "label": "Sistema di prenotazione / agenda",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_crm",
+              "label": "CRM Clienti",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_reminder",
+              "label": "Sistema di reminder/notifica automatica",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_google_business",
+              "label": "Google Business Profile",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_apple_business",
+              "label": "Apple Business Profile",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_whatsapp",
+              "label": "Whatsapp Business",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_recensioni",
+              "label": "Sistema richiesta recensioni",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_loyalty",
+              "label": "Sistema Loyalty Card",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_dashboard",
+              "label": "Dashboard statistiche",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_sito",
+              "label": "Sito web aziendale",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_ricorrenze",
+              "label": "Sistema gestione ricorrenze/compleanni",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            },
+            {
+              "id": "attiva_comunicazioni",
+              "label": "Sistema comunicazioni reminder e follow-up",
+              "tipo": "checkbox",
+              "obbligatorio": false
+            }
+          ]
+        },
+        {
+          "id": "budget",
+          "nome": "Budget e Costi",
+          "campi": [
+            {
+              "id": "budget_marketing",
+              "label": "Budget per campagne Marketing (€/mese)",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "budget_strumenti",
+              "label": "Budget per implementazione strumenti tecnologici (€/mese)",
+              "tipo": "number",
+              "obbligatorio": false
+            },
+            {
+              "id": "note_budget",
+              "label": "Note aggiuntive",
+              "tipo": "textarea",
+              "obbligatorio": false,
+              "rows": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
