@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,6 +49,7 @@ const feedbackSchema = z.object({
 });
 
 export default function Contacts() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [subject, setSubject] = useState("feedback");
   const [email, setEmail] = useState(user?.email ?? "");
@@ -73,7 +75,7 @@ export default function Contacts() {
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Contact & Support</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('contacts.contactSupport')}</h1>
         <p className="text-sm text-muted-foreground">Get in touch with the NODI team.</p>
       </div>
 

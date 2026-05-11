@@ -9,31 +9,33 @@ import {
   SidebarHeader, useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/useAuth";
-
-const mainItems = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Onboarding", url: "/onboarding", icon: Rocket },
-  { title: "Projects", url: "/projects", icon: FolderKanban },
-  { title: "Uploads", url: "/uploads", icon: Upload },
-  { title: "Credentials", url: "/credentials", icon: KeyRound },
-  { title: "Stack", url: "/stack", icon: Layers },
-  { title: "Contacts", url: "/contacts", icon: Contact },
-  { title: "Downloads", url: "/downloads", icon: Download },
-];
-
-const adminItems = [
-  { title: "Dashboard", url: "/admin", icon: Shield, exact: true },
-  { title: "Clients", url: "/admin/clients", icon: Users },
-  { title: "Revenue", url: "/admin/revenue", icon: DollarSign },
-  { title: "Analytics", url: "/admin/analytics", icon: BarChart3 },
-  { title: "Settings", url: "/admin/config", icon: Settings },
-];
+import { useTranslation } from "react-i18next";
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const { pathname } = useLocation();
   const { role } = useAuth();
+  const { t } = useTranslation();
   const collapsed = state === "collapsed";
+
+  const mainItems = [
+    { title: t("nav.dashboard"), url: "/", icon: LayoutDashboard },
+    { title: t("nav.onboarding"), url: "/onboarding", icon: Rocket },
+    { title: t("nav.projects"), url: "/projects", icon: FolderKanban },
+    { title: t("nav.uploads"), url: "/uploads", icon: Upload },
+    { title: t("nav.credentials"), url: "/credentials", icon: KeyRound },
+    { title: t("nav.stack"), url: "/stack", icon: Layers },
+    { title: t("nav.contacts"), url: "/contacts", icon: Contact },
+    { title: t("nav.downloads"), url: "/downloads", icon: Download },
+  ];
+
+  const adminItems = [
+    { title: t("nav.dashboard"), url: "/admin", icon: Shield, exact: true },
+    { title: t("nav.clients"), url: "/admin/clients", icon: Users },
+    { title: t("nav.revenue"), url: "/admin/revenue", icon: DollarSign },
+    { title: t("nav.analytics"), url: "/admin/analytics", icon: BarChart3 },
+    { title: t("nav.settings"), url: "/admin/config", icon: Settings },
+  ];
 
   return (
     <Sidebar collapsible="icon">
@@ -52,7 +54,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("nav.workspace")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainItems.map((item) => (
@@ -71,7 +73,7 @@ export function AppSidebar() {
 
         {role === "admin" && (
           <SidebarGroup>
-            <SidebarGroupLabel>Administration</SidebarGroupLabel>
+            <SidebarGroupLabel>{t("nav.administration")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {adminItems.map((item) => {

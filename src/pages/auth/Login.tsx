@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,7 @@ import { loginSchema } from "@/lib/auth-validation";
 import AuthShell from "@/components/auth/AuthShell";
 
 export default function Login() {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -74,8 +76,8 @@ export default function Login() {
     <AuthShell>
       <Card className="shadow-[var(--shadow-elegant)]">
         <CardHeader>
-          <CardTitle>Sign in</CardTitle>
-          <CardDescription>Welcome back. Enter your details to continue.</CardDescription>
+          <CardTitle>{t('auth.signInTitle')}</CardTitle>
+          <CardDescription>{t('auth.signInDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -86,7 +88,7 @@ export default function Login() {
               </Alert>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('auth.email')}</Label>
               <Input
                 id="email" type="email" autoComplete="email" required
                 value={email} onChange={(e) => setEmail(e.target.value)}
@@ -94,9 +96,9 @@ export default function Login() {
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t('auth.password')}</Label>
                 <Link to="/auth/reset-password" className="text-xs text-primary hover:underline">
-                  Forgot password?
+                  {t('auth.forgotPassword')}
                 </Link>
               </div>
               <div className="relative">
@@ -116,10 +118,10 @@ export default function Login() {
             </div>
             <div className="flex items-center gap-2">
               <Checkbox id="remember" checked={remember} onCheckedChange={(v) => setRemember(!!v)} />
-              <Label htmlFor="remember" className="text-sm font-normal cursor-pointer">Remember me</Label>
+              <Label htmlFor="remember" className="text-sm font-normal cursor-pointer">{t('auth.rememberMe')}</Label>
             </div>
             <Button type="submit" className="w-full" disabled={busy}>
-              {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Sign in
+              {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} {t('auth.signIn')}
             </Button>
           </form>
 
@@ -141,12 +143,12 @@ export default function Login() {
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.83C6.71 7.31 9.14 5.38 12 5.38z"/>
               </svg>
             )}
-            Continue with Google
+            {t('auth.continueWithGoogle')}
           </Button>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
-            <Link to="/auth/signup" className="font-medium text-primary hover:underline">Sign up</Link>
+            {t('auth.noAccount')}{" "}
+            <Link to="/auth/signup" className="font-medium text-primary hover:underline">{t('auth.signUp')}</Link>
           </p>
         </CardContent>
       </Card>

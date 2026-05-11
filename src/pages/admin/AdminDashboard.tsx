@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,7 @@ function StatCard({ icon: Icon, label, value, hint, accent = "primary" }: any) {
 }
 
 export default function AdminDashboard() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState<any[]>([]);
@@ -128,7 +130,7 @@ export default function AdminDashboard() {
     <div className="container mx-auto p-4 md:p-8 space-y-6 max-w-[1400px]">
       <header className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('admin.dashboard')}</h1>
           <p className="text-muted-foreground">
             {stats.totalClients} clients · {stats.activeProjects} active projects · €{stats.mrr.toLocaleString()} MRR
           </p>

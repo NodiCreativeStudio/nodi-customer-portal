@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { downloadCsv } from "@/lib/csv-export";
 
 export default function AdminRevenue() {
+  const { t } = useTranslation();
   const [tech, setTech] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -101,7 +103,7 @@ export default function AdminRevenue() {
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-6 max-w-[1400px]">
       <header>
-        <h1 className="text-3xl font-bold tracking-tight">Revenue & Billing</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('admin.revenue')}</h1>
         <p className="text-muted-foreground">MRR, renewals, and revenue distribution</p>
       </header>
 

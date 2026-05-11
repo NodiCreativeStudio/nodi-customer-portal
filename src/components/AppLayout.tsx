@@ -83,7 +83,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     <Link to="/profile"><UserIcon className="mr-2 h-4 w-4" /> {t("nav.profile")}</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={signOut}>
-                    <LogOut className="mr-2 h-4 w-4" /> {t("common.close")}
+                    <LogOut className="mr-2 h-4 w-4" /> {t("nav.logout")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

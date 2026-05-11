@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,6 +58,7 @@ const emptyForm = {
 };
 
 export default function AdminClients() {
+  const { t } = useTranslation();
   const [rows, setRows] = useState<ClientRow[]>([]);
   const [projectCounts, setProjectCounts] = useState<Map<string, number>>(new Map());
   const [teamCounts, setTeamCounts] = useState<Map<string, number>>(new Map());
@@ -199,7 +201,7 @@ export default function AdminClients() {
     <div className="container mx-auto p-4 md:p-8 space-y-6 max-w-[1400px]">
       <header className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Clients</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('admin.clients')}</h1>
           <p className="text-muted-foreground">{filtered.length} of {rows.length} clients</p>
         </div>
         <div className="flex gap-2">

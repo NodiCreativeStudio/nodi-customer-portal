@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -77,6 +78,7 @@ function fmtMoney(v: number | null | undefined) {
 }
 
 export default function TechStack() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [items, setItems] = useState<Service[]>([]);
@@ -172,7 +174,7 @@ export default function TechStack() {
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Your Tech Stack</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('stack.title')}</h1>
           <p className="text-sm text-muted-foreground">Services and tools integrated into your account.</p>
         </div>
         <Button onClick={() => setOpenNew(true)}>
