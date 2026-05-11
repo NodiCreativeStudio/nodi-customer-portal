@@ -136,6 +136,7 @@ export default function AdminClients() {
       contact_phone: r.contact_phone ?? "",
       website: r.website ?? "",
       status: r.status,
+      monthly_fee: r.monthly_fee != null ? String(r.monthly_fee) : "",
       notes: "",
     });
     setOpen(true);
