@@ -152,17 +152,21 @@ export default function AdminDashboard() {
       {/* Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
-          Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-28" />)
+          Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-28" />)
         ) : (
           <>
             <StatCard icon={Users} label="Total Clients" value={stats.totalClients}
               hint={stats.newClientsMonth ? `+${stats.newClientsMonth} this month` : "Active clients"} accent="primary" />
             <StatCard icon={FolderKanban} label="Active Projects" value={stats.activeProjects}
               hint="Currently running" accent="success" />
-            <StatCard icon={DollarSign} label="Monthly Revenue" value={`€${stats.mrr.toLocaleString()}`}
-              hint="MRR from tech stack" accent="accent" />
+            <StatCard icon={DollarSign} label="Monthly Recurring Revenue" value={`€${stats.mrr.toLocaleString()}`}
+              hint="Sum of active client fees" accent="accent" />
             <StatCard icon={CheckCircle} label="Onboarding" value={`${stats.rate}%`}
               hint={`${profiles.filter(p => p.onboarding_completed).length} of ${profiles.length}`} accent="warning" />
+            <StatCard icon={DollarSign} label="Total Client Costs" value={`€${stats.costs.toLocaleString()}`}
+              hint="Third-party services / month" accent="warning" />
+            <StatCard icon={DollarSign} label="Gross Margin" value={`€${stats.margin.toLocaleString()}`}
+              hint="MRR − costs" accent={stats.margin >= 0 ? "success" : "primary"} />
           </>
         )}
       </div>
