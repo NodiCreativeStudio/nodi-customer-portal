@@ -236,11 +236,12 @@ export default function AdminClients() {
       </Card>
 
       <Card className="overflow-hidden">
-        <div className="hidden lg:grid grid-cols-[2fr_1fr_1.5fr_1fr_80px_80px_120px_140px] gap-3 px-4 py-3 text-xs font-medium text-muted-foreground border-b bg-muted/30">
+        <div className="hidden lg:grid grid-cols-[2fr_1fr_1.3fr_1fr_110px_80px_80px_120px_140px] gap-3 px-4 py-3 text-xs font-medium text-muted-foreground border-b bg-muted/30">
           <button className="flex items-center gap-1 hover:text-foreground" onClick={() => toggleSort("company_name")}>Company <ArrowUpDown className="h-3 w-3" /></button>
           <button className="flex items-center gap-1 hover:text-foreground" onClick={() => toggleSort("industry")}>Industry <ArrowUpDown className="h-3 w-3" /></button>
           <span>Contact</span>
           <button className="flex items-center gap-1 hover:text-foreground" onClick={() => toggleSort("status")}>Status <ArrowUpDown className="h-3 w-3" /></button>
+          <span>Monthly Revenue</span>
           <span>Team</span>
           <span>Projects</span>
           <button className="flex items-center gap-1 hover:text-foreground" onClick={() => toggleSort("created_at")}>Created <ArrowUpDown className="h-3 w-3" /></button>
@@ -251,11 +252,14 @@ export default function AdminClients() {
         ) : pageRows.length === 0 ? (
           <div className="p-12 text-center text-muted-foreground">No clients found.</div>
         ) : pageRows.map((r) => (
-          <div key={r.id} className="grid lg:grid-cols-[2fr_1fr_1.5fr_1fr_80px_80px_120px_140px] gap-3 px-4 py-3 items-center border-b last:border-0 hover:bg-muted/20">
+          <div key={r.id} className="grid lg:grid-cols-[2fr_1fr_1.3fr_1fr_110px_80px_80px_120px_140px] gap-3 px-4 py-3 items-center border-b last:border-0 hover:bg-muted/20">
             <Link to={`/admin/clients/${r.id}`} className="font-medium hover:text-primary">{r.company_name}</Link>
             <Badge variant="outline" className="capitalize w-fit">{r.industry ?? "—"}</Badge>
             <span className="text-sm text-muted-foreground truncate">{r.contact_email ?? "—"}</span>
             <Badge variant="outline" className={cn("capitalize w-fit", STATUS_CLS[r.status])}>{r.status}</Badge>
+            <span className={cn("text-sm font-semibold", (!r.monthly_fee || Number(r.monthly_fee) <= 0) && "text-warning")}>
+              €{Number(r.monthly_fee ?? 0).toLocaleString()}
+            </span>
             <span className="text-sm">{teamCounts.get(r.id) ?? 0}</span>
             <span className="text-sm">{projectCounts.get(r.id) ?? 0}</span>
             <span className="text-sm text-muted-foreground">{format(new Date(r.created_at), "MMM d, yyyy")}</span>
