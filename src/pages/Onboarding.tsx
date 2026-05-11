@@ -132,7 +132,7 @@ export default function Onboarding() {
       };
       const { data, error } = await supabase
         .from("onboarding_moduli")
-        .insert(payload)
+        .insert(payload as any)
         .select("id")
         .single();
       if (error) throw error;
