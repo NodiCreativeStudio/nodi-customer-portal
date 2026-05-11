@@ -48,7 +48,14 @@ function StatCard({ icon: Icon, label, value, hint, accent = "primary" }: any) {
 }
 
 export default function AdminDashboard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const dfLocale = i18n.language?.startsWith("it") ? itLocale : enUS;
+  const STATUS_LABELS: Record<string, string> = {
+    planning: t("projects.planning"),
+    in_progress: t("projects.inProgress"),
+    completed: t("projects.completed"),
+    paused: t("projects.paused"),
+  };
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState<any[]>([]);
@@ -122,7 +129,7 @@ export default function AdminDashboard() {
       ["MRR (EUR)", stats.mrr],
       ["Onboarding Completion %", stats.rate],
     ]);
-    toast.success("Summary exported");
+    toast.success(t("admin.summaryExported"));
   };
 
   return (
