@@ -61,9 +61,9 @@ const statusBadge: Record<ProjectStatus, string> = {
   completed: "bg-success/15 text-success border-success/30",
 };
 const statusLabel: Record<ProjectStatus, string> = {
-  planning: "Planning",
-  in_progress: "In progress",
-  completed: "Completed",
+  planning: "Pianificazione",
+  in_progress: "In corso",
+  completed: "Completato",
 };
 const taskTone: Record<TaskStatus, string> = {
   todo: "bg-muted text-muted-foreground",
@@ -71,7 +71,7 @@ const taskTone: Record<TaskStatus, string> = {
   done: "bg-success/15 text-success border-success/30",
 };
 const taskLabel: Record<TaskStatus, string> = {
-  todo: "To-Do", in_progress: "In Progress", done: "Done",
+  todo: "Da fare", in_progress: "In corso", done: "Completato",
 };
 
 function progressOf(p: Project): number {
@@ -88,21 +88,21 @@ function progressOf(p: Project): number {
 }
 
 function priorityOf(due: string | null): { label: string; tone: string } {
-  if (!due) return { label: "Low", tone: "bg-muted text-muted-foreground" };
+  if (!due) return { label: "Bassa", tone: "bg-muted text-muted-foreground" };
   const d = differenceInDays(new Date(due), new Date());
-  if (d < 0) return { label: "Overdue", tone: "bg-destructive/15 text-destructive border-destructive/30" };
-  if (d <= 2) return { label: "High", tone: "bg-secondary/15 text-secondary border-secondary/30" };
-  if (d <= 5) return { label: "Medium", tone: "bg-warning/15 text-warning border-warning/30" };
-  return { label: "Low", tone: "bg-muted text-muted-foreground" };
+  if (d < 0) return { label: "In ritardo", tone: "bg-destructive/15 text-destructive border-destructive/30" };
+  if (d <= 2) return { label: "Alta", tone: "bg-secondary/15 text-secondary border-secondary/30" };
+  if (d <= 5) return { label: "Media", tone: "bg-warning/15 text-warning border-warning/30" };
+  return { label: "Bassa", tone: "bg-muted text-muted-foreground" };
 }
 
 function buildPhases(p: Project) {
   if (!p.start_date || !p.end_date) {
     return [
-      { name: "Planning", from: null as Date | null, to: null as Date | null, done: p.status !== "planning" },
-      { name: "Development", from: null, to: null, done: p.status === "completed" },
-      { name: "Testing", from: null, to: null, done: p.status === "completed" },
-      { name: "Launch", from: null, to: null, done: p.status === "completed" },
+      { name: "Pianificazione", from: null as Date | null, to: null as Date | null, done: p.status !== "planning" },
+      { name: "Sviluppo", from: null, to: null, done: p.status === "completed" },
+      { name: "Test", from: null, to: null, done: p.status === "completed" },
+      { name: "Lancio", from: null, to: null, done: p.status === "completed" },
     ];
   }
   const start = new Date(p.start_date).getTime();
@@ -115,10 +115,10 @@ function buildPhases(p: Project) {
     done: pct >= b * 100,
   });
   return [
-    { name: "Planning", ...seg(0, 0.2) },
-    { name: "Development", ...seg(0.2, 0.7) },
-    { name: "Testing", ...seg(0.7, 0.9) },
-    { name: "Launch", ...seg(0.9, 1) },
+    { name: "Pianificazione", ...seg(0, 0.2) },
+    { name: "Sviluppo", ...seg(0.2, 0.7) },
+    { name: "Test", ...seg(0.7, 0.9) },
+    { name: "Lancio", ...seg(0.9, 1) },
   ];
 }
 
@@ -153,7 +153,7 @@ export default function ProjectDetail() {
 
   const submitNewTask = async () => {
     if (!id) return;
-    if (!taskForm.title.trim()) { toast.error("Title is required"); return; }
+    if (!taskForm.title.trim()) { toast.error("Il titolo è obbligatorio"); return; }
     setSavingTask(true);
     const { error } = await supabase.from("tasks").insert({
       project_id: id,
@@ -165,7 +165,7 @@ export default function ProjectDetail() {
     } as never);
     setSavingTask(false);
     if (error) { toast.error(error.message); return; }
-    toast.success("✓ Task created");
+    toast.success("✓ Task creato");
     setOpenNewTask(false);
     setTaskForm({ title: "", description: "", status: "todo", due_date: "", priority: "medium" });
     reloadTasks();
@@ -194,8 +194,8 @@ export default function ProjectDetail() {
         setUploads(up);
         const phases = buildPhases((pj as Project) ?? { status: "planning" } as Project);
         setDeliverables(phases.map((ph) => ({
-          name: `${ph.name} sign-off`,
-          date: ph.to ? format(ph.to, "MMM d, yyyy") : "—",
+          name: `Approvazione ${ph.name}`,
+          date: ph.to ? format(ph.to, "d MMM yyyy") : "—",
           done: ph.done,
         })));
         setLoading(false);
@@ -227,8 +227,8 @@ export default function ProjectDetail() {
   if (!project) {
     return (
       <Card><CardContent className="py-16 text-center space-y-3">
-        <h2 className="text-xl font-semibold">Project not found</h2>
-        <Button asChild variant="outline"><Link to="/projects"><ArrowLeft className="mr-2 h-4 w-4" />Back to projects</Link></Button>
+        <h2 className="text-xl font-semibold">Progetto non trovato</h2>
+        <Button asChild variant="outline"><Link to="/projects"><ArrowLeft className="mr-2 h-4 w-4" />Torna ai progetti</Link></Button>
       </CardContent></Card>
     );
   }
@@ -237,13 +237,13 @@ export default function ProjectDetail() {
     <div className="space-y-6 animate-in fade-in duration-300">
       <div>
         <Button asChild variant="ghost" size="sm" className="mb-2 -ml-2">
-          <Link to="/projects"><ArrowLeft className="mr-2 h-4 w-4" />All projects</Link>
+          <Link to="/projects"><ArrowLeft className="mr-2 h-4 w-4" />Tutti i progetti</Link>
         </Button>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{project.project_name}</h1>
             <p className="text-sm text-muted-foreground">
-              Last updated {format(new Date(project.updated_at), "MMM d, yyyy 'at' HH:mm")}
+              Ultimo aggiornamento {format(new Date(project.updated_at), "d MMM yyyy 'alle' HH:mm")}
             </p>
           </div>
           <Badge variant="outline" className={cn("text-sm", statusBadge[project.status])}>
@@ -253,21 +253,21 @@ export default function ProjectDetail() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
-        <InfoCard icon={<CalendarRange className="h-4 w-4" />} label="Start Date"
-          value={project.start_date ? format(new Date(project.start_date), "MMM d, yyyy") : "—"} />
-        <InfoCard icon={<CalendarCheck2 className="h-4 w-4" />} label="End Date"
-          value={project.end_date ? format(new Date(project.end_date), "MMM d, yyyy") : "—"} />
+        <InfoCard icon={<CalendarRange className="h-4 w-4" />} label="Data inizio"
+          value={project.start_date ? format(new Date(project.start_date), "d MMM yyyy") : "—"} />
+        <InfoCard icon={<CalendarCheck2 className="h-4 w-4" />} label="Data fine"
+          value={project.end_date ? format(new Date(project.end_date), "d MMM yyyy") : "—"} />
         <InfoCard icon={<Wallet className="h-4 w-4" />} label="Budget"
           value={project.budget != null ? `€${project.budget.toLocaleString()}` : "—"} />
-        <InfoCard icon={<Activity className="h-4 w-4" />} label="Progress" value={`${pct}%`} />
+        <InfoCard icon={<Activity className="h-4 w-4" />} label="Avanzamento" value={`${pct}%`} />
       </div>
 
       <Card>
-        <CardHeader><CardTitle>Progress & Timeline</CardTitle></CardHeader>
+        <CardHeader><CardTitle>Avanzamento e timeline</CardTitle></CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Overall progress</span>
+              <span className="text-muted-foreground">Avanzamento complessivo</span>
               <span className="font-medium">{pct}%</span>
             </div>
             <Progress value={pct} className="h-3" />
@@ -281,10 +281,10 @@ export default function ProjectDetail() {
                 <div className="flex items-center gap-2 mb-1">
                   {ph.done ? <CheckCircle2 className="h-4 w-4 text-success" />
                     : <Circle className="h-4 w-4 text-muted-foreground" />}
-                  <span className="font-medium text-sm">Phase {i + 1}: {ph.name}</span>
+                  <span className="font-medium text-sm">Fase {i + 1}: {ph.name}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {ph.from ? format(ph.from, "MMM d") : "—"} → {ph.to ? format(ph.to, "MMM d, yyyy") : "—"}
+                  {ph.from ? format(ph.from, "d MMM") : "—"} → {ph.to ? format(ph.to, "d MMM yyyy") : "—"}
                 </p>
               </div>
             ))}
@@ -294,40 +294,40 @@ export default function ProjectDetail() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Project Tasks</CardTitle>
+          <CardTitle>Task del progetto</CardTitle>
           <div className="flex items-center gap-2">
             <Select value={taskFilter} onValueChange={(v) => setTaskFilter(v as typeof taskFilter)}>
               <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="todo">To-Do</SelectItem>
-                <SelectItem value="in_progress">In Progress</SelectItem>
-                <SelectItem value="done">Done</SelectItem>
+                <SelectItem value="all">Tutti</SelectItem>
+                <SelectItem value="todo">Da fare</SelectItem>
+                <SelectItem value="in_progress">In corso</SelectItem>
+                <SelectItem value="done">Completato</SelectItem>
               </SelectContent>
             </Select>
             <Button size="sm" onClick={() => setOpenNewTask(true)}>
-              <Plus className="mr-1 h-4 w-4" />New Task
+              <Plus className="mr-1 h-4 w-4" />Nuovo task
             </Button>
           </div>
         </CardHeader>
         <CardContent className="p-0">
           {filteredTasks.length === 0 ? (
-            <p className="px-6 py-8 text-center text-sm text-muted-foreground">No tasks in this view.</p>
+            <p className="px-6 py-8 text-center text-sm text-muted-foreground">Nessun task in questa vista.</p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Task</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Assigned</TableHead>
-                  <TableHead>Due Date</TableHead>
-                  <TableHead>Priority</TableHead>
+                  <TableHead>Stato</TableHead>
+                  <TableHead>Assegnato</TableHead>
+                  <TableHead>Scadenza</TableHead>
+                  <TableHead>Priorità</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredTasks.map((t) => {
                   const pri = priorityOf(t.due_date);
-                  const overdue = pri.label === "Overdue" && t.status !== "done";
+                  const overdue = pri.label === "In ritardo" && t.status !== "done";
                   return (
                     <TableRow key={t.id} onClick={() => setOpenTask(t)}
                       className={cn("cursor-pointer", overdue && "bg-destructive/5")}>
@@ -336,10 +336,10 @@ export default function ProjectDetail() {
                         <Badge variant="outline" className={taskTone[t.status]}>{taskLabel[t.status]}</Badge>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
-                        {t.assigned_to ?? "Unassigned"}
+                        {t.assigned_to ?? "Non assegnato"}
                       </TableCell>
                       <TableCell className={cn("text-sm", overdue && "text-destructive font-medium")}>
-                        {t.due_date ? format(new Date(t.due_date), "MMM d, yyyy") : "—"}
+                        {t.due_date ? format(new Date(t.due_date), "d MMM yyyy") : "—"}
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline" className={pri.tone}>{pri.label}</Badge>
@@ -355,7 +355,7 @@ export default function ProjectDetail() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader><CardTitle>Project Deliverables</CardTitle></CardHeader>
+          <CardHeader><CardTitle>Deliverable del progetto</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {deliverables.map((d, i) => (
               <div key={i} className="flex items-center gap-3 rounded-md border p-3">
@@ -368,7 +368,7 @@ export default function ProjectDetail() {
                 />
                 <div className="flex-1">
                   <p className={cn("text-sm font-medium", d.done && "line-through text-muted-foreground")}>{d.name}</p>
-                  <p className="text-xs text-muted-foreground">Due {d.date}</p>
+                  <p className="text-xs text-muted-foreground">Scadenza {d.date}</p>
                 </div>
                 {d.done && <CheckCircle2 className="h-4 w-4 text-success" />}
               </div>
@@ -399,12 +399,12 @@ export default function ProjectDetail() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Project Documents</CardTitle>
-          <Button asChild variant="outline" size="sm"><Link to="/uploads">Open uploads</Link></Button>
+          <CardTitle>Documenti del progetto</CardTitle>
+          <Button asChild variant="outline" size="sm"><Link to="/uploads">Apri uploads</Link></Button>
         </CardHeader>
         <CardContent>
           {uploads.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No recent documents.</p>
+            <p className="text-sm text-muted-foreground">Nessun documento recente.</p>
           ) : (
             <ul className="divide-y">
               {uploads.map((u) => (
@@ -412,7 +412,7 @@ export default function ProjectDetail() {
                   <FileText className="h-4 w-4 text-muted-foreground" />
                   <span className="flex-1 text-sm">{u.file_name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {format(new Date(u.uploaded_at), "MMM d, yyyy")}
+                    {format(new Date(u.uploaded_at), "d MMM yyyy")}
                   </span>
                 </li>
               ))}
@@ -428,7 +428,7 @@ export default function ProjectDetail() {
               <DialogHeader>
                 <DialogTitle>{openTask.title}</DialogTitle>
                 <DialogDescription>
-                  {openTask.due_date ? `Due ${format(new Date(openTask.due_date), "PPP")}` : "No due date"}
+                  {openTask.due_date ? `Scadenza ${format(new Date(openTask.due_date), "PPP")}` : "Senza scadenza"}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-3">
@@ -439,10 +439,10 @@ export default function ProjectDetail() {
                   </Badge>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {openTask.description ?? "No description provided."}
+                  {openTask.description ?? "Nessuna descrizione fornita."}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Assigned to: {openTask.assigned_to ?? "Unassigned"}
+                  Assegnato a: {openTask.assigned_to ?? "Non assegnato"}
                 </p>
               </div>
             </>
@@ -453,53 +453,53 @@ export default function ProjectDetail() {
       <Dialog open={openNewTask} onOpenChange={setOpenNewTask}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>New Task</DialogTitle>
-            <DialogDescription>Create a new task for this project.</DialogDescription>
+            <DialogTitle>Nuovo task</DialogTitle>
+            <DialogDescription>Crea un nuovo task per questo progetto.</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5">
-              <Label>Title *</Label>
+              <Label>Titolo *</Label>
               <Input value={taskForm.title} maxLength={200}
                 onChange={(e) => setTaskForm({ ...taskForm, title: e.target.value })} />
             </div>
             <div className="space-y-1.5">
-              <Label>Description</Label>
+              <Label>Descrizione</Label>
               <Textarea value={taskForm.description} maxLength={2000}
                 onChange={(e) => setTaskForm({ ...taskForm, description: e.target.value })} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label>Status</Label>
+                <Label>Stato</Label>
                 <Select value={taskForm.status} onValueChange={(v) => setTaskForm({ ...taskForm, status: v as TaskStatus })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="todo">To-Do</SelectItem>
-                    <SelectItem value="in_progress">In Progress</SelectItem>
-                    <SelectItem value="done">Done</SelectItem>
+                    <SelectItem value="todo">Da fare</SelectItem>
+                    <SelectItem value="in_progress">In corso</SelectItem>
+                    <SelectItem value="done">Completato</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label>Priority</Label>
+                <Label>Priorità</Label>
                 <Select value={taskForm.priority} onValueChange={(v) => setTaskForm({ ...taskForm, priority: v as "low" | "medium" | "high" })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="low">Bassa</SelectItem>
+                    <SelectItem value="medium">Media</SelectItem>
+                    <SelectItem value="high">Alta</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label>Due Date</Label>
+              <Label>Scadenza</Label>
               <Input type="date" value={taskForm.due_date}
                 onChange={(e) => setTaskForm({ ...taskForm, due_date: e.target.value })} />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpenNewTask(false)}>Cancel</Button>
-            <Button onClick={submitNewTask} disabled={savingTask}>{savingTask ? "Saving..." : "Create"}</Button>
+            <Button variant="outline" onClick={() => setOpenNewTask(false)}>Annulla</Button>
+            <Button onClick={submitNewTask} disabled={savingTask}>{savingTask ? "Salvataggio..." : "Crea"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
