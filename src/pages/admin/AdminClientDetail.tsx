@@ -56,8 +56,10 @@ export default function AdminClientDetail() {
     })();
   }, [id]);
 
-  const mrr = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
-  const arr = mrr * 12;
+  const monthlyFee = Number(client?.monthly_fee) || 0;
+  const monthlyCosts = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
+  const margin = monthlyFee - monthlyCosts;
+  const arr = monthlyFee * 12;
   const nextRenewal = tech
     .filter(t => t.renewal_date)
     .map(t => new Date(t.renewal_date))
