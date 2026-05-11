@@ -27,25 +27,25 @@ const SUPPORT_PHONE = "+39 02 1234 5678";
 const EMERGENCY_PHONE = "+39 333 999 0000";
 
 const FAQS = [
-  { q: "How do I update my company information?", a: "Go to Onboarding from the sidebar and edit your company profile. Changes are saved automatically." },
-  { q: "How do I integrate new services?", a: "Visit the Tech Stack page and click 'Add service', or contact your consultant for guided setup." },
-  { q: "What's included in my package?", a: "Your active services and renewals are listed in the Tech Stack section, with full cost breakdown." },
-  { q: "How do I download my reports?", a: "All available reports and exports live in the Downloads section of the portal." },
-  { q: "Can I export my data?", a: "Yes — request a full data export from the Downloads page or contact support." },
+  { q: "Come aggiorno le informazioni della mia azienda?", a: "Vai su Onboarding dalla sidebar e modifica il profilo aziendale. Le modifiche vengono salvate automaticamente." },
+  { q: "Come integro nuovi servizi?", a: "Visita la pagina Tech Stack e clicca su 'Aggiungi servizio', oppure contatta il tuo consulente per una configurazione guidata." },
+  { q: "Cosa è incluso nel mio pacchetto?", a: "Servizi attivi e rinnovi sono elencati nella sezione Tech Stack, con il dettaglio completo dei costi." },
+  { q: "Come scarico i miei report?", a: "Tutti i report e gli export disponibili sono nella sezione Download del portale." },
+  { q: "Posso esportare i miei dati?", a: "Sì — richiedi un export completo dalla pagina Download oppure contatta il supporto." },
 ];
 
 const DOCS = [
-  { label: "Getting started guide", href: "#" },
-  { label: "Feature tutorials", href: "#" },
-  { label: "Integration guides", href: "#" },
+  { label: "Guida introduttiva", href: "#" },
+  { label: "Tutorial sulle funzionalità", href: "#" },
+  { label: "Guide alle integrazioni", href: "#" },
   { label: "Privacy policy", href: "#" },
-  { label: "Terms of service", href: "#" },
+  { label: "Termini di servizio", href: "#" },
 ];
 
 const feedbackSchema = z.object({
-  email: z.string().trim().email("Invalid email").max(255),
+  email: z.string().trim().email("Email non valida").max(255),
   subject: z.string().min(1),
-  message: z.string().trim().min(5, "Please write at least 5 characters").max(2000),
+  message: z.string().trim().min(5, "Scrivi almeno 5 caratteri").max(2000),
 });
 
 export default function Contacts() {
@@ -69,14 +69,14 @@ export default function Contacts() {
     await new Promise((r) => setTimeout(r, 600));
     setSending(false);
     setMessage("");
-    toast.success("✓ Thank you for your feedback!");
+    toast.success("✓ Grazie per il tuo feedback!");
   };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t('contacts.contactSupport')}</h1>
-        <p className="text-sm text-muted-foreground">Get in touch with the NODI team.</p>
+        <p className="text-sm text-muted-foreground">Mettiti in contatto con il team NODI.</p>
       </div>
 
       {/* Main contact cards */}
@@ -86,11 +86,11 @@ export default function Contacts() {
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-primary/10 p-2.5 text-primary"><User2 className="h-5 w-5" /></div>
               <div>
-                <p className="text-xs uppercase text-muted-foreground">Your NODI Consultant</p>
+                <p className="text-xs uppercase text-muted-foreground">Il tuo consulente NODI</p>
                 <p className="font-semibold">Marco Bianchi</p>
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">Digital Strategy Consultant</p>
+            <p className="text-xs text-muted-foreground">Consulente di strategia digitale</p>
             <div className="space-y-1.5 text-sm">
               <a href="mailto:marco@nodi.it" className="flex items-center gap-2 hover:text-primary">
                 <Mail className="h-4 w-4" />marco@nodi.it
@@ -100,11 +100,11 @@ export default function Contacts() {
               </a>
             </div>
             <Badge variant="outline" className="bg-success/10 text-success border-success/30">
-              <Clock className="mr-1 h-3 w-3" />Replies within 2h
+              <Clock className="mr-1 h-3 w-3" />Risposta entro 2h
             </Badge>
             <Button asChild className="w-full">
               <a href={CALENDLY} target="_blank" rel="noreferrer">
-                <CalendarDays className="mr-2 h-4 w-4" />Schedule a call
+                <CalendarDays className="mr-2 h-4 w-4" />Prenota una call
               </a>
             </Button>
           </CardContent>
@@ -115,8 +115,8 @@ export default function Contacts() {
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-secondary/15 p-2.5 text-secondary"><Headphones className="h-5 w-5" /></div>
               <div>
-                <p className="text-xs uppercase text-muted-foreground">Support Team</p>
-                <p className="font-semibold">General assistance</p>
+                <p className="text-xs uppercase text-muted-foreground">Team di supporto</p>
+                <p className="font-semibold">Assistenza generale</p>
               </div>
             </div>
             <div className="space-y-1.5 text-sm">
@@ -128,11 +128,11 @@ export default function Contacts() {
               </a>
             </div>
             <Badge variant="outline">
-              <Clock className="mr-1 h-3 w-3" />Within 24h
+              <Clock className="mr-1 h-3 w-3" />Entro 24h
             </Badge>
             <Button variant="outline" className="w-full"
-              onClick={() => toast.info("Live chat will open during business hours")}>
-              <MessageCircle className="mr-2 h-4 w-4" />Start live chat
+              onClick={() => toast.info("La live chat sarà attiva negli orari d'ufficio")}>
+              <MessageCircle className="mr-2 h-4 w-4" />Avvia live chat
             </Button>
           </CardContent>
         </Card>
@@ -142,8 +142,8 @@ export default function Contacts() {
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-destructive/10 p-2.5 text-destructive"><ShieldAlert className="h-5 w-5" /></div>
               <div>
-                <p className="text-xs uppercase text-muted-foreground">Emergency Support</p>
-                <p className="font-semibold">Critical issues only</p>
+                <p className="text-xs uppercase text-muted-foreground">Supporto urgente</p>
+                <p className="font-semibold">Solo problemi critici</p>
               </div>
             </div>
             <a href={`tel:${EMERGENCY_PHONE.replace(/\s/g, "")}`}
@@ -151,10 +151,10 @@ export default function Contacts() {
               <Phone className="h-4 w-4" />{EMERGENCY_PHONE}
             </a>
             <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30">
-              Available 24/7
+              Disponibile 24/7
             </Badge>
             <p className="text-xs text-muted-foreground">
-              Use only for production outages or urgent security issues.
+              Da usare solo per disservizi in produzione o problemi di sicurezza urgenti.
             </p>
           </CardContent>
         </Card>
@@ -162,26 +162,26 @@ export default function Contacts() {
 
       {/* Communication channels */}
       <div>
-        <h2 className="text-lg font-semibold mb-3">Communication channels</h2>
+        <h2 className="text-lg font-semibold mb-3">Canali di comunicazione</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Channel
             icon={<Mail className="h-5 w-5" />} title="Email" sub={SUPPORT_EMAIL}
-            meta="Response in 24h" cta="Send email"
-            onClick={() => { window.location.href = `mailto:${SUPPORT_EMAIL}`; toast.success("Email opened in your default client"); }}
+            meta="Risposta in 24h" cta="Invia email"
+            onClick={() => { window.location.href = `mailto:${SUPPORT_EMAIL}`; toast.success("Email aperta nel client predefinito"); }}
           />
           <Channel
-            icon={<Phone className="h-5 w-5" />} title="Phone" sub={SUPPORT_PHONE}
-            meta="Mon–Fri · 9–18" cta="Call now"
+            icon={<Phone className="h-5 w-5" />} title="Telefono" sub={SUPPORT_PHONE}
+            meta="Lun–Ven · 9–18" cta="Chiama ora"
             onClick={() => { window.location.href = `tel:${SUPPORT_PHONE.replace(/\s/g, "")}`; }}
           />
           <Channel
-            icon={<MessageCircle className="h-5 w-5" />} title="WhatsApp" sub="Quick chat"
-            meta="During business hours" cta="Open WhatsApp"
+            icon={<MessageCircle className="h-5 w-5" />} title="WhatsApp" sub="Chat veloce"
+            meta="Negli orari d'ufficio" cta="Apri WhatsApp"
             onClick={() => window.open(WHATSAPP, "_blank")}
           />
           <Channel
-            icon={<CalendarDays className="h-5 w-5" />} title="Book a call" sub="30 min slot"
-            meta="Pick a time" cta="Schedule"
+            icon={<CalendarDays className="h-5 w-5" />} title="Prenota una call" sub="Slot di 30 min"
+            meta="Scegli un orario" cta="Prenota"
             onClick={() => window.open(CALENDLY, "_blank")}
           />
         </div>
@@ -190,7 +190,7 @@ export default function Contacts() {
       {/* FAQ */}
       <Card>
         <CardContent className="p-5">
-          <h2 className="text-lg font-semibold mb-3">Frequently asked questions</h2>
+          <h2 className="text-lg font-semibold mb-3">Domande frequenti</h2>
           <Accordion type="single" collapsible className="w-full">
             {FAQS.map((f, i) => (
               <AccordionItem key={i} value={`q-${i}`}>
@@ -207,7 +207,7 @@ export default function Contacts() {
         <CardContent className="p-5 space-y-3">
           <div className="flex items-center gap-2">
             <BookOpen className="h-4 w-4 text-primary" />
-            <h2 className="text-lg font-semibold">Knowledge base & documentation</h2>
+            <h2 className="text-lg font-semibold">Knowledge base e documentazione</h2>
           </div>
           <div className="grid gap-2 sm:grid-cols-2">
             {DOCS.map((d) => (
@@ -225,33 +225,33 @@ export default function Contacts() {
       <Card>
         <CardContent className="p-5 space-y-4">
           <div>
-            <h2 className="text-lg font-semibold">Send us your feedback</h2>
-            <p className="text-sm text-muted-foreground">We read every message — usually responds within 1 business day.</p>
+            <h2 className="text-lg font-semibold">Inviaci un feedback</h2>
+            <p className="text-sm text-muted-foreground">Leggiamo ogni messaggio — di solito rispondiamo entro 1 giorno lavorativo.</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Your email" error={errors.email}>
+            <Field label="La tua email" error={errors.email}>
               <Input value={email} onChange={(e) => setEmail(e.target.value)} maxLength={255} />
             </Field>
-            <Field label="Subject">
+            <Field label="Oggetto">
               <Select value={subject} onValueChange={setSubject}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="bug">Bug report</SelectItem>
-                  <SelectItem value="feature">Feature request</SelectItem>
+                  <SelectItem value="bug">Segnalazione bug</SelectItem>
+                  <SelectItem value="feature">Richiesta funzionalità</SelectItem>
                   <SelectItem value="feedback">Feedback</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="other">Altro</SelectItem>
                 </SelectContent>
               </Select>
             </Field>
           </div>
-          <Field label="Message" error={errors.message}>
+          <Field label="Messaggio" error={errors.message}>
             <Textarea rows={5} value={message} maxLength={2000}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Tell us what's on your mind..." />
+              placeholder="Raccontaci cosa ne pensi..." />
           </Field>
           <div className="flex justify-end">
             <Button onClick={submit} disabled={sending}>
-              <Send className="mr-2 h-4 w-4" />{sending ? "Sending..." : "Send feedback"}
+              <Send className="mr-2 h-4 w-4" />{sending ? "Invio..." : "Invia feedback"}
             </Button>
           </div>
         </CardContent>
