@@ -14,6 +14,123 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          client_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          label: string | null
+          metadata: Json
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          label?: string | null
+          metadata?: Json
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          label?: string | null
+          metadata?: Json
+        }
+        Relationships: []
+      }
+      agency_config: {
+        Row: {
+          business_hours: string | null
+          calendly_link: string | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          id: boolean
+          send_monthly_report: boolean
+          send_onboarding_reminder: boolean
+          send_welcome_email: boolean
+          sender_email: string | null
+          support_email: string | null
+          support_phone: string | null
+          updated_at: string
+          updated_by: string | null
+          whatsapp_link: string | null
+        }
+        Insert: {
+          business_hours?: string | null
+          calendly_link?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          id?: boolean
+          send_monthly_report?: boolean
+          send_onboarding_reminder?: boolean
+          send_welcome_email?: boolean
+          sender_email?: string | null
+          support_email?: string | null
+          support_phone?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          whatsapp_link?: string | null
+        }
+        Update: {
+          business_hours?: string | null
+          calendly_link?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          id?: boolean
+          send_monthly_report?: boolean
+          send_onboarding_reminder?: boolean
+          send_welcome_email?: boolean
+          sender_email?: string | null
+          support_email?: string | null
+          support_phone?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          whatsapp_link?: string | null
+        }
+        Relationships: []
+      }
+      agency_faqs: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          question: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          id?: string
+          question: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          question?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           address: string | null

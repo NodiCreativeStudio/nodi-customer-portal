@@ -22,6 +22,10 @@ import Downloads from "./pages/Downloads";
 import AdminGuard from "./components/AdminGuard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminClientDetail from "./pages/admin/AdminClientDetail";
+import AdminClients from "./pages/admin/AdminClients";
+import AdminRevenue from "./pages/admin/AdminRevenue";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import AdminConfig from "./pages/admin/AdminConfig";
 import Profile from "./pages/Profile";
 import { ProtectedOnboardingRoute } from "./components/ProtectedOnboardingRoute";
 
@@ -62,7 +66,11 @@ const App = () => (
             <Route path="/downloads" element={<Guarded><Downloads /></Guarded>} />
             <Route path="/profile" element={<Guarded><Profile /></Guarded>} />
             <Route path="/admin" element={<AppLayout><AdminGuard><AdminDashboard /></AdminGuard></AppLayout>} />
+            <Route path="/admin/clients" element={<AppLayout><AdminGuard><AdminClients /></AdminGuard></AppLayout>} />
             <Route path="/admin/clients/:id" element={<AppLayout><AdminGuard><AdminClientDetail /></AdminGuard></AppLayout>} />
+            <Route path="/admin/revenue" element={<AppLayout><AdminGuard><AdminRevenue /></AdminGuard></AppLayout>} />
+            <Route path="/admin/analytics" element={<AppLayout><AdminGuard><AdminAnalytics /></AdminGuard></AppLayout>} />
+            <Route path="/admin/config" element={<AppLayout><AdminGuard><AdminConfig /></AdminGuard></AppLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
