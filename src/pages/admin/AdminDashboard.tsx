@@ -14,16 +14,11 @@ import {
   PieChart, Pie, Cell, BarChart, Bar, Legend,
 } from "recharts";
 import { format, formatDistanceToNow, startOfMonth, subMonths } from "date-fns";
+import { it as itLocale, enUS } from "date-fns/locale";
 import { toast } from "sonner";
 import { downloadCsv } from "@/lib/csv-export";
 
 const COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--secondary))"];
-const STATUS_LABELS: Record<string, string> = {
-  planning: "Planning",
-  in_progress: "In Progress",
-  completed: "Completed",
-  paused: "Paused",
-};
 
 const ACCENTS: Record<string, { text: string; bg: string }> = {
   primary: { text: "text-primary", bg: "bg-primary/10" },
