@@ -52,11 +52,16 @@ export type Database = {
       }
       agency_config: {
         Row: {
+          agency_name: string | null
+          agency_tagline: string | null
           business_hours: string | null
           calendly_link: string | null
           contact_email: string | null
           contact_name: string | null
           contact_phone: string | null
+          contact_response_time: string | null
+          contact_role: string | null
+          google_calendar_link: string | null
           id: boolean
           send_monthly_report: boolean
           send_onboarding_reminder: boolean
@@ -69,11 +74,16 @@ export type Database = {
           whatsapp_link: string | null
         }
         Insert: {
+          agency_name?: string | null
+          agency_tagline?: string | null
           business_hours?: string | null
           calendly_link?: string | null
           contact_email?: string | null
           contact_name?: string | null
           contact_phone?: string | null
+          contact_response_time?: string | null
+          contact_role?: string | null
+          google_calendar_link?: string | null
           id?: boolean
           send_monthly_report?: boolean
           send_onboarding_reminder?: boolean
@@ -86,11 +96,16 @@ export type Database = {
           whatsapp_link?: string | null
         }
         Update: {
+          agency_name?: string | null
+          agency_tagline?: string | null
           business_hours?: string | null
           calendly_link?: string | null
           contact_email?: string | null
           contact_name?: string | null
           contact_phone?: string | null
+          contact_response_time?: string | null
+          contact_role?: string | null
+          google_calendar_link?: string | null
           id?: boolean
           send_monthly_report?: boolean
           send_onboarding_reminder?: boolean
