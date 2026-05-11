@@ -141,7 +141,7 @@ export default function Onboarding() {
     await supabase.from("profiles").update({ onboarding_completed: true }).eq("id", user.id);
     setBusy(false);
     setSubmitted(true);
-    toast.success("Onboarding submitted!");
+    toast.success("Onboarding inviato!");
     const pdf = generateOnboardingPdf(form);
     pdf.save(`NODI-onboarding-${(form.company_name || "summary").replace(/\s+/g, "-")}.pdf`);
     setTimeout(() => navigate("/"), 2000);
@@ -160,16 +160,16 @@ export default function Onboarding() {
             <div className="mb-2 flex h-14 w-14 items-center justify-center rounded-full bg-success/15 text-success">
               <CheckCircle2 className="h-7 w-7" />
             </div>
-            <CardTitle>Onboarding complete</CardTitle>
+            <CardTitle>Onboarding completato</CardTitle>
             <CardDescription>
-              Thanks {form.company_name || "—"}, your responses have been saved. Your account manager will be in touch shortly.
+              Grazie {form.company_name || "—"}, le tue risposte sono state salvate. Il tuo account manager ti contatterà a breve.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Button onClick={downloadPdf} variant="outline">
-              <Download className="mr-2 h-4 w-4" /> Download summary PDF
+              <Download className="mr-2 h-4 w-4" /> Scarica riepilogo PDF
             </Button>
-            <Button onClick={() => navigate("/")}>Go to dashboard</Button>
+            <Button onClick={() => navigate("/")}>Vai alla dashboard</Button>
           </CardContent>
         </Card>
       </div>
@@ -180,16 +180,16 @@ export default function Onboarding() {
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t('onboarding.title')}</h1>
-        <p className="text-muted-foreground">Tell us about your business so we can tailor your workspace.</p>
+        <p className="text-muted-foreground">Raccontaci della tua attività per personalizzare il tuo workspace.</p>
       </div>
 
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
-          <span className="font-medium">Step {step} of {TOTAL}</span>
+          <span className="font-medium">Step {step} di {TOTAL}</span>
           <span className="text-muted-foreground inline-flex items-center gap-1">
             {savedAt ? (
-              <><Save className="h-3 w-3 text-success" /> Draft saved {savedAt.toLocaleTimeString()}</>
-            ) : "Auto-saving as you go"}
+              <><Save className="h-3 w-3 text-success" /> Bozza salvata {savedAt.toLocaleTimeString()}</>
+            ) : "Salvataggio automatico in corso"}
           </span>
         </div>
         <Progress value={(step / TOTAL) * 100} className="h-2" />
@@ -198,14 +198,14 @@ export default function Onboarding() {
       <Card className="shadow-[var(--shadow-elegant)] animate-in fade-in duration-300" key={step}>
         <CardHeader>
           <CardTitle>
-            {step === 1 && "Anagrafica — Company information"}
-            {step === 2 && "Business vertical details"}
-            {step === 3 && "Goals & next steps"}
+            {step === 1 && "Anagrafica — Informazioni aziendali"}
+            {step === 2 && "Dettagli del settore"}
+            {step === 3 && "Obiettivi e prossimi passi"}
           </CardTitle>
           <CardDescription>
-            {step === 1 && "Basic information about your company."}
-            {step === 2 && "Tell us what you'd like to enable for your business."}
-            {step === 3 && "Help us understand your priorities."}
+            {step === 1 && "Informazioni di base sulla tua azienda."}
+            {step === 2 && "Dicci cosa vorresti attivare per la tua attività."}
+            {step === 3 && "Aiutaci a capire le tue priorità."}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
@@ -224,7 +224,7 @@ export default function Onboarding() {
 
       <div className="flex items-center justify-between">
         <Button variant="outline" onClick={prev} disabled={step === 1 || busy}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Previous
+          <ArrowLeft className="mr-2 h-4 w-4" /> Indietro
         </Button>
         <div className="flex gap-1.5">
           {Array.from({ length: TOTAL }).map((_, i) => (
@@ -239,11 +239,11 @@ export default function Onboarding() {
         </div>
         {step < TOTAL ? (
           <Button onClick={next} disabled={busy}>
-            Next <ArrowRight className="ml-2 h-4 w-4" />
+            Avanti <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         ) : (
           <Button onClick={handleSubmit} disabled={busy}>
-            {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Complete
+            {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Completa
           </Button>
         )}
       </div>
@@ -288,67 +288,67 @@ function Page1({
 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <Field label="Company name *" className="sm:col-span-2">
+      <Field label="Ragione sociale *" className="sm:col-span-2">
         <Input ref={firstRef} value={form.company_name} onChange={(e) => update("company_name", e.target.value)} />
       </Field>
-      <Field label="Industry *">
+      <Field label="Settore *">
         <Select value={form.industry} onValueChange={(v) => update("industry", v as Industry)}>
-          <SelectTrigger><SelectValue placeholder="Select industry" /></SelectTrigger>
+          <SelectTrigger><SelectValue placeholder="Seleziona settore" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="retail">Retail</SelectItem>
             <SelectItem value="wellness">Wellness</SelectItem>
-            <SelectItem value="repair">Repair</SelectItem>
+            <SelectItem value="repair">Riparazioni</SelectItem>
           </SelectContent>
         </Select>
       </Field>
-      <Field label="Number of employees *">
+      <Field label="Numero di dipendenti *">
         <Select value={form.employees_range} onValueChange={(v) => update("employees_range", v)}>
-          <SelectTrigger><SelectValue placeholder="Select range" /></SelectTrigger>
+          <SelectTrigger><SelectValue placeholder="Seleziona intervallo" /></SelectTrigger>
           <SelectContent>
             {employeesOptions.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
           </SelectContent>
         </Select>
       </Field>
-      <Field label="Contact email *">
+      <Field label="Email di contatto *">
         <Input type="email" value={form.contact_email} onChange={(e) => update("contact_email", e.target.value)} />
       </Field>
-      <Field label="Contact phone *">
+      <Field label="Telefono di contatto *">
         <Input type="tel" value={form.contact_phone} onChange={(e) => update("contact_phone", e.target.value)} />
       </Field>
-      <Field label="Website">
+      <Field label="Sito web">
         <Input placeholder="https://" value={form.website} onChange={(e) => update("website", e.target.value)} />
       </Field>
-      <Field label="VAT / Tax ID">
+      <Field label="P. IVA / Codice fiscale">
         <Input value={form.vat_id} onChange={(e) => update("vat_id", e.target.value)} />
       </Field>
-      <Field label="Founding year">
+      <Field label="Anno di fondazione">
         <Input type="number" min={1800} max={new Date().getFullYear()} value={form.founding_year} onChange={(e) => update("founding_year", e.target.value)} />
       </Field>
-      <Field label="Best time to contact">
+      <Field label="Orario migliore per essere contattati">
         <Select value={form.best_time} onValueChange={(v) => update("best_time", v)}>
-          <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+          <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
           <SelectContent>
             {bestTimeOptions.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
           </SelectContent>
         </Select>
       </Field>
-      <Field label="Company address" className="sm:col-span-2">
+      <Field label="Indirizzo aziendale" className="sm:col-span-2">
         <Textarea rows={2} value={form.address} onChange={(e) => update("address", e.target.value)} />
       </Field>
-      <Field label={`Company description (${form.description.length}/200)`} className="sm:col-span-2">
+      <Field label={`Descrizione azienda (${form.description.length}/200)`} className="sm:col-span-2">
         <Textarea
           rows={3} maxLength={200}
           value={form.description}
           onChange={(e) => update("description", e.target.value)}
         />
       </Field>
-      <Field label="Preferred contact method" className="sm:col-span-2">
+      <Field label="Metodo di contatto preferito" className="sm:col-span-2">
         <RadioGroup
           value={form.preferred_contact}
           onValueChange={(v) => update("preferred_contact", v as any)}
           className="flex flex-wrap gap-4"
         >
-          {[["email", "Email"], ["phone", "Phone"], ["both", "Both"]].map(([v, l]) => (
+          {[["email", "Email"], ["phone", "Telefono"], ["both", "Entrambi"]].map(([v, l]) => (
             <div key={v} className="flex items-center gap-2">
               <RadioGroupItem id={`pc-${v}`} value={v} />
               <Label htmlFor={`pc-${v}`} className="font-normal cursor-pointer">{l}</Label>
@@ -372,7 +372,7 @@ function Page2({
     return (
       <Alert>
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>Please go back and select an industry on step 1.</AlertDescription>
+        <AlertDescription>Torna allo step 1 e seleziona un settore.</AlertDescription>
       </Alert>
     );
   }
@@ -385,7 +385,7 @@ function Page2({
       </div>
       <div>
         <p className="font-medium">{title}</p>
-        <p className="text-xs text-muted-foreground">Tailored questions for your vertical</p>
+        <p className="text-xs text-muted-foreground">Domande personalizzate per il tuo settore</p>
       </div>
     </div>
   );
@@ -394,23 +394,23 @@ function Page2({
     return (
       <div className="space-y-5">
         <VerticalCard icon={ShoppingBag} title="Retail" />
-        <CheckboxRow id="online_orders" label="I want to accept orders online" checked={!!v.online_orders} onChange={(c) => updateVertical({ online_orders: c })} />
-        <CheckboxRow id="loyalty_program" label="I want to use a loyalty program" checked={!!v.loyalty_program} onChange={(c) => updateVertical({ loyalty_program: c })} />
-        <CheckboxRow id="whatsapp_automation" label="I want WhatsApp automation" checked={!!v.whatsapp_automation} onChange={(c) => updateVertical({ whatsapp_automation: c })} />
-        <Field label={`Biggest challenges (${(v.challenges ?? "").length}/200)`}>
+        <CheckboxRow id="online_orders" label="Voglio accettare ordini online" checked={!!v.online_orders} onChange={(c) => updateVertical({ online_orders: c })} />
+        <CheckboxRow id="loyalty_program" label="Voglio usare un programma fedeltà" checked={!!v.loyalty_program} onChange={(c) => updateVertical({ loyalty_program: c })} />
+        <CheckboxRow id="whatsapp_automation" label="Voglio l'automazione WhatsApp" checked={!!v.whatsapp_automation} onChange={(c) => updateVertical({ whatsapp_automation: c })} />
+        <Field label={`Sfide principali (${(v.challenges ?? "").length}/200)`}>
           <Textarea rows={3} maxLength={200} value={v.challenges ?? ""} onChange={(e) => updateVertical({ challenges: e.target.value })} />
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Average monthly customers">
+          <Field label="Clienti medi al mese">
             <Input type="number" value={v.monthly_customers ?? ""} onChange={(e) => updateVertical({ monthly_customers: e.target.value })} />
           </Field>
-          <Field label="Main sales channel">
+          <Field label="Canale di vendita principale">
             <Select value={v.sales_channel ?? ""} onValueChange={(val) => updateVertical({ sales_channel: val })}>
-              <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="In-store">In-store</SelectItem>
+                <SelectItem value="In-store">Negozio fisico</SelectItem>
                 <SelectItem value="Online">Online</SelectItem>
-                <SelectItem value="Both">Both</SelectItem>
+                <SelectItem value="Both">Entrambi</SelectItem>
               </SelectContent>
             </Select>
           </Field>
@@ -423,21 +423,21 @@ function Page2({
     return (
       <div className="space-y-5">
         <VerticalCard icon={Sparkles} title="Wellness" />
-        <CheckboxRow id="online_booking" label="I want online appointment booking" checked={!!v.online_booking} onChange={(c) => updateVertical({ online_booking: c })} />
-        <CheckboxRow id="membership" label="I want membership management" checked={!!v.membership} onChange={(c) => updateVertical({ membership: c })} />
-        <CheckboxRow id="whatsapp_reminders" label="I want WhatsApp reminders" checked={!!v.whatsapp_reminders} onChange={(c) => updateVertical({ whatsapp_reminders: c })} />
-        <Field label={`Services offered (${(v.services ?? "").length}/200)`}>
+        <CheckboxRow id="online_booking" label="Voglio le prenotazioni online" checked={!!v.online_booking} onChange={(c) => updateVertical({ online_booking: c })} />
+        <CheckboxRow id="membership" label="Voglio gestire abbonamenti/membership" checked={!!v.membership} onChange={(c) => updateVertical({ membership: c })} />
+        <CheckboxRow id="whatsapp_reminders" label="Voglio reminder via WhatsApp" checked={!!v.whatsapp_reminders} onChange={(c) => updateVertical({ whatsapp_reminders: c })} />
+        <Field label={`Servizi offerti (${(v.services ?? "").length}/200)`}>
           <Textarea rows={3} maxLength={200} value={v.services ?? ""} onChange={(e) => updateVertical({ services: e.target.value })} />
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Average weekly bookings">
+          <Field label="Prenotazioni medie a settimana">
             <Input type="number" value={v.weekly_bookings ?? ""} onChange={(e) => updateVertical({ weekly_bookings: e.target.value })} />
           </Field>
-          <Field label="Primary service type">
+          <Field label="Tipologia di servizio principale">
             <Select value={v.service_type ?? ""} onValueChange={(val) => updateVertical({ service_type: val })}>
-              <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
               <SelectContent>
-                {["Fitness", "Spa", "Medical", "Other"].map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                {[["Fitness","Fitness"],["Spa","Spa"],["Medical","Medico"],["Other","Altro"]].map(([val,lab]) => <SelectItem key={val} value={val}>{lab}</SelectItem>)}
               </SelectContent>
             </Select>
           </Field>
@@ -449,22 +449,22 @@ function Page2({
   // repair
   return (
     <div className="space-y-5">
-      <VerticalCard icon={Wrench} title="Repair" />
-      <CheckboxRow id="job_tracking" label="I want a job tracking system" checked={!!v.job_tracking} onChange={(c) => updateVertical({ job_tracking: c })} />
-      <CheckboxRow id="customer_notifications" label="I want customer notifications" checked={!!v.customer_notifications} onChange={(c) => updateVertical({ customer_notifications: c })} />
-      <CheckboxRow id="whatsapp_status" label="I want repair status updates via WhatsApp" checked={!!v.whatsapp_status} onChange={(c) => updateVertical({ whatsapp_status: c })} />
-      <Field label={`What do you repair? (${(v.repairs ?? "").length}/200)`}>
+      <VerticalCard icon={Wrench} title="Riparazioni" />
+      <CheckboxRow id="job_tracking" label="Voglio un sistema di tracking riparazioni" checked={!!v.job_tracking} onChange={(c) => updateVertical({ job_tracking: c })} />
+      <CheckboxRow id="customer_notifications" label="Voglio notifiche al cliente" checked={!!v.customer_notifications} onChange={(c) => updateVertical({ customer_notifications: c })} />
+      <CheckboxRow id="whatsapp_status" label="Voglio aggiornamenti di stato via WhatsApp" checked={!!v.whatsapp_status} onChange={(c) => updateVertical({ whatsapp_status: c })} />
+      <Field label={`Cosa ripari? (${(v.repairs ?? "").length}/200)`}>
         <Textarea rows={3} maxLength={200} value={v.repairs ?? ""} onChange={(e) => updateVertical({ repairs: e.target.value })} />
       </Field>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Average monthly repairs">
+        <Field label="Riparazioni medie al mese">
           <Input type="number" value={v.monthly_repairs ?? ""} onChange={(e) => updateVertical({ monthly_repairs: e.target.value })} />
         </Field>
-        <Field label="Primary repair category">
+        <Field label="Categoria di riparazioni principale">
           <Select value={v.repair_category ?? ""} onValueChange={(val) => updateVertical({ repair_category: val })}>
-            <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+            <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
             <SelectContent>
-              {["Electronics", "Automotive", "Home", "Other"].map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+              {[["Electronics","Elettronica"],["Automotive","Auto"],["Home","Casa"],["Other","Altro"]].map(([val,lab]) => <SelectItem key={val} value={val}>{lab}</SelectItem>)}
             </SelectContent>
           </Select>
         </Field>
@@ -487,7 +487,7 @@ function Page3({
 
   return (
     <div className="space-y-5">
-      <Field label="Primary goals * (select all that apply)">
+      <Field label="Obiettivi principali * (seleziona tutti quelli pertinenti)">
         <div className="grid gap-2 sm:grid-cols-2">
           {goalOptions.map((g) => (
             <label key={g} className="flex items-center gap-2 rounded-md border p-2.5 cursor-pointer hover:bg-accent transition-colors">
@@ -498,7 +498,7 @@ function Page3({
         </div>
       </Field>
 
-      <Field label="Budget range *">
+      <Field label="Budget disponibile *">
         <RadioGroup value={form.budget_range} onValueChange={(v) => update("budget_range", v)} className="grid gap-2 sm:grid-cols-2">
           {budgetOptions.map((b) => (
             <label key={b} className="flex items-center gap-2 rounded-md border p-2.5 cursor-pointer hover:bg-accent transition-colors">
@@ -509,19 +509,19 @@ function Page3({
         </RadioGroup>
       </Field>
 
-      <Field label="Timeline *">
+      <Field label="Tempistiche *">
         <Select value={form.timeline} onValueChange={(v) => update("timeline", v)}>
-          <SelectTrigger><SelectValue placeholder="Select timeline" /></SelectTrigger>
+          <SelectTrigger><SelectValue placeholder="Seleziona tempistiche" /></SelectTrigger>
           <SelectContent>
             {timelineOptions.map((o) => <SelectItem key={o} value={o}>{o}</SelectItem>)}
           </SelectContent>
         </Select>
       </Field>
 
-      <Field label={`Additional requirements (${form.additional_requirements.length}/300)`}>
+      <Field label={`Requisiti aggiuntivi (${form.additional_requirements.length}/300)`}>
         <Textarea
           rows={3} maxLength={300}
-          placeholder="Any other features or integrations you need?"
+          placeholder="Altre funzionalità o integrazioni di cui hai bisogno?"
           value={form.additional_requirements}
           onChange={(e) => update("additional_requirements", e.target.value)}
         />
@@ -530,9 +530,9 @@ function Page3({
       <label className="flex items-start gap-2 cursor-pointer">
         <Checkbox className="mt-0.5" checked={form.agreed_terms} onCheckedChange={(c) => update("agreed_terms", !!c)} />
         <span className="text-sm leading-snug">
-          I agree to the{" "}
-          <a href="#" className="text-primary hover:underline">NODI Service Agreement</a>{" "}
-          and{" "}
+          Accetto il{" "}
+          <a href="#" className="text-primary hover:underline">Contratto di servizio NODI</a>{" "}
+          e la{" "}
           <a href="#" className="text-primary hover:underline">Privacy Policy</a>.
         </span>
       </label>
