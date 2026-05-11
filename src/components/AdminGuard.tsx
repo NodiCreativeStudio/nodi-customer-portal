@@ -17,8 +17,8 @@ export default function AdminGuard({ children }: { children: ReactNode }) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 text-center">
         <ShieldAlert className="h-10 w-10 text-destructive" />
-        <h2 className="text-xl font-semibold">Admin access required</h2>
-        <p className="text-sm text-muted-foreground">You don't have permission to view this area.</p>
+        <h2 className="text-xl font-semibold">Accesso admin richiesto</h2>
+        <p className="text-sm text-muted-foreground">Non hai i permessi per visualizzare questa area.</p>
       </div>
     );
   }
