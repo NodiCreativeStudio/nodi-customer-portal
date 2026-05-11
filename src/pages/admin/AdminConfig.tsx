@@ -63,12 +63,17 @@ export default function AdminConfig() {
       contact_name: config.contact_name,
       contact_email: config.contact_email,
       contact_phone: config.contact_phone,
+      contact_role: config.contact_role,
+      contact_response_time: config.contact_response_time,
       whatsapp_link: config.whatsapp_link,
       calendly_link: config.calendly_link,
+      google_calendar_link: config.google_calendar_link,
       business_hours: config.business_hours,
       support_email: config.support_email,
       support_phone: config.support_phone,
       sender_email: config.sender_email,
+      agency_name: config.agency_name,
+      agency_tagline: config.agency_tagline,
       send_welcome_email: config.send_welcome_email,
       send_onboarding_reminder: config.send_onboarding_reminder,
       send_monthly_report: config.send_monthly_report,
@@ -162,12 +167,17 @@ export default function AdminConfig() {
 
         <TabsContent value="contact" className="mt-4">
           <Card><CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><Label>Nome agenzia</Label><Input value={config?.agency_name ?? ""} onChange={(e) => updateField("agency_name", e.target.value)} placeholder="NODI" /></div>
+            <div><Label>Tagline</Label><Input value={config?.agency_tagline ?? ""} onChange={(e) => updateField("agency_tagline", e.target.value)} placeholder="Innovation & Digital Strategy" /></div>
             <div><Label>{t("admin.config.contactName")}</Label><Input value={config?.contact_name ?? ""} onChange={(e) => updateField("contact_name", e.target.value)} /></div>
+            <div><Label>Ruolo del consulente</Label><Input value={config?.contact_role ?? ""} onChange={(e) => updateField("contact_role", e.target.value)} placeholder="Innovation Manager, AI Expert" /></div>
             <div><Label>{t("admin.config.contactEmail")}</Label><Input type="email" value={config?.contact_email ?? ""} onChange={(e) => updateField("contact_email", e.target.value)} /></div>
             <div><Label>{t("admin.config.contactPhone")}</Label><Input value={config?.contact_phone ?? ""} onChange={(e) => updateField("contact_phone", e.target.value)} /></div>
+            <div><Label>Tempo medio di risposta</Label><Input value={config?.contact_response_time ?? ""} onChange={(e) => updateField("contact_response_time", e.target.value)} placeholder="Generalmente entro 3 ore" /></div>
+            <div><Label>{t("admin.config.businessHours")}</Label><Input value={config?.business_hours ?? ""} onChange={(e) => updateField("business_hours", e.target.value)} placeholder="9-19 Lun-Ven" /></div>
             <div><Label>{t("admin.config.whatsappLink")}</Label><Input value={config?.whatsapp_link ?? ""} onChange={(e) => updateField("whatsapp_link", e.target.value)} placeholder="https://wa.me/…" /></div>
+            <div><Label>Link Google Calendar</Label><Input value={config?.google_calendar_link ?? ""} onChange={(e) => updateField("google_calendar_link", e.target.value)} placeholder="https://calendar.app.google/…" /></div>
             <div><Label>{t("admin.config.calendlyLink")}</Label><Input value={config?.calendly_link ?? ""} onChange={(e) => updateField("calendly_link", e.target.value)} placeholder="https://calendly.com/…" /></div>
-            <div><Label>{t("admin.config.businessHours")}</Label><Input value={config?.business_hours ?? ""} onChange={(e) => updateField("business_hours", e.target.value)} placeholder="Lun-Ven 9-18 CET" /></div>
             <div><Label>{t("admin.config.supportEmail")}</Label><Input type="email" value={config?.support_email ?? ""} onChange={(e) => updateField("support_email", e.target.value)} /></div>
             <div><Label>{t("admin.config.supportPhone")}</Label><Input value={config?.support_phone ?? ""} onChange={(e) => updateField("support_phone", e.target.value)} /></div>
             <div className="md:col-span-2 flex justify-end">

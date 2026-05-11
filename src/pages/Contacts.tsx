@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useTranslation } from "react-i18next";
+import { useAgencyConfig } from "@/hooks/useAgencyConfig";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -14,33 +15,11 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 import {
-  Mail, Phone, MessageCircle, CalendarDays, Clock, ShieldAlert,
-  ExternalLink, BookOpen, Send, Headphones, User2,
+  Mail, Phone, MessageCircle, CalendarDays, Clock,
+  Send, Headphones, User2, Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
-
-const CALENDLY = "https://calendly.com/nodi-consultation";
-const WHATSAPP = "https://wa.me/393000000000";
-const SUPPORT_EMAIL = "support@nodi.it";
-const SUPPORT_PHONE = "+39 02 1234 5678";
-const EMERGENCY_PHONE = "+39 333 999 0000";
-
-const FAQS = [
-  { q: "Come aggiorno le informazioni della mia azienda?", a: "Vai su Onboarding dalla sidebar e modifica il profilo aziendale. Le modifiche vengono salvate automaticamente." },
-  { q: "Come integro nuovi servizi?", a: "Visita la pagina Tech Stack e clicca su 'Aggiungi servizio', oppure contatta il tuo consulente per una configurazione guidata." },
-  { q: "Cosa è incluso nel mio pacchetto?", a: "Servizi attivi e rinnovi sono elencati nella sezione Tech Stack, con il dettaglio completo dei costi." },
-  { q: "Come scarico i miei report?", a: "Tutti i report e gli export disponibili sono nella sezione Download del portale." },
-  { q: "Posso esportare i miei dati?", a: "Sì — richiedi un export completo dalla pagina Download oppure contatta il supporto." },
-];
-
-const DOCS = [
-  { label: "Guida introduttiva", href: "#" },
-  { label: "Tutorial sulle funzionalità", href: "#" },
-  { label: "Guide alle integrazioni", href: "#" },
-  { label: "Privacy policy", href: "#" },
-  { label: "Termini di servizio", href: "#" },
-];
 
 const feedbackSchema = z.object({
   email: z.string().trim().email("Email non valida").max(255),
@@ -49,8 +28,8 @@ const feedbackSchema = z.object({
 });
 
 export default function Contacts() {
-  const { t } = useTranslation();
   const { user } = useAuth();
+  const { config, faqs, loading } = useAgencyConfig();
   const [subject, setSubject] = useState("feedback");
   const [email, setEmail] = useState(user?.email ?? "");
   const [message, setMessage] = useState("");
@@ -72,156 +51,153 @@ export default function Contacts() {
     toast.success("✓ Grazie per il tuo feedback!");
   };
 
+  if (loading) {
+    return (
+      <div className="space-y-6 p-2">
+        <Skeleton className="h-10 w-72" />
+        <div className="grid gap-4 md:grid-cols-3">
+          <Skeleton className="h-64" /><Skeleton className="h-64" /><Skeleton className="h-64" />
+        </div>
+        <Skeleton className="h-80" />
+      </div>
+    );
+  }
+
+  const calendarLink = config.google_calendar_link || config.calendly_link || "#";
+  const whatsapp = config.whatsapp_link || "#";
+  const supportEmail = config.support_email || config.contact_email || "";
+  const supportPhone = config.support_phone || config.contact_phone || "";
+
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t('contacts.contactSupport')}</h1>
-        <p className="text-sm text-muted-foreground">Mettiti in contatto con il team NODI.</p>
+        <h1 className="text-3xl font-bold tracking-tight">Contatti & Supporto</h1>
+        <p className="text-sm text-muted-foreground">
+          Mettiti in contatto con il team {config.agency_name ?? "NODI"}
+          {config.agency_tagline ? ` — ${config.agency_tagline}` : ""}.
+        </p>
       </div>
 
-      {/* Main contact cards */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardContent className="p-5 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-primary/10 p-2.5 text-primary"><User2 className="h-5 w-5" /></div>
-              <div>
-                <p className="text-xs uppercase text-muted-foreground">Il tuo consulente NODI</p>
-                <p className="font-semibold">Marco Bianchi</p>
+      {/* Consultant card */}
+      <Card>
+        <CardContent className="p-6 space-y-4">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Il tuo consulente {config.agency_name ?? "NODI"}</p>
+          </div>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-primary/10 p-3 text-primary"><User2 className="h-6 w-6" /></div>
+                <div>
+                  <p className="text-xl font-semibold">{config.contact_name}</p>
+                  <p className="text-sm text-muted-foreground">{config.contact_role}</p>
+                </div>
+              </div>
+              <div className="space-y-1 text-sm pt-2">
+                {config.contact_email && (
+                  <a href={`mailto:${config.contact_email}`} className="flex items-center gap-2 hover:text-primary">
+                    <Mail className="h-4 w-4" />{config.contact_email}
+                  </a>
+                )}
+                {config.contact_phone && (
+                  <a href={`tel:${config.contact_phone.replace(/\s/g, "")}`} className="flex items-center gap-2 hover:text-primary">
+                    <Phone className="h-4 w-4" />{config.contact_phone}
+                  </a>
+                )}
+                {config.contact_response_time && (
+                  <Badge variant="outline" className="bg-success/10 text-success border-success/30 mt-2">
+                    <Clock className="mr-1 h-3 w-3" />{config.contact_response_time}
+                  </Badge>
+                )}
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">Consulente di strategia digitale</p>
-            <div className="space-y-1.5 text-sm">
-              <a href="mailto:marco@nodi.it" className="flex items-center gap-2 hover:text-primary">
-                <Mail className="h-4 w-4" />marco@nodi.it
-              </a>
-              <a href="tel:+393333333333" className="flex items-center gap-2 hover:text-primary">
-                <Phone className="h-4 w-4" />+39 333 333 3333
-              </a>
+            <div className="flex flex-col gap-2 min-w-[200px]">
+              <Button asChild>
+                <a href={calendarLink} target="_blank" rel="noreferrer">
+                  <CalendarDays className="mr-2 h-4 w-4" />Prenota Consultazione
+                </a>
+              </Button>
+              <Button asChild variant="outline">
+                <a href={whatsapp} target="_blank" rel="noreferrer">
+                  <MessageCircle className="mr-2 h-4 w-4" />WhatsApp
+                </a>
+              </Button>
             </div>
-            <Badge variant="outline" className="bg-success/10 text-success border-success/30">
-              <Clock className="mr-1 h-3 w-3" />Risposta entro 2h
-            </Badge>
-            <Button asChild className="w-full">
-              <a href={CALENDLY} target="_blank" rel="noreferrer">
-                <CalendarDays className="mr-2 h-4 w-4" />Prenota una call
-              </a>
-            </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </CardContent>
+      </Card>
 
-        <Card>
-          <CardContent className="p-5 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-secondary/15 p-2.5 text-secondary"><Headphones className="h-5 w-5" /></div>
-              <div>
-                <p className="text-xs uppercase text-muted-foreground">Team di supporto</p>
-                <p className="font-semibold">Assistenza generale</p>
-              </div>
-            </div>
-            <div className="space-y-1.5 text-sm">
-              <a href={`mailto:${SUPPORT_EMAIL}`} className="flex items-center gap-2 hover:text-primary">
-                <Mail className="h-4 w-4" />{SUPPORT_EMAIL}
-              </a>
-              <a href={`tel:${SUPPORT_PHONE.replace(/\s/g, "")}`} className="flex items-center gap-2 hover:text-primary">
-                <Phone className="h-4 w-4" />{SUPPORT_PHONE}
-              </a>
-            </div>
-            <Badge variant="outline">
-              <Clock className="mr-1 h-3 w-3" />Entro 24h
-            </Badge>
-            <Button variant="outline" className="w-full"
-              onClick={() => toast.info("La live chat sarà attiva negli orari d'ufficio")}>
-              <MessageCircle className="mr-2 h-4 w-4" />Avvia live chat
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="border-destructive/30">
-          <CardContent className="p-5 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-destructive/10 p-2.5 text-destructive"><ShieldAlert className="h-5 w-5" /></div>
-              <div>
-                <p className="text-xs uppercase text-muted-foreground">Supporto urgente</p>
-                <p className="font-semibold">Solo problemi critici</p>
-              </div>
-            </div>
-            <a href={`tel:${EMERGENCY_PHONE.replace(/\s/g, "")}`}
-              className="flex items-center gap-2 text-sm hover:text-destructive">
-              <Phone className="h-4 w-4" />{EMERGENCY_PHONE}
-            </a>
-            <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/30">
-              Disponibile 24/7
-            </Badge>
-            <p className="text-xs text-muted-foreground">
-              Da usare solo per disservizi in produzione o problemi di sicurezza urgenti.
-            </p>
-          </CardContent>
-        </Card>
+      {/* Channels */}
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <Channel icon={<Mail className="h-5 w-5" />} title="Email" sub={config.contact_email ?? ""}
+          meta={config.contact_response_time ?? ""} cta="Invia email"
+          onClick={() => { if (config.contact_email) window.location.href = `mailto:${config.contact_email}`; }}
+        />
+        <Channel icon={<Phone className="h-5 w-5" />} title="Telefono" sub={config.contact_phone ?? ""}
+          meta={config.business_hours ?? ""} cta="Chiama ora"
+          onClick={() => { if (config.contact_phone) window.location.href = `tel:${config.contact_phone.replace(/\s/g, "")}`; }}
+        />
+        <Channel icon={<MessageCircle className="h-5 w-5" />} title="WhatsApp" sub="Chat veloce"
+          meta="Risposta rapida" cta="Apri WhatsApp"
+          onClick={() => window.open(whatsapp, "_blank")}
+        />
+        <Channel icon={<CalendarDays className="h-5 w-5" />} title="Prenota una call" sub="Google Calendar"
+          meta="Scegli un orario" cta="Prenota"
+          onClick={() => window.open(calendarLink, "_blank")}
+        />
       </div>
 
-      {/* Communication channels */}
-      <div>
-        <h2 className="text-lg font-semibold mb-3">Canali di comunicazione</h2>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Channel
-            icon={<Mail className="h-5 w-5" />} title="Email" sub={SUPPORT_EMAIL}
-            meta="Risposta in 24h" cta="Invia email"
-            onClick={() => { window.location.href = `mailto:${SUPPORT_EMAIL}`; toast.success("Email aperta nel client predefinito"); }}
-          />
-          <Channel
-            icon={<Phone className="h-5 w-5" />} title="Telefono" sub={SUPPORT_PHONE}
-            meta="Lun–Ven · 9–18" cta="Chiama ora"
-            onClick={() => { window.location.href = `tel:${SUPPORT_PHONE.replace(/\s/g, "")}`; }}
-          />
-          <Channel
-            icon={<MessageCircle className="h-5 w-5" />} title="WhatsApp" sub="Chat veloce"
-            meta="Negli orari d'ufficio" cta="Apri WhatsApp"
-            onClick={() => window.open(WHATSAPP, "_blank")}
-          />
-          <Channel
-            icon={<CalendarDays className="h-5 w-5" />} title="Prenota una call" sub="Slot di 30 min"
-            meta="Scegli un orario" cta="Prenota"
-            onClick={() => window.open(CALENDLY, "_blank")}
-          />
-        </div>
-      </div>
+      {/* Support */}
+      <Card>
+        <CardContent className="p-5 space-y-3">
+          <div className="flex items-center gap-2">
+            <Headphones className="h-4 w-4 text-secondary" />
+            <h2 className="text-lg font-semibold">Supporto Tecnico</h2>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-3 text-sm">
+            {supportEmail && (
+              <div>
+                <p className="text-xs text-muted-foreground">Email</p>
+                <a href={`mailto:${supportEmail}`} className="hover:text-primary">{supportEmail}</a>
+              </div>
+            )}
+            {supportPhone && (
+              <div>
+                <p className="text-xs text-muted-foreground">Telefono</p>
+                <a href={`tel:${supportPhone.replace(/\s/g, "")}`} className="hover:text-primary">{supportPhone}</a>
+              </div>
+            )}
+            {config.business_hours && (
+              <div>
+                <p className="text-xs text-muted-foreground">Orari</p>
+                <p>{config.business_hours}</p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* FAQ */}
       <Card>
         <CardContent className="p-5">
           <h2 className="text-lg font-semibold mb-3">Domande frequenti</h2>
-          <Accordion type="single" collapsible className="w-full">
-            {FAQS.map((f, i) => (
-              <AccordionItem key={i} value={`q-${i}`}>
-                <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">{f.a}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          {faqs.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Nessuna FAQ disponibile.</p>
+          ) : (
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((f) => (
+                <AccordionItem key={f.id} value={f.id}>
+                  <AccordionTrigger className="text-left">{f.question}</AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground whitespace-pre-wrap">{f.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          )}
         </CardContent>
       </Card>
 
-      {/* Knowledge base */}
-      <Card>
-        <CardContent className="p-5 space-y-3">
-          <div className="flex items-center gap-2">
-            <BookOpen className="h-4 w-4 text-primary" />
-            <h2 className="text-lg font-semibold">Knowledge base e documentazione</h2>
-          </div>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {DOCS.map((d) => (
-              <a key={d.label} href={d.href} target="_blank" rel="noreferrer"
-                className="flex items-center justify-between rounded-md border p-3 text-sm hover:bg-muted transition-colors">
-                <span>{d.label}</span>
-                <ExternalLink className="h-4 w-4 text-muted-foreground" />
-              </a>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Feedback form */}
+      {/* Feedback */}
       <Card>
         <CardContent className="p-5 space-y-4">
           <div>
@@ -271,7 +247,7 @@ function Channel({ icon, title, sub, meta, cta, onClick }: {
           <p className="font-semibold">{title}</p>
         </div>
         <div>
-          <p className="text-sm">{sub}</p>
+          <p className="text-sm break-all">{sub}</p>
           <p className="text-xs text-muted-foreground">{meta}</p>
         </div>
         <Button size="sm" variant="outline" className="w-full" onClick={onClick}>{cta}</Button>
