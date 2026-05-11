@@ -44,9 +44,9 @@ const statusBadge: Record<ProjectStatus, string> = {
   completed: "bg-success/15 text-success border-success/30",
 };
 const statusLabel: Record<ProjectStatus, string> = {
-  planning: "Planning",
-  in_progress: "In progress",
-  completed: "Completed",
+  planning: "Pianificazione",
+  in_progress: "In corso",
+  completed: "Completato",
 };
 
 function progressOf(p: Project): number {
@@ -106,8 +106,8 @@ export default function ProjectsList() {
   };
 
   const submitNew = async () => {
-    if (!form.project_name.trim()) { toast.error("Project name is required"); return; }
-    if (!companyId) { toast.error("Account not linked to a company"); return; }
+    if (!form.project_name.trim()) { toast.error("Il nome del progetto è obbligatorio"); return; }
+    if (!companyId) { toast.error("Account non collegato ad un'azienda"); return; }
     setSaving(true);
     const { error } = await supabase.from("projects").insert({
       client_id: companyId,
@@ -120,7 +120,7 @@ export default function ProjectsList() {
     } as never);
     setSaving(false);
     if (error) { toast.error(error.message); return; }
-    toast.success("✓ Project created");
+    toast.success("✓ Progetto creato");
     setOpenNew(false);
     setForm({ project_name: "", description: "", status: "planning", start_date: "", end_date: "", budget: "" });
     reload();
@@ -150,7 +150,7 @@ export default function ProjectsList() {
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t('projects.title')}</h1>
-          <p className="text-sm text-muted-foreground">Browse, filter and open project details.</p>
+          <p className="text-sm text-muted-foreground">Sfoglia, filtra e apri i dettagli dei progetti.</p>
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -162,7 +162,7 @@ export default function ProjectsList() {
             onClick={() => setView("table")}
           ><List className="h-4 w-4" /></Button>
           <Button size="sm" onClick={() => setOpenNew(true)}>
-            <Plus className="mr-1 h-4 w-4" />New Project
+            <Plus className="mr-1 h-4 w-4" />Nuovo progetto
           </Button>
         </div>
       </div>
@@ -170,39 +170,39 @@ export default function ProjectsList() {
       <Dialog open={openNew} onOpenChange={setOpenNew}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>New Project</DialogTitle>
-            <DialogDescription>Create a new project for your company.</DialogDescription>
+            <DialogTitle>Nuovo progetto</DialogTitle>
+            <DialogDescription>Crea un nuovo progetto per la tua azienda.</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5">
-              <Label>Project Name *</Label>
+              <Label>Nome progetto *</Label>
               <Input value={form.project_name} maxLength={120}
                 onChange={(e) => setForm({ ...form, project_name: e.target.value })} />
             </div>
             <div className="space-y-1.5">
-              <Label>Description</Label>
+              <Label>Descrizione</Label>
               <Textarea value={form.description} maxLength={2000}
                 onChange={(e) => setForm({ ...form, description: e.target.value })} />
             </div>
             <div className="space-y-1.5">
-              <Label>Status</Label>
+              <Label>Stato</Label>
               <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v as ProjectStatus })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="planning">Planning</SelectItem>
-                  <SelectItem value="in_progress">In progress</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="planning">Pianificazione</SelectItem>
+                  <SelectItem value="in_progress">In corso</SelectItem>
+                  <SelectItem value="completed">Completato</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label>Start Date</Label>
+                <Label>Data inizio</Label>
                 <Input type="date" value={form.start_date}
                   onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
               </div>
               <div className="space-y-1.5">
-                <Label>End Date</Label>
+                <Label>Data fine</Label>
                 <Input type="date" value={form.end_date}
                   onChange={(e) => setForm({ ...form, end_date: e.target.value })} />
               </div>
@@ -214,8 +214,8 @@ export default function ProjectsList() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpenNew(false)}>Cancel</Button>
-            <Button onClick={submitNew} disabled={saving}>{saving ? "Saving..." : "Create"}</Button>
+            <Button variant="outline" onClick={() => setOpenNew(false)}>Annulla</Button>
+            <Button onClick={submitNew} disabled={saving}>{saving ? "Salvataggio..." : "Crea"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -225,7 +225,7 @@ export default function ProjectsList() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search by project name..."
+              placeholder="Cerca per nome progetto..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-9"
@@ -234,18 +234,18 @@ export default function ProjectsList() {
           <Select value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
             <SelectTrigger className="md:w-44"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="archived">Archived</SelectItem>
+              <SelectItem value="all">Tutti</SelectItem>
+              <SelectItem value="active">Attivi</SelectItem>
+              <SelectItem value="completed">Completati</SelectItem>
+              <SelectItem value="archived">Archiviati</SelectItem>
             </SelectContent>
           </Select>
           <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
             <SelectTrigger className="md:w-44"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="name">Sort by Name</SelectItem>
-              <SelectItem value="date">Sort by Date</SelectItem>
-              <SelectItem value="status">Sort by Status</SelectItem>
+              <SelectItem value="name">Ordina per nome</SelectItem>
+              <SelectItem value="date">Ordina per data</SelectItem>
+              <SelectItem value="status">Ordina per stato</SelectItem>
             </SelectContent>
           </Select>
         </CardContent>
@@ -261,11 +261,11 @@ export default function ProjectsList() {
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
             <div className="rounded-full bg-muted p-4"><Inbox className="h-8 w-8 text-muted-foreground" /></div>
-            <h3 className="text-lg font-semibold">No projects yet</h3>
+            <h3 className="text-lg font-semibold">Nessun progetto</h3>
             <p className="text-sm text-muted-foreground max-w-md">
-              You don't have any projects yet. Contact us to get started.
+              Non hai ancora progetti. Contattaci per iniziare.
             </p>
-            <Button asChild><Link to="/contacts"><Mail className="mr-2 h-4 w-4" />Contact us</Link></Button>
+            <Button asChild><Link to="/contacts"><Mail className="mr-2 h-4 w-4" />Contattaci</Link></Button>
           </CardContent>
         </Card>
       ) : view === "cards" ? (
@@ -285,14 +285,14 @@ export default function ProjectsList() {
                 <CardContent className="space-y-4">
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>Progress</span><span className="font-medium text-foreground">{pct}%</span>
+                      <span>Avanzamento</span><span className="font-medium text-foreground">{pct}%</span>
                     </div>
                     <Progress value={pct} className="h-2" />
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {p.start_date ? format(new Date(p.start_date), "MMM d, yyyy") : "—"}
+                    {p.start_date ? format(new Date(p.start_date), "d MMM yyyy") : "—"}
                     {" → "}
-                    {p.end_date ? format(new Date(p.end_date), "MMM d, yyyy") : "—"}
+                    {p.end_date ? format(new Date(p.end_date), "d MMM yyyy") : "—"}
                   </div>
                   <div className="flex -space-x-2">
                     {["A", "B", "C"].map((l, i) => (
@@ -300,7 +300,7 @@ export default function ProjectsList() {
                     ))}
                   </div>
                   <Button asChild variant="outline" size="sm" className="w-full">
-                    <Link to={`/projects/${p.id}`}>View details <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    <Link to={`/projects/${p.id}`}>Vedi dettagli <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -312,12 +312,12 @@ export default function ProjectsList() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Project Name</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Progress</TableHead>
-                <TableHead>Start</TableHead>
-                <TableHead>End</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>Nome progetto</TableHead>
+                <TableHead>Stato</TableHead>
+                <TableHead>Avanzamento</TableHead>
+                <TableHead>Inizio</TableHead>
+                <TableHead>Fine</TableHead>
+                <TableHead className="text-right">Azioni</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -337,11 +337,11 @@ export default function ProjectsList() {
                         <span className="text-xs text-muted-foreground w-9 text-right">{pct}%</span>
                       </div>
                     </TableCell>
-                    <TableCell>{p.start_date ? format(new Date(p.start_date), "MMM d, yyyy") : "—"}</TableCell>
-                    <TableCell>{p.end_date ? format(new Date(p.end_date), "MMM d, yyyy") : "—"}</TableCell>
+                    <TableCell>{p.start_date ? format(new Date(p.start_date), "d MMM yyyy") : "—"}</TableCell>
+                    <TableCell>{p.end_date ? format(new Date(p.end_date), "d MMM yyyy") : "—"}</TableCell>
                     <TableCell className="text-right">
                       <Button asChild variant="ghost" size="sm">
-                        <Link to={`/projects/${p.id}`}>Open</Link>
+                        <Link to={`/projects/${p.id}`}>Apri</Link>
                       </Button>
                     </TableCell>
                   </TableRow>

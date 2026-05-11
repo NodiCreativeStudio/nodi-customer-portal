@@ -48,9 +48,9 @@ const statusBadge: Record<ProjectStatus, string> = {
   completed: "bg-success/15 text-success border-success/30",
 };
 const statusLabel: Record<ProjectStatus, string> = {
-  planning: "Planning",
-  in_progress: "In progress",
-  completed: "Completed",
+  planning: "Pianificazione",
+  in_progress: "In corso",
+  completed: "Completato",
 };
 
 function projectProgress(p: Project): number {
@@ -67,12 +67,12 @@ function projectProgress(p: Project): number {
 }
 
 function taskPriority(due: string | null): { label: string; tone: string } {
-  if (!due) return { label: "Low", tone: "bg-muted text-muted-foreground" };
+  if (!due) return { label: "Bassa", tone: "bg-muted text-muted-foreground" };
   const days = differenceInDays(new Date(due), new Date());
-  if (days < 0) return { label: "Overdue", tone: "bg-destructive/15 text-destructive border-destructive/30" };
-  if (days <= 2) return { label: "High", tone: "bg-secondary/15 text-secondary border-secondary/30" };
-  if (days <= 5) return { label: "Medium", tone: "bg-warning/15 text-warning border-warning/30" };
-  return { label: "Low", tone: "bg-muted text-muted-foreground" };
+  if (days < 0) return { label: "In ritardo", tone: "bg-destructive/15 text-destructive border-destructive/30" };
+  if (days <= 2) return { label: "Alta", tone: "bg-secondary/15 text-secondary border-secondary/30" };
+  if (days <= 5) return { label: "Media", tone: "bg-warning/15 text-warning border-warning/30" };
+  return { label: "Bassa", tone: "bg-muted text-muted-foreground" };
 }
 
 export default function Dashboard() {
@@ -158,10 +158,10 @@ export default function Dashboard() {
   );
 
   const stats = [
-    { label: "Active projects", value: activeProjects.length, icon: FolderKanban, tone: "text-primary bg-primary/10" },
-    { label: "Total tasks", value: allTasksCount, icon: ListChecks, tone: "text-[hsl(var(--primary-glow))] bg-primary/5" },
-    { label: "Completed deliverables", value: completedTasks.length, icon: CheckCircle2, tone: "text-success bg-success/10" },
-    { label: "Days to next milestone", value: nextMilestone ?? "—", icon: CalendarClock, tone: "text-secondary bg-secondary/10" },
+    { label: "Progetti attivi", value: activeProjects.length, icon: FolderKanban, tone: "text-primary bg-primary/10" },
+    { label: "Task totali", value: allTasksCount, icon: ListChecks, tone: "text-[hsl(var(--primary-glow))] bg-primary/5" },
+    { label: "Deliverable completati", value: completedTasks.length, icon: CheckCircle2, tone: "text-success bg-success/10" },
+    { label: "Giorni alla prossima milestone", value: nextMilestone ?? "—", icon: CalendarClock, tone: "text-secondary bg-secondary/10" },
   ];
 
   return (
@@ -173,8 +173,8 @@ export default function Dashboard() {
             {t('dashboard.welcome')}, {firstName}!
           </h1>
           <p className="text-muted-foreground">
-            {format(now, "EEEE, MMMM d, yyyy")} · {format(now, "HH:mm")}
-            {role === "admin" && <span className="ml-2 text-primary font-medium">· Admin view</span>}
+            {format(now, "EEEE, d MMMM yyyy")} · {format(now, "HH:mm")}
+            {role === "admin" && <span className="ml-2 text-primary font-medium">· Vista admin</span>}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -183,11 +183,11 @@ export default function Dashboard() {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search projects…"
+              placeholder="Cerca progetti…"
               className="pl-8 w-full sm:w-64"
             />
           </div>
-          <Button variant="outline" size="icon" onClick={load} disabled={refreshing} aria-label="Refresh">
+          <Button variant="outline" size="icon" onClick={load} disabled={refreshing} aria-label="Aggiorna">
             <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin")} />
           </Button>
         </div>
@@ -222,11 +222,11 @@ export default function Dashboard() {
         <Card className="lg:col-span-2 shadow-[var(--shadow-card)]">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Your active projects</CardTitle>
-              <CardDescription>Live status of ongoing engagements</CardDescription>
+              <CardTitle>I tuoi progetti attivi</CardTitle>
+              <CardDescription>Stato in tempo reale dei lavori in corso</CardDescription>
             </div>
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/projects">View all <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
+              <Link to="/projects">Vedi tutti <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
             </Button>
           </CardHeader>
           <CardContent>
@@ -237,8 +237,8 @@ export default function Dashboard() {
             ) : filteredProjects.length === 0 ? (
               <EmptyState
                 icon={FolderKanban}
-                title={search ? "No matching projects" : "No active projects yet"}
-                description={search ? "Try a different search term." : "Active projects will appear here once your team starts one."}
+                title={search ? "Nessun progetto corrispondente" : "Nessun progetto attivo"}
+                description={search ? "Prova un altro termine di ricerca." : "I progetti attivi appariranno qui non appena il team ne avvierà uno."}
               />
             ) : (
               <div className="space-y-3">
@@ -254,9 +254,9 @@ export default function Dashboard() {
                         <div className="min-w-0 flex-1">
                           <h3 className="font-medium truncate">{p.project_name}</h3>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            {p.start_date ? format(new Date(p.start_date), "MMM d, yyyy") : "—"}
+                            {p.start_date ? format(new Date(p.start_date), "d MMM yyyy") : "—"}
                             {" → "}
-                            {p.end_date ? format(new Date(p.end_date), "MMM d, yyyy") : "—"}
+                            {p.end_date ? format(new Date(p.end_date), "d MMM yyyy") : "—"}
                           </p>
                         </div>
                         <Badge variant="outline" className={cn("border", statusBadge[p.status])}>
@@ -265,7 +265,7 @@ export default function Dashboard() {
                       </div>
                       <div className="mt-3 space-y-1">
                         <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>Progress</span>
+                          <span>Avanzamento</span>
                           <span className="font-medium text-foreground">{progress}%</span>
                         </div>
                         <Progress value={progress} className="h-1.5" />
@@ -281,8 +281,8 @@ export default function Dashboard() {
         <Card className="shadow-[var(--shadow-card)]">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Tasks due this week</CardTitle>
-              <CardDescription>Next 7 days</CardDescription>
+              <CardTitle>Task in scadenza questa settimana</CardTitle>
+              <CardDescription>Prossimi 7 giorni</CardDescription>
             </div>
           </CardHeader>
           <CardContent>
@@ -291,7 +291,7 @@ export default function Dashboard() {
                 {[0, 1, 2].map((i) => <Skeleton key={i} className="h-12 w-full" />)}
               </div>
             ) : tasks.length === 0 ? (
-              <EmptyState icon={CheckSquare} title="All caught up" description="No tasks due this week." />
+              <EmptyState icon={CheckSquare} title="Tutto in regola" description="Nessun task in scadenza questa settimana." />
             ) : (
               <ul className="space-y-2">
                 {tasks.slice(0, 6).map((t) => {
@@ -307,7 +307,7 @@ export default function Dashboard() {
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-medium">{t.title}</p>
                           <p className={cn("text-xs", overdue ? "text-destructive font-medium" : "text-muted-foreground")}>
-                            {t.due_date ? `Due ${format(new Date(t.due_date), "MMM d")}` : "No due date"}
+                            {t.due_date ? `Scadenza ${format(new Date(t.due_date), "d MMM")}` : "Senza scadenza"}
                           </p>
                         </div>
                         <Badge variant="outline" className={cn("border text-[10px]", pr.tone)}>
@@ -320,7 +320,7 @@ export default function Dashboard() {
               </ul>
             )}
             <Button variant="ghost" size="sm" className="mt-3 w-full" asChild>
-              <Link to="/projects">View all tasks <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
+              <Link to="/projects">Vedi tutti i task <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
             </Button>
           </CardContent>
         </Card>
@@ -329,8 +329,8 @@ export default function Dashboard() {
       {/* Activity */}
       <Card className="shadow-[var(--shadow-card)]">
         <CardHeader>
-          <CardTitle>Recent activity</CardTitle>
-          <CardDescription>Latest uploads and completed tasks</CardDescription>
+          <CardTitle>Attività recente</CardTitle>
+          <CardDescription>Ultimi upload e task completati</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -338,7 +338,7 @@ export default function Dashboard() {
               {[0, 1, 2].map((i) => <Skeleton key={i} className="h-10 w-full" />)}
             </div>
           ) : activity.length === 0 ? (
-            <EmptyState icon={Inbox} title="No recent activity" description="Activity will appear here as your team works." />
+            <EmptyState icon={Inbox} title="Nessuna attività recente" description="L'attività apparirà qui man mano che il team lavora." />
           ) : (
             <ol className="relative space-y-4 border-l border-border pl-6">
               {activity.map((a) => (
@@ -352,7 +352,7 @@ export default function Dashboard() {
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <p className="text-sm">
                       <span className="font-medium">
-                        {a.kind === "upload" ? "Uploaded " : "Completed task "}
+                        {a.kind === "upload" ? "Upload " : "Task completato "}
                       </span>
                       <span className="text-muted-foreground">{a.title}</span>
                     </p>
@@ -369,9 +369,9 @@ export default function Dashboard() {
 
       {/* Quick actions */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <QuickAction to="/uploads" icon={Upload} label="Upload files" />
-        <QuickAction to="/stack" icon={Layers} label="View stack" />
-        <QuickAction to="/contacts" icon={Contact} label="Contact us" />
+        <QuickAction to="/uploads" icon={Upload} label="Carica file" />
+        <QuickAction to="/stack" icon={Layers} label="Vedi tech stack" />
+        <QuickAction to="/contacts" icon={Contact} label="Contattaci" />
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ export default function AuthShell({ children }: { children: ReactNode }) {
           </div>
           <div className="text-center">
             <h1 className="text-xl font-semibold">NODI Portal</h1>
-            <p className="text-xs text-muted-foreground">Digital consulting workspace</p>
+            <p className="text-xs text-muted-foreground">Workspace di consulenza digitale</p>
           </div>
         </div>
         {children}

@@ -9,11 +9,11 @@ export default function Placeholder({ title, description }: { title: string; des
       </header>
       <Card>
         <CardHeader>
-          <CardTitle>Coming soon</CardTitle>
-          <CardDescription>This module will be implemented in upcoming iterations.</CardDescription>
+          <CardTitle>In arrivo</CardTitle>
+          <CardDescription>Questo modulo sarà implementato nelle prossime iterazioni.</CardDescription>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
-          The data model is already in place — UI work follows.
+          Il modello dati è già pronto — manca solo l'interfaccia.
         </CardContent>
       </Card>
     </div>

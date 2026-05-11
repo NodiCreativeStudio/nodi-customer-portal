@@ -155,13 +155,13 @@ export default function Uploads() {
 
   const handleFiles = async (list: FileList | File[]) => {
     if (!companyId || !user) {
-      toast.error("Your account isn't linked to a company yet.");
+      toast.error("Il tuo account non è ancora collegato a un'azienda.");
       return;
     }
     const items = Array.from(list);
     for (const f of items) {
       if (f.size > MAX_BYTES) {
-        toast.error(`${f.name} exceeds 50MB limit`);
+        toast.error(`${f.name} supera il limite di 50MB`);
         continue;
       }
       const folderSlug = currentFolderId ?? "root";
@@ -170,7 +170,7 @@ export default function Uploads() {
       const { error: upErr } = await supabase.storage
         .from(BUCKET).upload(path, f, { contentType: f.type, upsert: false });
       if (upErr) {
-        toast.error(`Upload failed: ${upErr.message}`);
+        toast.error(`Upload fallito: ${upErr.message}`);
         setProgress(null);
         continue;
       }
@@ -185,8 +185,8 @@ export default function Uploads() {
         folder_id: currentFolderId,
       } as never);
       setProgress({ name: f.name, pct: 100 });
-      if (dbErr) toast.error(`Saved file but record failed: ${dbErr.message}`);
-      else toast.success(`✓ ${f.name} uploaded`);
+      if (dbErr) toast.error(`File salvato ma il record è fallito: ${dbErr.message}`);
+      else toast.success(`✓ ${f.name} caricato`);
       setTimeout(() => setProgress(null), 600);
     }
     load();
@@ -199,10 +199,10 @@ export default function Uploads() {
   };
 
   const openPreview = async (row: UploadRow) => {
-    if (!row.storage_path) { toast.error("File path missing"); return; }
+    if (!row.storage_path) { toast.error("Percorso file mancante"); return; }
     const { data, error } = await supabase.storage
       .from(BUCKET).createSignedUrl(row.storage_path, 60 * 5);
-    if (error || !data) { toast.error("Could not open file"); return; }
+    if (error || !data) { toast.error("Impossibile aprire il file"); return; }
     setPreview({ row, url: data.signedUrl });
   };
 
@@ -210,7 +210,7 @@ export default function Uploads() {
     if (!row.storage_path) return;
     const { data, error } = await supabase.storage
       .from(BUCKET).createSignedUrl(row.storage_path, 60, { download: row.file_name });
-    if (error || !data) { toast.error("Download failed"); return; }
+    if (error || !data) { toast.error("Download fallito"); return; }
     window.open(data.signedUrl, "_blank");
   };
 
@@ -220,14 +220,14 @@ export default function Uploads() {
       .from(BUCKET).createSignedUrl(row.storage_path, 60 * 60);
     if (data) {
       await navigator.clipboard.writeText(data.signedUrl);
-      toast.success("Share link copied (valid 1h)");
+      toast.success("Link di condivisione copiato (valido 1h)");
     }
   };
 
   const deleteFile = async (row: UploadRow) => {
     if (row.storage_path) await supabase.storage.from(BUCKET).remove([row.storage_path]);
     await supabase.from("uploads").delete().eq("id", row.id);
-    toast.success("File deleted");
+    toast.success("File eliminato");
     setConfirmDelete(null);
     load();
   };
@@ -238,7 +238,7 @@ export default function Uploads() {
     if (error) toast.error(error.message);
     else {
       const target = newFolderId ? folderById.get(newFolderId)?.folder_name : "Root";
-      toast.success(`Moved to ${target}`);
+      toast.success(`Spostato in ${target}`);
       load();
     }
   };
@@ -248,7 +248,7 @@ export default function Uploads() {
     const { error } = await supabase
       .from("uploads").update({ file_name: renameValue.trim() }).eq("id", renameRow.id);
     if (error) toast.error(error.message);
-    else { toast.success("File renamed"); setRenameRow(null); load(); }
+    else { toast.success("File rinominato"); setRenameRow(null); load(); }
   };
 
   const createFolder = async () => {
@@ -260,7 +260,7 @@ export default function Uploads() {
     } as never);
     if (error) toast.error(error.message);
     else {
-      toast.success("Folder created");
+      toast.success("Cartella creata");
       setNewFolderOpen(false);
       setNewFolderName("");
       if (newFolderParent) setExpanded((s) => new Set(s).add(newFolderParent));
@@ -272,14 +272,14 @@ export default function Uploads() {
     const hasFiles = files.some((f) => f.folder_id === folder.id);
     const hasChildren = folders.some((f) => f.parent_id === folder.id);
     if (hasFiles || hasChildren) {
-      toast.error("Folder is not empty. Move or delete its contents first.");
+      toast.error("La cartella non è vuota. Sposta o elimina prima il contenuto.");
       setConfirmDeleteFolder(null);
       return;
     }
     const { error } = await supabase.from("folders").delete().eq("id", folder.id);
     if (error) toast.error(error.message);
     else {
-      toast.success("Folder deleted");
+      toast.success("Cartella eliminata");
       if (currentFolderId === folder.id) setCurrentFolderId(folder.parent_id);
       setConfirmDeleteFolder(null);
       load();
@@ -374,7 +374,7 @@ export default function Uploads() {
     <div className="space-y-6 animate-in fade-in duration-300">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t('uploads.title')}</h1>
-        <p className="text-sm text-muted-foreground">Organize files into folders, drag to move, right-click for actions.</p>
+        <p className="text-sm text-muted-foreground">Organizza i file in cartelle, trascina per spostare, click destro per le azioni.</p>
       </div>
 
       {/* Breadcrumb */}
@@ -414,7 +414,7 @@ export default function Uploads() {
         <Card className="h-fit">
           <CardContent className="space-y-2 p-3">
             <div className="flex items-center justify-between px-1">
-              <p className="text-xs font-medium uppercase text-muted-foreground">Folders</p>
+              <p className="text-xs font-medium uppercase text-muted-foreground">Cartelle</p>
               <Button
                 size="sm" variant="ghost" className="h-7 px-2"
                 onClick={() => { setNewFolderParent(null); setNewFolderOpen(true); }}
@@ -443,13 +443,13 @@ export default function Uploads() {
             </div>
             {rootFolders.map((f) => <TreeNode key={f.id} folder={f} depth={0} />)}
             {rootFolders.length === 0 && (
-              <p className="px-2 py-3 text-xs text-muted-foreground">No folders yet.</p>
+              <p className="px-2 py-3 text-xs text-muted-foreground">Nessuna cartella.</p>
             )}
             <Button
               size="sm" variant="outline" className="w-full mt-2"
               onClick={() => { setNewFolderParent(null); setNewFolderOpen(true); }}
             >
-              <FolderPlus className="mr-2 h-3.5 w-3.5" /> New Folder
+              <FolderPlus className="mr-2 h-3.5 w-3.5" /> Nuova cartella
             </Button>
           </CardContent>
         </Card>
@@ -471,7 +471,7 @@ export default function Uploads() {
                 <UploadCloud className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium">Drop files here to upload to this folder</p>
+                <p className="text-sm font-medium">Trascina i file qui per caricarli in questa cartella</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   PDF, DOC, XLS, JPG, PNG, ZIP · Max 50MB
                 </p>
@@ -480,7 +480,7 @@ export default function Uploads() {
                 ref={inputRef} type="file" multiple accept={ACCEPTED} className="hidden"
                 onChange={(e) => e.target.files && handleFiles(e.target.files)}
               />
-              <Button size="sm" onClick={() => inputRef.current?.click()}>Browse files</Button>
+              <Button size="sm" onClick={() => inputRef.current?.click()}>Sfoglia file</Button>
               {progress && (
                 <div className="w-full max-w-sm space-y-1 pt-2">
                   <div className="flex justify-between text-xs">
@@ -499,7 +499,7 @@ export default function Uploads() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Search in this folder..." value={search}
+                  placeholder="Cerca in questa cartella..." value={search}
                   onChange={(e) => setSearch(e.target.value)} className="pl-9"
                 />
               </div>
@@ -514,7 +514,7 @@ export default function Uploads() {
             <Card>
               <CardContent className="py-12 text-center text-muted-foreground">
                 <UploadCloud className="mx-auto h-10 w-10 mb-3 opacity-40" />
-                <p>This folder is empty. Drop files above to add them.</p>
+                <p>Questa cartella è vuota. Trascina i file qui sopra per aggiungerli.</p>
               </CardContent>
             </Card>
           ) : (
@@ -552,18 +552,18 @@ export default function Uploads() {
                             <span className="text-muted-foreground">{fmtSize(row.file_size)}</span>
                           </div>
                           <div className="flex gap-1 pt-1 border-t opacity-80 group-hover:opacity-100">
-                            <Button size="sm" variant="ghost" onClick={() => openPreview(row)} title="Preview">
+                            <Button size="sm" variant="ghost" onClick={() => openPreview(row)} title="Anteprima">
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button size="sm" variant="ghost" onClick={() => downloadFile(row)} title="Download">
                               <Download className="h-4 w-4" />
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => shareFile(row)} title="Share link">
+                            <Button size="sm" variant="ghost" onClick={() => shareFile(row)} title="Condividi link">
                               <Share2 className="h-4 w-4" />
                             </Button>
                             <Button
                               size="sm" variant="ghost" className="ml-auto text-destructive hover:text-destructive"
-                              onClick={() => setConfirmDelete(row)} title="Delete"
+                              onClick={() => setConfirmDelete(row)} title="Elimina"
                             ><Trash2 className="h-4 w-4" /></Button>
                           </div>
                         </CardContent>
@@ -571,17 +571,17 @@ export default function Uploads() {
                     </ContextMenuTrigger>
                     <ContextMenuContent>
                       <ContextMenuItem onClick={() => openPreview(row)}>
-                        <Eye className="mr-2 h-4 w-4" /> Preview
+                        <Eye className="mr-2 h-4 w-4" /> Anteprima
                       </ContextMenuItem>
                       <ContextMenuItem onClick={() => downloadFile(row)}>
                         <Download className="mr-2 h-4 w-4" /> Download
                       </ContextMenuItem>
                       <ContextMenuItem onClick={() => { setRenameRow(row); setRenameValue(row.file_name); }}>
-                        <Pencil className="mr-2 h-4 w-4" /> Rename
+                        <Pencil className="mr-2 h-4 w-4" /> Rinomina
                       </ContextMenuItem>
                       <ContextMenuSub>
                         <ContextMenuSubTrigger>
-                          <FolderInput className="mr-2 h-4 w-4" /> Move to folder
+                          <FolderInput className="mr-2 h-4 w-4" /> Sposta in cartella
                         </ContextMenuSubTrigger>
                         <ContextMenuSubContent className="max-h-72 overflow-y-auto">
                           <ContextMenuItem onClick={() => moveFileToFolder(row.id, null)}>
@@ -599,7 +599,7 @@ export default function Uploads() {
                         className="text-destructive focus:text-destructive"
                         onClick={() => setConfirmDelete(row)}
                       >
-                        <Trash2 className="mr-2 h-4 w-4" /> Delete
+                        <Trash2 className="mr-2 h-4 w-4" /> Elimina
                       </ContextMenuItem>
                     </ContextMenuContent>
                   </ContextMenu>
@@ -616,19 +616,19 @@ export default function Uploads() {
           <DialogHeader>
             <DialogTitle>
               {newFolderParent
-                ? `New subfolder in "${folderById.get(newFolderParent)?.folder_name}"`
-                : "New folder"}
+                ? `Nuova sottocartella in "${folderById.get(newFolderParent)?.folder_name}"`
+                : "Nuova cartella"}
             </DialogTitle>
           </DialogHeader>
           <Input
-            autoFocus placeholder="Folder name"
+            autoFocus placeholder="Nome cartella"
             value={newFolderName}
             onChange={(e) => setNewFolderName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && createFolder()}
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setNewFolderOpen(false)}>Cancel</Button>
-            <Button onClick={createFolder} disabled={!newFolderName.trim()}>Create</Button>
+            <Button variant="outline" onClick={() => setNewFolderOpen(false)}>Annulla</Button>
+            <Button onClick={createFolder} disabled={!newFolderName.trim()}>Crea</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -636,15 +636,15 @@ export default function Uploads() {
       {/* Rename dialog */}
       <Dialog open={!!renameRow} onOpenChange={(o) => !o && setRenameRow(null)}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Rename file</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Rinomina file</DialogTitle></DialogHeader>
           <Input
             autoFocus value={renameValue}
             onChange={(e) => setRenameValue(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && renameFile()}
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRenameRow(null)}>Cancel</Button>
-            <Button onClick={renameFile} disabled={!renameValue.trim()}>Save</Button>
+            <Button variant="outline" onClick={() => setRenameRow(null)}>Annulla</Button>
+            <Button onClick={renameFile} disabled={!renameValue.trim()}>Salva</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -659,7 +659,7 @@ export default function Uploads() {
               </DialogHeader>
               <div className="text-xs text-muted-foreground flex flex-wrap gap-x-4 gap-y-1">
                 <span>{fmtSize(preview.row.file_size)}</span>
-                <span>{preview.row.file_type ?? "unknown"}</span>
+                <span>{preview.row.file_type ?? "sconosciuto"}</span>
                 <span>{formatDistanceToNow(new Date(preview.row.uploaded_at), { addSuffix: true })}</span>
               </div>
               <div className="rounded-md border bg-muted/30 overflow-hidden h-[60vh]">
@@ -669,12 +669,12 @@ export default function Uploads() {
                   <iframe src={preview.url} title={preview.row.file_name} className="w-full h-full" />
                 ) : (
                   <div className="grid place-items-center h-full text-sm text-muted-foreground p-6 text-center">
-                    Preview not available for this file type. Use Download to open it.
+                    Anteprima non disponibile per questo tipo di file. Usa Download per aprirlo.
                   </div>
                 )}
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setPreview(null)}>Close</Button>
+                <Button variant="outline" onClick={() => setPreview(null)}>Chiudi</Button>
                 <Button onClick={() => downloadFile(preview.row)}>
                   <Download className="mr-2 h-4 w-4" />Download
                 </Button>
@@ -688,17 +688,17 @@ export default function Uploads() {
       <AlertDialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this file?</AlertDialogTitle>
+            <AlertDialogTitle>Eliminare questo file?</AlertDialogTitle>
             <AlertDialogDescription>
-              {confirmDelete?.file_name} will be permanently removed. This action cannot be undone.
+              {confirmDelete?.file_name} sarà eliminato in modo permanente. Questa operazione è irreversibile.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => confirmDelete && deleteFile(confirmDelete)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >Delete</AlertDialogAction>
+            >Elimina</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -707,17 +707,17 @@ export default function Uploads() {
       <AlertDialog open={!!confirmDeleteFolder} onOpenChange={(o) => !o && setConfirmDeleteFolder(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete folder "{confirmDeleteFolder?.folder_name}"?</AlertDialogTitle>
+            <AlertDialogTitle>Eliminare la cartella "{confirmDeleteFolder?.folder_name}"?</AlertDialogTitle>
             <AlertDialogDescription>
-              The folder must be empty. Move or delete its files and subfolders first.
+              La cartella deve essere vuota. Sposta o elimina prima i suoi file e sottocartelle.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => confirmDeleteFolder && deleteFolder(confirmDeleteFolder)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >Delete</AlertDialogAction>
+            >Elimina</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
