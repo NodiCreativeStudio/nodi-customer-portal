@@ -44,6 +44,7 @@ interface ClientRow {
   contact_email: string | null;
   contact_phone: string | null;
   website: string | null;
+  monthly_fee: number | null;
   created_at: string;
 }
 
@@ -54,6 +55,7 @@ const emptyForm = {
   contact_phone: "",
   website: "",
   status: "active",
+  monthly_fee: "",
   notes: "",
 };
 
@@ -134,6 +136,7 @@ export default function AdminClients() {
       contact_phone: r.contact_phone ?? "",
       website: r.website ?? "",
       status: r.status,
+      monthly_fee: r.monthly_fee != null ? String(r.monthly_fee) : "",
       notes: "",
     });
     setOpen(true);
@@ -141,27 +144,27 @@ export default function AdminClients() {
 
   const save = async () => {
     if (!form.company_name.trim()) return toast.error("Company name is required");
+    const fee = form.monthly_fee === "" ? 0 : Number(form.monthly_fee);
+    if (Number.isNaN(fee) || fee < 0) return toast.error("Monthly fee must be a non-negative number");
+    if (form.status === "active" && fee <= 0) {
+      return toast.error("Set monthly fee before activating client");
+    }
     setSaving(true);
+    const payload = {
+      company_name: form.company_name,
+      industry: form.industry as any,
+      contact_email: form.contact_email || null,
+      contact_phone: form.contact_phone || null,
+      website: form.website || null,
+      status: form.status as any,
+      monthly_fee: fee,
+    };
     if (editingId) {
-      const { error } = await supabase.from("clients").update({
-        company_name: form.company_name,
-        industry: form.industry as any,
-        contact_email: form.contact_email || null,
-        contact_phone: form.contact_phone || null,
-        website: form.website || null,
-        status: form.status as any,
-      }).eq("id", editingId);
+      const { error } = await supabase.from("clients").update(payload).eq("id", editingId);
       if (error) { setSaving(false); return toast.error(error.message); }
       toast.success("Client updated");
     } else {
-      const { error } = await supabase.from("clients").insert({
-        company_name: form.company_name,
-        industry: form.industry as any,
-        contact_email: form.contact_email || null,
-        contact_phone: form.contact_phone || null,
-        website: form.website || null,
-        status: form.status as any,
-      });
+      const { error } = await supabase.from("clients").insert(payload);
       if (error) { setSaving(false); return toast.error(error.message); }
       toast.success("Client created");
     }
@@ -172,6 +175,9 @@ export default function AdminClients() {
 
   const toggleActive = async (r: ClientRow) => {
     const next = r.status === "active" ? "inactive" : "active";
+    if (next === "active" && (!r.monthly_fee || Number(r.monthly_fee) <= 0)) {
+      return toast.error("Set monthly fee before activating client");
+    }
     const { error } = await supabase.from("clients").update({ status: next as any }).eq("id", r.id);
     if (error) return toast.error(error.message);
     toast.success(`Client ${next}`);
@@ -189,9 +195,9 @@ export default function AdminClients() {
 
   const exportCsv = () => {
     downloadCsv("clients", [
-      ["Company", "Industry", "Status", "Email", "Phone", "Website", "Created"],
+      ["Company", "Industry", "Status", "Monthly Fee EUR", "Email", "Phone", "Website", "Created"],
       ...filtered.map((c) => [
-        c.company_name, c.industry ?? "", c.status, c.contact_email ?? "",
+        c.company_name, c.industry ?? "", c.status, c.monthly_fee ?? 0, c.contact_email ?? "",
         c.contact_phone ?? "", c.website ?? "", c.created_at,
       ]),
     ]);
@@ -230,11 +236,12 @@ export default function AdminClients() {
       </Card>
 
       <Card className="overflow-hidden">
-        <div className="hidden lg:grid grid-cols-[2fr_1fr_1.5fr_1fr_80px_80px_120px_140px] gap-3 px-4 py-3 text-xs font-medium text-muted-foreground border-b bg-muted/30">
+        <div className="hidden lg:grid grid-cols-[2fr_1fr_1.3fr_1fr_110px_80px_80px_120px_140px] gap-3 px-4 py-3 text-xs font-medium text-muted-foreground border-b bg-muted/30">
           <button className="flex items-center gap-1 hover:text-foreground" onClick={() => toggleSort("company_name")}>Company <ArrowUpDown className="h-3 w-3" /></button>
           <button className="flex items-center gap-1 hover:text-foreground" onClick={() => toggleSort("industry")}>Industry <ArrowUpDown className="h-3 w-3" /></button>
           <span>Contact</span>
           <button className="flex items-center gap-1 hover:text-foreground" onClick={() => toggleSort("status")}>Status <ArrowUpDown className="h-3 w-3" /></button>
+          <span>Monthly Revenue</span>
           <span>Team</span>
           <span>Projects</span>
           <button className="flex items-center gap-1 hover:text-foreground" onClick={() => toggleSort("created_at")}>Created <ArrowUpDown className="h-3 w-3" /></button>
@@ -245,11 +252,14 @@ export default function AdminClients() {
         ) : pageRows.length === 0 ? (
           <div className="p-12 text-center text-muted-foreground">No clients found.</div>
         ) : pageRows.map((r) => (
-          <div key={r.id} className="grid lg:grid-cols-[2fr_1fr_1.5fr_1fr_80px_80px_120px_140px] gap-3 px-4 py-3 items-center border-b last:border-0 hover:bg-muted/20">
+          <div key={r.id} className="grid lg:grid-cols-[2fr_1fr_1.3fr_1fr_110px_80px_80px_120px_140px] gap-3 px-4 py-3 items-center border-b last:border-0 hover:bg-muted/20">
             <Link to={`/admin/clients/${r.id}`} className="font-medium hover:text-primary">{r.company_name}</Link>
             <Badge variant="outline" className="capitalize w-fit">{r.industry ?? "—"}</Badge>
             <span className="text-sm text-muted-foreground truncate">{r.contact_email ?? "—"}</span>
             <Badge variant="outline" className={cn("capitalize w-fit", STATUS_CLS[r.status])}>{r.status}</Badge>
+            <span className={cn("text-sm font-semibold", (!r.monthly_fee || Number(r.monthly_fee) <= 0) && "text-warning")}>
+              €{Number(r.monthly_fee ?? 0).toLocaleString()}
+            </span>
             <span className="text-sm">{teamCounts.get(r.id) ?? 0}</span>
             <span className="text-sm">{projectCounts.get(r.id) ?? 0}</span>
             <span className="text-sm text-muted-foreground">{format(new Date(r.created_at), "MMM d, yyyy")}</span>
@@ -317,6 +327,15 @@ export default function AdminClients() {
               <div><Label>Phone</Label><Input value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} /></div>
             </div>
             <div><Label>Website</Label><Input value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })} /></div>
+            <div>
+              <Label>Monthly Contract Value * (€)</Label>
+              <Input
+                type="number" min="0" step="0.01" placeholder="2000"
+                value={form.monthly_fee}
+                onChange={(e) => setForm({ ...form, monthly_fee: e.target.value })}
+              />
+              <p className="text-xs text-muted-foreground mt-1">The monthly amount this client pays you for your services.</p>
+            </div>
             <div><Label>Notes</Label><Textarea rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
           </div>
           <DialogFooter>

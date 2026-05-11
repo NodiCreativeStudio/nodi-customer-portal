@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import {
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid,
-  BarChart, Bar,
 } from "recharts";
 import { format, formatDistanceToNow, startOfMonth, subMonths, differenceInDays, endOfMonth } from "date-fns";
 import { toast } from "sonner";
@@ -30,7 +29,7 @@ export default function AdminRevenue() {
       setLoading(true);
       const [t, c] = await Promise.all([
         supabase.from("tech_stack").select("*"),
-        supabase.from("clients").select("id, company_name, status"),
+        supabase.from("clients").select("id, company_name, status, monthly_fee"),
       ]);
       if (t.error || c.error) toast.error("Failed to load revenue data");
       setTech(t.data ?? []);
@@ -40,8 +39,11 @@ export default function AdminRevenue() {
   }, []);
 
   const stats = useMemo(() => {
-    const mrr = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
+    const activeClients = clients.filter((c: any) => c.status === "active");
+    const mrr = activeClients.reduce((s, c: any) => s + (Number(c.monthly_fee) || 0), 0);
     const arr = mrr * 12;
+    const costs = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
+    const margin = mrr - costs;
     const monthEnd = endOfMonth(new Date());
     const monthStart = startOfMonth(new Date());
     const renewalsThisMonth = tech.filter((t) => {
@@ -49,34 +51,37 @@ export default function AdminRevenue() {
       const d = new Date(t.renewal_date);
       return d >= monthStart && d <= monthEnd;
     });
-    const lastMrr = mrr * 0.92; // synthetic last-month comparison
-    const arpc = clients.length ? mrr / clients.length : 0;
+    const arpc = activeClients.length ? mrr / activeClients.length : 0;
     return {
-      mrr, arr, arpc,
-      lastMrr,
-      growth: mrr - lastMrr,
+      mrr, arr, costs, margin, arpc,
+      activeClientCount: activeClients.length,
       renewalsThisMonthCount: renewalsThisMonth.length,
     };
   }, [tech, clients]);
 
   const revenueSeries = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, i) => startOfMonth(subMonths(new Date(), 11 - i)));
+    // Synthetic ramp-up to current MRR (no historical fee snapshots stored)
     return months.map((m, i) => ({
       month: format(m, "MMM yy"),
-      revenue: Math.round(stats.mrr * (0.6 + i * 0.04 + Math.sin(i * 0.6) * 0.05)),
+      revenue: Math.round(stats.mrr * (0.6 + i * 0.04)),
       current: i === 11,
     }));
   }, [stats.mrr]);
 
-  const revenueByService = useMemo(() => {
-    const map = new Map<string, number>();
+  const clientBreakdown = useMemo(() => {
+    const costByClient = new Map<string, number>();
     tech.forEach((t) => {
-      const k = t.service_name || "Other";
-      map.set(k, (map.get(k) ?? 0) + (Number(t.cost_monthly) || 0));
+      costByClient.set(t.client_id, (costByClient.get(t.client_id) ?? 0) + (Number(t.cost_monthly) || 0));
     });
-    return Array.from(map, ([service, amount]) => ({ service, amount }))
-      .sort((a, b) => b.amount - a.amount).slice(0, 5);
-  }, [tech]);
+    return clients
+      .map((c: any) => {
+        const fee = Number(c.monthly_fee) || 0;
+        const cost = costByClient.get(c.id) ?? 0;
+        return { id: c.id, name: c.company_name, status: c.status, fee, cost, margin: fee - cost };
+      })
+      .sort((a, b) => b.fee - a.fee);
+  }, [clients, tech]);
 
   const renewals = useMemo(() => {
     const today = new Date();
@@ -115,9 +120,9 @@ export default function AdminRevenue() {
                 <div>
                   <p className="text-xs uppercase text-muted-foreground tracking-wide">MRR</p>
                   <p className="text-3xl font-bold mt-2">€{stats.mrr.toLocaleString()}</p>
-                  <p className={cn("text-xs mt-2 flex items-center gap-1", stats.growth >= 0 ? "text-success" : "text-destructive")}>
-                    {stats.growth >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                    €{Math.abs(Math.round(stats.growth)).toLocaleString()} vs last month
+                  <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
+                    <TrendingUp className="h-3 w-3" />
+                    {stats.activeClientCount} active client{stats.activeClientCount === 1 ? "" : "s"}
                   </p>
                 </div>
                 <div className="h-11 w-11 rounded-lg bg-primary/10 flex items-center justify-center"><DollarSign className="h-5 w-5 text-primary" /></div>
@@ -136,9 +141,9 @@ export default function AdminRevenue() {
             <Card className="hover-lift"><CardContent className="p-5">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs uppercase text-muted-foreground tracking-wide">Renewals This Month</p>
-                  <p className="text-3xl font-bold mt-2 text-warning">{stats.renewalsThisMonthCount}</p>
-                  <p className="text-xs text-muted-foreground mt-2">Services renewing</p>
+                  <p className="text-xs uppercase text-muted-foreground tracking-wide">Total Client Costs</p>
+                  <p className="text-3xl font-bold mt-2 text-warning">€{stats.costs.toLocaleString()}</p>
+                  <p className="text-xs text-muted-foreground mt-2">Third-party services / month</p>
                 </div>
                 <div className="h-11 w-11 rounded-lg bg-warning/10 flex items-center justify-center"><AlertTriangle className="h-5 w-5 text-warning" /></div>
               </div>
@@ -146,11 +151,15 @@ export default function AdminRevenue() {
             <Card className="hover-lift"><CardContent className="p-5">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs uppercase text-muted-foreground tracking-wide">Avg / Client</p>
-                  <p className="text-3xl font-bold mt-2">€{Math.round(stats.arpc).toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground mt-2">Per active client</p>
+                  <p className="text-xs uppercase text-muted-foreground tracking-wide">Gross Margin</p>
+                  <p className={cn("text-3xl font-bold mt-2", stats.margin >= 0 ? "text-success" : "text-destructive")}>
+                    €{stats.margin.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">MRR − costs · avg €{Math.round(stats.arpc).toLocaleString()}/client</p>
                 </div>
-                <div className="h-11 w-11 rounded-lg bg-accent/30 flex items-center justify-center"><UsersIcon className="h-5 w-5 text-accent-foreground" /></div>
+                <div className="h-11 w-11 rounded-lg bg-accent/30 flex items-center justify-center">
+                  {stats.margin >= 0 ? <TrendingUp className="h-5 w-5 text-success" /> : <TrendingDown className="h-5 w-5 text-destructive" />}
+                </div>
               </div>
             </CardContent></Card>
           </>
@@ -181,26 +190,37 @@ export default function AdminRevenue() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader><CardTitle>Top services by revenue</CardTitle></CardHeader>
-        <CardContent className="h-[280px]">
-          {revenueByService.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center pt-12">No services yet</p>
-          ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={revenueByService} layout="vertical" margin={{ left: 30 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={12} tickFormatter={(v) => `€${v}`} />
-                <YAxis type="category" dataKey="service" stroke="hsl(var(--muted-foreground))" fontSize={12} width={120} />
-                <Tooltip
-                  contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8 }}
-                  formatter={(v: any) => [`€${Number(v).toLocaleString()}`, "Monthly"]}
-                />
-                <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[0, 6, 6, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          )}
-        </CardContent>
+      <Card className="overflow-hidden">
+        <CardHeader><CardTitle>Breakdown by client</CardTitle></CardHeader>
+        <div className="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 px-4 py-3 text-xs font-medium text-muted-foreground border-b bg-muted/30">
+          <span>Client</span><span>Status</span><span>Monthly Fee</span><span>Costs</span><span>Margin</span>
+        </div>
+        {clientBreakdown.length === 0 ? (
+          <div className="p-12 text-center text-muted-foreground">No clients yet.</div>
+        ) : (
+          <>
+            {clientBreakdown.map((c) => (
+              <Link
+                key={c.id} to={`/admin/clients/${c.id}`}
+                className="grid md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 px-4 py-3 items-center border-b last:border-0 hover:bg-muted/20"
+              >
+                <span className="font-medium">{c.name}</span>
+                <Badge variant="outline" className="capitalize w-fit">{c.status}</Badge>
+                <span className="text-sm font-semibold">€{c.fee.toLocaleString()}</span>
+                <span className="text-sm text-warning">€{c.cost.toLocaleString()}</span>
+                <span className={cn("text-sm font-semibold", c.margin >= 0 ? "text-success" : "text-destructive")}>
+                  €{c.margin.toLocaleString()}
+                </span>
+              </Link>
+            ))}
+            <div className="grid md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-3 px-4 py-3 items-center bg-muted/30 font-semibold text-sm">
+              <span>Total</span><span />
+              <span>€{stats.mrr.toLocaleString()}</span>
+              <span className="text-warning">€{stats.costs.toLocaleString()}</span>
+              <span className={stats.margin >= 0 ? "text-success" : "text-destructive"}>€{stats.margin.toLocaleString()}</span>
+            </div>
+          </>
+        )}
       </Card>
 
       <Card className="overflow-hidden">

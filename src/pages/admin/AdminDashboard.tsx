@@ -83,13 +83,17 @@ export default function AdminDashboard() {
   useEffect(() => { load(); }, []);
 
   const stats = useMemo(() => {
-    const mrr = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
+    const mrr = clients
+      .filter((c) => c.status === "active")
+      .reduce((s, c) => s + (Number(c.monthly_fee) || 0), 0);
+    const costs = tech.reduce((s, t) => s + (Number(t.cost_monthly) || 0), 0);
+    const margin = mrr - costs;
     const activeProjects = projects.filter((p) => p.status !== "completed").length;
     const onboarded = profiles.filter((p) => p.onboarding_completed).length;
     const rate = profiles.length ? Math.round((onboarded / profiles.length) * 100) : 0;
     const monthAgo = subMonths(new Date(), 1);
     const newClientsMonth = clients.filter((c) => new Date(c.created_at) >= monthAgo).length;
-    return { mrr, activeProjects, rate, newClientsMonth, totalClients: clients.length };
+    return { mrr, costs, margin, activeProjects, rate, newClientsMonth, totalClients: clients.length };
   }, [clients, projects, tech, profiles]);
 
   const revenueSeries = useMemo(() => {
@@ -148,17 +152,21 @@ export default function AdminDashboard() {
       {/* Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {loading ? (
-          Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-28" />)
+          Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-28" />)
         ) : (
           <>
             <StatCard icon={Users} label="Total Clients" value={stats.totalClients}
               hint={stats.newClientsMonth ? `+${stats.newClientsMonth} this month` : "Active clients"} accent="primary" />
             <StatCard icon={FolderKanban} label="Active Projects" value={stats.activeProjects}
               hint="Currently running" accent="success" />
-            <StatCard icon={DollarSign} label="Monthly Revenue" value={`€${stats.mrr.toLocaleString()}`}
-              hint="MRR from tech stack" accent="accent" />
+            <StatCard icon={DollarSign} label="Monthly Recurring Revenue" value={`€${stats.mrr.toLocaleString()}`}
+              hint="Sum of active client fees" accent="accent" />
             <StatCard icon={CheckCircle} label="Onboarding" value={`${stats.rate}%`}
               hint={`${profiles.filter(p => p.onboarding_completed).length} of ${profiles.length}`} accent="warning" />
+            <StatCard icon={DollarSign} label="Total Client Costs" value={`€${stats.costs.toLocaleString()}`}
+              hint="Third-party services / month" accent="warning" />
+            <StatCard icon={DollarSign} label="Gross Margin" value={`€${stats.margin.toLocaleString()}`}
+              hint="MRR − costs" accent={stats.margin >= 0 ? "success" : "primary"} />
           </>
         )}
       </div>
