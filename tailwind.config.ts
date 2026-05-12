@@ -75,10 +75,12 @@ export default {
         },
       },
       boxShadow: {
+        subtle: "var(--shadow-subtle)",
         card: "var(--shadow-card)",
         elegant: "var(--shadow-elegant)",
         hover: "var(--shadow-hover)",
         glow: "var(--shadow-glow)",
+        modal: "var(--shadow-modal)",
       },
       backdropBlur: {
         xs: "4px",
