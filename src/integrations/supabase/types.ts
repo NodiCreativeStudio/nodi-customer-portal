@@ -713,6 +713,119 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_methods: {
+        Row: {
+          account_holder_name: string | null
+          client_id: string
+          created_at: string
+          iban_country: string | null
+          iban_last_4: string | null
+          id: string
+          is_default: boolean
+          mandate_accepted_at: string
+          mandate_id: string | null
+          mandate_status: Database["public"]["Enums"]["mandate_status"]
+          stripe_payment_method_id: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          account_holder_name?: string | null
+          client_id: string
+          created_at?: string
+          iban_country?: string | null
+          iban_last_4?: string | null
+          id?: string
+          is_default?: boolean
+          mandate_accepted_at?: string
+          mandate_id?: string | null
+          mandate_status?: Database["public"]["Enums"]["mandate_status"]
+          stripe_payment_method_id?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          account_holder_name?: string | null
+          client_id?: string
+          created_at?: string
+          iban_country?: string | null
+          iban_last_4?: string | null
+          id?: string
+          is_default?: boolean
+          mandate_accepted_at?: string
+          mandate_id?: string | null
+          mandate_status?: Database["public"]["Enums"]["mandate_status"]
+          stripe_payment_method_id?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          client_id: string
+          created_at: string
+          currency: string
+          failure_code: string | null
+          failure_reason: string | null
+          id: string
+          next_retry_date: string | null
+          paid_at: string | null
+          payment_type: Database["public"]["Enums"]["payment_type"]
+          retry_count: number
+          status: Database["public"]["Enums"]["payment_status"]
+          stripe_invoice_id: string | null
+          stripe_payment_id: string | null
+          subscription_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          client_id: string
+          created_at?: string
+          currency?: string
+          failure_code?: string | null
+          failure_reason?: string | null
+          id?: string
+          next_retry_date?: string | null
+          paid_at?: string | null
+          payment_type: Database["public"]["Enums"]["payment_type"]
+          retry_count?: number
+          status?: Database["public"]["Enums"]["payment_status"]
+          stripe_invoice_id?: string | null
+          stripe_payment_id?: string | null
+          subscription_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          client_id?: string
+          created_at?: string
+          currency?: string
+          failure_code?: string | null
+          failure_reason?: string | null
+          id?: string
+          next_retry_date?: string | null
+          paid_at?: string | null
+          payment_type?: Database["public"]["Enums"]["payment_type"]
+          retry_count?: number
+          status?: Database["public"]["Enums"]["payment_status"]
+          stripe_invoice_id?: string | null
+          stripe_payment_id?: string | null
+          subscription_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           company_id: string | null
@@ -825,6 +938,78 @@ export type Database = {
             referencedColumns: ["client_id"]
           },
         ]
+      }
+      subscriptions: {
+        Row: {
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          client_id: string
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          failure_count: number
+          iban_last_4: string | null
+          id: string
+          last_payment_date: string | null
+          last_payment_status: string | null
+          monthly_fee: number
+          next_billing_date: string | null
+          onboarding_fee: number
+          onboarding_paid: boolean
+          onboarding_paid_at: string | null
+          stripe_customer_id: string | null
+          stripe_payment_method_id: string | null
+          stripe_subscription_id: string | null
+          subscription_status: Database["public"]["Enums"]["subscription_status"]
+          updated_at: string
+        }
+        Insert: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          client_id: string
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          failure_count?: number
+          iban_last_4?: string | null
+          id?: string
+          last_payment_date?: string | null
+          last_payment_status?: string | null
+          monthly_fee?: number
+          next_billing_date?: string | null
+          onboarding_fee?: number
+          onboarding_paid?: boolean
+          onboarding_paid_at?: string | null
+          stripe_customer_id?: string | null
+          stripe_payment_method_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: Database["public"]["Enums"]["subscription_status"]
+          updated_at?: string
+        }
+        Update: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          client_id?: string
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          failure_count?: number
+          iban_last_4?: string | null
+          id?: string
+          last_payment_date?: string | null
+          last_payment_status?: string | null
+          monthly_fee?: number
+          next_billing_date?: string | null
+          onboarding_fee?: number
+          onboarding_paid?: boolean
+          onboarding_paid_at?: string | null
+          stripe_customer_id?: string | null
+          stripe_payment_method_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: Database["public"]["Enums"]["subscription_status"]
+          updated_at?: string
+        }
+        Relationships: []
       }
       tasks: {
         Row: {
@@ -1122,6 +1307,39 @@ export type Database = {
         }
         Relationships: []
       }
+      webhooks_log: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          event_data: Json
+          event_type: string
+          id: string
+          processed: boolean
+          processed_at: string | null
+          stripe_event_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          event_data: Json
+          event_type: string
+          id?: string
+          processed?: boolean
+          processed_at?: string | null
+          stripe_event_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          event_data?: Json
+          event_type?: string
+          id?: string
+          processed?: boolean
+          processed_at?: string | null
+          stripe_event_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       academy_course_progress: {
@@ -1192,8 +1410,12 @@ export type Database = {
         | "deliverable"
         | "onboarding"
         | "other"
+      mandate_status: "accepted" | "rejected" | "cancelled"
       onboarding_status: "draft" | "submitted"
+      payment_status: "succeeded" | "failed" | "pending" | "cancelled"
+      payment_type: "onboarding" | "monthly_subscription"
       project_status: "planning" | "in_progress" | "completed"
+      subscription_status: "active" | "cancelled" | "past_due" | "incomplete"
       subscription_type: "free" | "basic" | "pro" | "enterprise"
       task_priority: "low" | "medium" | "high"
       task_status: "todo" | "in_progress" | "done"
@@ -1349,8 +1571,12 @@ export const Constants = {
         "onboarding",
         "other",
       ],
+      mandate_status: ["accepted", "rejected", "cancelled"],
       onboarding_status: ["draft", "submitted"],
+      payment_status: ["succeeded", "failed", "pending", "cancelled"],
+      payment_type: ["onboarding", "monthly_subscription"],
       project_status: ["planning", "in_progress", "completed"],
+      subscription_status: ["active", "cancelled", "past_due", "incomplete"],
       subscription_type: ["free", "basic", "pro", "enterprise"],
       task_priority: ["low", "medium", "high"],
       task_status: ["todo", "in_progress", "done"],
