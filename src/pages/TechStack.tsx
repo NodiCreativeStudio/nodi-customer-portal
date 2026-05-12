@@ -24,7 +24,7 @@ export default function TechStack() {
   const { tools, loading } = useClientTechStack(companyId);
 
   return (
-    <div className="text-slate-950 space-y-6">
+    <div className="space-y-6">
       <header>
         <h1 className="text-3xl font-bold tracking-tight">🛠️ Stack Tecnologico</h1>
         <p className="text-muted-foreground mt-1">
