@@ -14,6 +14,203 @@ export type Database = {
   }
   public: {
     Tables: {
+      academy_course_completion: {
+        Row: {
+          certificate_generated_at: string | null
+          certificate_path: string | null
+          client_id: string
+          completed_at: string
+          course_id: string
+          id: string
+        }
+        Insert: {
+          certificate_generated_at?: string | null
+          certificate_path?: string | null
+          client_id: string
+          completed_at?: string
+          course_id: string
+          id?: string
+        }
+        Update: {
+          certificate_generated_at?: string | null
+          certificate_path?: string | null
+          client_id?: string
+          completed_at?: string
+          course_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_course_completion_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_course_progress"
+            referencedColumns: ["course_id"]
+          },
+          {
+            foreignKeyName: "academy_course_completion_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_courses: {
+        Row: {
+          cover_image_path: string | null
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          order_index: number
+          prerequisites: string | null
+          status: Database["public"]["Enums"]["academy_status"]
+          title: string
+          total_duration_minutes: number
+          updated_at: string
+          verticale: Database["public"]["Enums"]["academy_verticale"]
+        }
+        Insert: {
+          cover_image_path?: string | null
+          created_at?: string
+          created_by?: string | null
+          description: string
+          id?: string
+          order_index?: number
+          prerequisites?: string | null
+          status?: Database["public"]["Enums"]["academy_status"]
+          title: string
+          total_duration_minutes?: number
+          updated_at?: string
+          verticale: Database["public"]["Enums"]["academy_verticale"]
+        }
+        Update: {
+          cover_image_path?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          order_index?: number
+          prerequisites?: string | null
+          status?: Database["public"]["Enums"]["academy_status"]
+          title?: string
+          total_duration_minutes?: number
+          updated_at?: string
+          verticale?: Database["public"]["Enums"]["academy_verticale"]
+        }
+        Relationships: []
+      }
+      academy_lesson_access: {
+        Row: {
+          client_id: string
+          completed_at: string | null
+          download_count: number
+          id: string
+          last_accessed_at: string
+          lesson_id: string
+          video_progress_percent: number
+          viewed_at: string
+        }
+        Insert: {
+          client_id: string
+          completed_at?: string | null
+          download_count?: number
+          id?: string
+          last_accessed_at?: string
+          lesson_id: string
+          video_progress_percent?: number
+          viewed_at?: string
+        }
+        Update: {
+          client_id?: string
+          completed_at?: string | null
+          download_count?: number
+          id?: string
+          last_accessed_at?: string
+          lesson_id?: string
+          video_progress_percent?: number
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_lesson_access_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "academy_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_lessons: {
+        Row: {
+          content_type: Database["public"]["Enums"]["academy_content_type"]
+          content_url: string
+          course_id: string
+          created_at: string
+          created_by: string | null
+          description: string
+          duration_minutes: number
+          id: string
+          is_downloadable: boolean
+          lesson_number: number
+          published_at: string | null
+          status: Database["public"]["Enums"]["academy_lesson_status"]
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content_type: Database["public"]["Enums"]["academy_content_type"]
+          content_url: string
+          course_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          duration_minutes?: number
+          id?: string
+          is_downloadable?: boolean
+          lesson_number: number
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["academy_lesson_status"]
+          tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content_type?: Database["public"]["Enums"]["academy_content_type"]
+          content_url?: string
+          course_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          duration_minutes?: number
+          id?: string
+          is_downloadable?: boolean
+          lesson_number?: number
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["academy_lesson_status"]
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_course_progress"
+            referencedColumns: ["course_id"]
+          },
+          {
+            foreignKeyName: "academy_lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "academy_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       activity_log: {
         Row: {
           action: string
@@ -300,6 +497,13 @@ export type Database = {
             foreignKeyName: "credentials_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
+            referencedRelation: "academy_course_progress"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "credentials_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
             referencedRelation: "clients"
             referencedColumns: ["id"]
           },
@@ -377,6 +581,13 @@ export type Database = {
           parent_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "folders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "academy_course_progress"
+            referencedColumns: ["client_id"]
+          },
           {
             foreignKeyName: "folders_client_id_fkey"
             columns: ["client_id"]
@@ -535,6 +746,13 @@ export type Database = {
             foreignKeyName: "profiles_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
+            referencedRelation: "academy_course_progress"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "profiles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
             referencedRelation: "clients"
             referencedColumns: ["id"]
           },
@@ -585,6 +803,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "projects_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "academy_course_progress"
+            referencedColumns: ["client_id"]
+          },
           {
             foreignKeyName: "projects_client_id_fkey"
             columns: ["client_id"]
@@ -701,6 +926,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "tech_stack_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "academy_course_progress"
+            referencedColumns: ["client_id"]
+          },
           {
             foreignKeyName: "tech_stack_client_id_fkey"
             columns: ["client_id"]
@@ -846,6 +1078,13 @@ export type Database = {
             foreignKeyName: "uploads_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
+            referencedRelation: "academy_course_progress"
+            referencedColumns: ["client_id"]
+          },
+          {
+            foreignKeyName: "uploads_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
             referencedRelation: "clients"
             referencedColumns: ["id"]
           },
@@ -885,6 +1124,19 @@ export type Database = {
       }
     }
     Views: {
+      academy_course_progress: {
+        Row: {
+          client_id: string | null
+          completed_lessons: number | null
+          completion_date: string | null
+          course_id: string | null
+          course_title: string | null
+          is_course_completed: boolean | null
+          total_lessons: number | null
+          verticale: Database["public"]["Enums"]["academy_verticale"] | null
+        }
+        Relationships: []
+      }
       tech_stack_costs_summary: {
         Row: {
           client_id: string | null
@@ -911,6 +1163,7 @@ export type Database = {
     }
     Functions: {
       current_user_company: { Args: never; Returns: string }
+      current_user_verticale: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -924,6 +1177,10 @@ export type Database = {
       }
     }
     Enums: {
+      academy_content_type: "pdf" | "video"
+      academy_lesson_status: "draft" | "scheduled" | "published" | "archived"
+      academy_status: "draft" | "published" | "archived"
+      academy_verticale: "retail" | "wellness" | "repair" | "shared"
       app_role: "admin" | "client"
       client_industry: "retail" | "wellness" | "repair"
       client_status: "active" | "inactive"
@@ -1076,6 +1333,10 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      academy_content_type: ["pdf", "video"],
+      academy_lesson_status: ["draft", "scheduled", "published", "archived"],
+      academy_status: ["draft", "published", "archived"],
+      academy_verticale: ["retail", "wellness", "repair", "shared"],
       app_role: ["admin", "client"],
       client_industry: ["retail", "wellness", "repair"],
       client_status: ["active", "inactive"],
