@@ -59,6 +59,10 @@ export default {
           DEFAULT: "hsl(var(--warning))",
           foreground: "hsl(var(--warning-foreground))",
         },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -71,10 +75,12 @@ export default {
         },
       },
       boxShadow: {
+        subtle: "var(--shadow-subtle)",
         card: "var(--shadow-card)",
         elegant: "var(--shadow-elegant)",
         hover: "var(--shadow-hover)",
         glow: "var(--shadow-glow)",
+        modal: "var(--shadow-modal)",
       },
       backdropBlur: {
         xs: "4px",
