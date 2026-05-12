@@ -2,6 +2,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Rocket, FolderKanban, Upload, KeyRound,
   Layers, Contact, Download, Shield, Users, DollarSign, BarChart3, Settings,
+  Package, Link2, Wallet,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -34,6 +35,9 @@ export function AppSidebar() {
     { title: t("nav.clients"), url: "/admin/clients", icon: Users },
     { title: t("nav.revenue"), url: "/admin/revenue", icon: DollarSign },
     { title: t("nav.analytics"), url: "/admin/analytics", icon: BarChart3 },
+    { title: "Catalogo Tool", url: "/admin/tech-stack/catalog", icon: Package },
+    { title: "Assegnazioni Tool", url: "/admin/tech-stack/assignments", icon: Link2 },
+    { title: "Costi Stack", url: "/admin/tech-stack/costs", icon: Wallet },
     { title: t("nav.settings"), url: "/admin/config", icon: Settings },
   ];
 

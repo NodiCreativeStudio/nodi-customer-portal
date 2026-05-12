@@ -26,6 +26,9 @@ import AdminClients from "./pages/admin/AdminClients";
 import AdminRevenue from "./pages/admin/AdminRevenue";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminConfig from "./pages/admin/AdminConfig";
+import AdminTechStackCatalog from "./pages/admin/AdminTechStackCatalog";
+import AdminTechStackAssignments from "./pages/admin/AdminTechStackAssignments";
+import AdminTechStackCosts from "./pages/admin/AdminTechStackCosts";
 import Profile from "./pages/Profile";
 import { ProtectedOnboardingRoute } from "./components/ProtectedOnboardingRoute";
 
@@ -71,6 +74,9 @@ const App = () => (
             <Route path="/admin/revenue" element={<AppLayout><AdminGuard><AdminRevenue /></AdminGuard></AppLayout>} />
             <Route path="/admin/analytics" element={<AppLayout><AdminGuard><AdminAnalytics /></AdminGuard></AppLayout>} />
             <Route path="/admin/config" element={<AppLayout><AdminGuard><AdminConfig /></AdminGuard></AppLayout>} />
+            <Route path="/admin/tech-stack/catalog" element={<AppLayout><AdminGuard><AdminTechStackCatalog /></AdminGuard></AppLayout>} />
+            <Route path="/admin/tech-stack/assignments" element={<AppLayout><AdminGuard><AdminTechStackAssignments /></AdminGuard></AppLayout>} />
+            <Route path="/admin/tech-stack/costs" element={<AppLayout><AdminGuard><AdminTechStackCosts /></AdminGuard></AppLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

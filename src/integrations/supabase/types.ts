@@ -146,6 +146,67 @@ export type Database = {
         }
         Relationships: []
       }
+      client_tech_stack: {
+        Row: {
+          activated_at: string
+          client_id: string
+          created_at: string
+          deactivated_at: string | null
+          id: string
+          notes: string | null
+          status: Database["public"]["Enums"]["client_tech_status"]
+          subscription_id: string
+          tech_stack_id: string
+          updated_at: string
+        }
+        Insert: {
+          activated_at?: string
+          client_id: string
+          created_at?: string
+          deactivated_at?: string | null
+          id?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["client_tech_status"]
+          subscription_id: string
+          tech_stack_id: string
+          updated_at?: string
+        }
+        Update: {
+          activated_at?: string
+          client_id?: string
+          created_at?: string
+          deactivated_at?: string | null
+          id?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["client_tech_status"]
+          subscription_id?: string
+          tech_stack_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_tech_stack_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_subscriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_tech_stack_tech_stack_id_fkey"
+            columns: ["tech_stack_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_tech_stack_tech_stack_id_fkey"
+            columns: ["tech_stack_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_tool_breakdown"
+            referencedColumns: ["tech_stack_id"]
+          },
+        ]
+      }
       clients: {
         Row: {
           address: string | null
@@ -242,6 +303,13 @@ export type Database = {
             referencedRelation: "clients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "credentials_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_costs_summary"
+            referencedColumns: ["client_id"]
+          },
         ]
       }
       documents: {
@@ -315,6 +383,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clients"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "folders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_costs_summary"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "folders_parent_id_fkey"
@@ -463,6 +538,13 @@ export type Database = {
             referencedRelation: "clients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "profiles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_costs_summary"
+            referencedColumns: ["client_id"]
+          },
         ]
       }
       projects: {
@@ -509,6 +591,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "clients"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_costs_summary"
+            referencedColumns: ["client_id"]
           },
         ]
       }
@@ -619,6 +708,100 @@ export type Database = {
             referencedRelation: "clients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "tech_stack_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_costs_summary"
+            referencedColumns: ["client_id"]
+          },
+        ]
+      }
+      tech_stack_catalog: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description_do: string
+          description_what: string
+          description_why: string
+          icon_url: string | null
+          id: string
+          name: string
+          updated_at: string
+          website_url: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description_do: string
+          description_what: string
+          description_why: string
+          icon_url?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          website_url: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description_do?: string
+          description_what?: string
+          description_why?: string
+          icon_url?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          website_url?: string
+        }
+        Relationships: []
+      }
+      tech_stack_subscriptions: {
+        Row: {
+          cost_monthly: number | null
+          cost_yearly: number | null
+          created_at: string
+          currency: string
+          id: string
+          subscription_type: Database["public"]["Enums"]["subscription_type"]
+          tech_stack_id: string
+          updated_at: string
+        }
+        Insert: {
+          cost_monthly?: number | null
+          cost_yearly?: number | null
+          created_at?: string
+          currency?: string
+          id?: string
+          subscription_type: Database["public"]["Enums"]["subscription_type"]
+          tech_stack_id: string
+          updated_at?: string
+        }
+        Update: {
+          cost_monthly?: number | null
+          cost_yearly?: number | null
+          created_at?: string
+          currency?: string
+          id?: string
+          subscription_type?: Database["public"]["Enums"]["subscription_type"]
+          tech_stack_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tech_stack_subscriptions_tech_stack_id_fkey"
+            columns: ["tech_stack_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tech_stack_subscriptions_tech_stack_id_fkey"
+            columns: ["tech_stack_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_tool_breakdown"
+            referencedColumns: ["tech_stack_id"]
+          },
         ]
       }
       uploads: {
@@ -667,6 +850,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "uploads_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack_costs_summary"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "uploads_folder_id_fkey"
             columns: ["folder_id"]
             isOneToOne: false
@@ -695,7 +885,29 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      tech_stack_costs_summary: {
+        Row: {
+          client_id: string | null
+          client_name: string | null
+          last_updated: string | null
+          tools_count: number | null
+          total_cost_monthly: number | null
+          total_cost_yearly: number | null
+        }
+        Relationships: []
+      }
+      tech_stack_tool_breakdown: {
+        Row: {
+          active_clients_count: number | null
+          clients_using_count: number | null
+          tech_stack_id: string | null
+          tool_name: string | null
+          tool_website: string | null
+          total_cost_monthly: number | null
+          total_cost_yearly: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       current_user_company: { Args: never; Returns: string }
@@ -715,6 +927,7 @@ export type Database = {
       app_role: "admin" | "client"
       client_industry: "retail" | "wellness" | "repair"
       client_status: "active" | "inactive"
+      client_tech_status: "active" | "inactive"
       document_category:
         | "report"
         | "invoice"
@@ -724,6 +937,7 @@ export type Database = {
         | "other"
       onboarding_status: "draft" | "submitted"
       project_status: "planning" | "in_progress" | "completed"
+      subscription_type: "free" | "basic" | "pro" | "enterprise"
       task_priority: "low" | "medium" | "high"
       task_status: "todo" | "in_progress" | "done"
       tech_category:
@@ -865,6 +1079,7 @@ export const Constants = {
       app_role: ["admin", "client"],
       client_industry: ["retail", "wellness", "repair"],
       client_status: ["active", "inactive"],
+      client_tech_status: ["active", "inactive"],
       document_category: [
         "report",
         "invoice",
@@ -875,6 +1090,7 @@ export const Constants = {
       ],
       onboarding_status: ["draft", "submitted"],
       project_status: ["planning", "in_progress", "completed"],
+      subscription_type: ["free", "basic", "pro", "enterprise"],
       task_priority: ["low", "medium", "high"],
       task_status: ["todo", "in_progress", "done"],
       tech_category: [
