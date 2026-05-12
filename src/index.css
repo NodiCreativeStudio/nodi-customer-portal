@@ -84,12 +84,12 @@
     /* Sidebar — light, Salezy-style */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 220 9% 46%;
-    --sidebar-primary: 229 67% 54%;
+    --sidebar-primary: 220 9% 46%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 226 100% 97%;
-    --sidebar-accent-foreground: 229 67% 54%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 220 9% 46%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 229 67% 54%;
+    --sidebar-ring: 220 9% 46%;
   }
 
   .dark {
