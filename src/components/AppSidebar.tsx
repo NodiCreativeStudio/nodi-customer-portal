@@ -2,7 +2,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Rocket, FolderKanban, Upload, KeyRound,
   Layers, Contact, Download, Shield, Users, DollarSign, BarChart3, Settings,
-  Package, Link2, Wallet, GraduationCap, BookOpen, CalendarClock, LineChart,
+  Package, Link2, Wallet, GraduationCap, BookOpen, CalendarClock, LineChart, CreditCard,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -29,6 +29,7 @@ export function AppSidebar() {
     { title: t("nav.contacts"), url: "/contacts", icon: Contact },
     { title: t("nav.downloads"), url: "/downloads", icon: Download },
     { title: "Academy", url: "/academy", icon: GraduationCap },
+    { title: "Pagamenti", url: "/pagamenti", icon: CreditCard },
   ];
 
   const adminItems = [
@@ -43,6 +44,7 @@ export function AppSidebar() {
     { title: "Academy · Lezioni", url: "/admin/academy/lessons", icon: BookOpen },
     { title: "Academy · Scheduling", url: "/admin/academy/scheduling", icon: CalendarClock },
     { title: "Academy · Analytics", url: "/admin/academy/analytics", icon: LineChart },
+    { title: "Pagamenti", url: "/admin/pagamenti", icon: CreditCard },
     { title: t("nav.settings"), url: "/admin/config", icon: Settings },
   ];
 

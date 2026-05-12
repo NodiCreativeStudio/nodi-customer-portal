@@ -37,6 +37,8 @@ import AdminAcademyLessons from "./pages/admin/AdminAcademyLessons";
 import AdminAcademyScheduling from "./pages/admin/AdminAcademyScheduling";
 import AdminAcademyAnalytics from "./pages/admin/AdminAcademyAnalytics";
 import Profile from "./pages/Profile";
+import Pagamenti from "./pages/Pagamenti";
+import AdminPagamenti from "./pages/admin/AdminPagamenti";
 import { ProtectedOnboardingRoute } from "./components/ProtectedOnboardingRoute";
 
 const queryClient = new QueryClient();
@@ -78,6 +80,8 @@ const App = () => (
             <Route path="/academy/course/:id" element={<Guarded><CourseDetail /></Guarded>} />
             <Route path="/academy/lesson/:id" element={<Guarded><LessonView /></Guarded>} />
             <Route path="/profile" element={<Guarded><Profile /></Guarded>} />
+            <Route path="/pagamenti" element={<Guarded><Pagamenti /></Guarded>} />
+            <Route path="/admin/pagamenti" element={<AppLayout><AdminGuard><AdminPagamenti /></AdminGuard></AppLayout>} />
             <Route path="/admin" element={<AppLayout><AdminGuard><AdminDashboard /></AdminGuard></AppLayout>} />
             <Route path="/admin/clients" element={<AppLayout><AdminGuard><AdminClients /></AdminGuard></AppLayout>} />
             <Route path="/admin/clients/:id" element={<AppLayout><AdminGuard><AdminClientDetail /></AdminGuard></AppLayout>} />
