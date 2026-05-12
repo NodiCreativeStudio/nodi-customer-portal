@@ -165,10 +165,10 @@
     background-image:
       repeating-linear-gradient(
         90deg,
-        hsl(229 30% 92% / 0.0) 0px,
-        hsl(229 30% 92% / 0.0) 39px,
-        hsl(229 40% 80% / 0.18) 39px,
-        hsl(229 40% 80% / 0.18) 40px
+        hsl(220 14% 92% / 0) 0px,
+        hsl(220 14% 92% / 0) 39px,
+        hsl(220 9% 70% / 0.18) 39px,
+        hsl(220 9% 70% / 0.18) 40px
       );
     background-attachment: fixed;
   }
@@ -176,10 +176,10 @@
     background-image:
       repeating-linear-gradient(
         90deg,
-        hsl(229 30% 30% / 0) 0px,
-        hsl(229 30% 30% / 0) 39px,
-        hsl(229 40% 50% / 0.06) 39px,
-        hsl(229 40% 50% / 0.06) 40px
+        hsl(220 10% 30% / 0) 0px,
+        hsl(220 10% 30% / 0) 39px,
+        hsl(220 9% 50% / 0.06) 39px,
+        hsl(220 9% 50% / 0.06) 40px
       );
   }
 
