@@ -22,10 +22,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* Brand — Salezy Blue #3B5BDB */
-    --primary: 229 67% 54%;
+    /* Brand — Dark Gray #6B7280 */
+    --primary: 220 9% 46%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 229 100% 65%;       /* #4B63FF accent */
+    --primary-glow: 220 9% 60%;         /* lighter gray accent */
 
     /* Secondary surface */
     --secondary: 220 14% 96%;           /* #F3F4F6 */
