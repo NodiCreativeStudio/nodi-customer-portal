@@ -3,8 +3,7 @@ import { ReactNode } from "react";
 export default function AuthShell({ children }: { children: ReactNode }) {
   return (
     <div
-      className="flex min-h-screen items-center justify-center p-4"
-      style={{ backgroundColor: "#f0f4ff" }}
+      className="flex min-h-screen items-center justify-center bg-background p-4"
     >
       <div className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center gap-2">
