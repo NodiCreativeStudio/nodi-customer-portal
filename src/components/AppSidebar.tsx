@@ -2,7 +2,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Rocket, FolderKanban, Upload, KeyRound,
   Layers, Contact, Download, Shield, Users, DollarSign, BarChart3, Settings,
-  Package, Link2, Wallet,
+  Package, Link2, Wallet, GraduationCap, BookOpen, CalendarClock, LineChart,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -28,6 +28,7 @@ export function AppSidebar() {
     { title: t("nav.stack"), url: "/stack", icon: Layers },
     { title: t("nav.contacts"), url: "/contacts", icon: Contact },
     { title: t("nav.downloads"), url: "/downloads", icon: Download },
+    { title: "Academy", url: "/academy", icon: GraduationCap },
   ];
 
   const adminItems = [
@@ -38,6 +39,10 @@ export function AppSidebar() {
     { title: "Catalogo Tool", url: "/admin/tech-stack/catalog", icon: Package },
     { title: "Assegnazioni Tool", url: "/admin/tech-stack/assignments", icon: Link2 },
     { title: "Costi Stack", url: "/admin/tech-stack/costs", icon: Wallet },
+    { title: "Academy · Corsi", url: "/admin/academy/courses", icon: GraduationCap },
+    { title: "Academy · Lezioni", url: "/admin/academy/lessons", icon: BookOpen },
+    { title: "Academy · Scheduling", url: "/admin/academy/scheduling", icon: CalendarClock },
+    { title: "Academy · Analytics", url: "/admin/academy/analytics", icon: LineChart },
     { title: t("nav.settings"), url: "/admin/config", icon: Settings },
   ];
 

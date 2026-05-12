@@ -29,6 +29,13 @@ import AdminConfig from "./pages/admin/AdminConfig";
 import AdminTechStackCatalog from "./pages/admin/AdminTechStackCatalog";
 import AdminTechStackAssignments from "./pages/admin/AdminTechStackAssignments";
 import AdminTechStackCosts from "./pages/admin/AdminTechStackCosts";
+import Academy from "./pages/Academy";
+import CourseDetail from "./pages/academy/CourseDetail";
+import LessonView from "./pages/academy/LessonView";
+import AdminAcademyCourses from "./pages/admin/AdminAcademyCourses";
+import AdminAcademyLessons from "./pages/admin/AdminAcademyLessons";
+import AdminAcademyScheduling from "./pages/admin/AdminAcademyScheduling";
+import AdminAcademyAnalytics from "./pages/admin/AdminAcademyAnalytics";
 import Profile from "./pages/Profile";
 import { ProtectedOnboardingRoute } from "./components/ProtectedOnboardingRoute";
 
@@ -67,6 +74,9 @@ const App = () => (
             <Route path="/stack" element={<Guarded><TechStack /></Guarded>} />
             <Route path="/contacts" element={<Guarded><Contacts /></Guarded>} />
             <Route path="/downloads" element={<Guarded><Downloads /></Guarded>} />
+            <Route path="/academy" element={<Guarded><Academy /></Guarded>} />
+            <Route path="/academy/course/:id" element={<Guarded><CourseDetail /></Guarded>} />
+            <Route path="/academy/lesson/:id" element={<Guarded><LessonView /></Guarded>} />
             <Route path="/profile" element={<Guarded><Profile /></Guarded>} />
             <Route path="/admin" element={<AppLayout><AdminGuard><AdminDashboard /></AdminGuard></AppLayout>} />
             <Route path="/admin/clients" element={<AppLayout><AdminGuard><AdminClients /></AdminGuard></AppLayout>} />
@@ -77,6 +87,10 @@ const App = () => (
             <Route path="/admin/tech-stack/catalog" element={<AppLayout><AdminGuard><AdminTechStackCatalog /></AdminGuard></AppLayout>} />
             <Route path="/admin/tech-stack/assignments" element={<AppLayout><AdminGuard><AdminTechStackAssignments /></AdminGuard></AppLayout>} />
             <Route path="/admin/tech-stack/costs" element={<AppLayout><AdminGuard><AdminTechStackCosts /></AdminGuard></AppLayout>} />
+            <Route path="/admin/academy/courses" element={<AppLayout><AdminGuard><AdminAcademyCourses /></AdminGuard></AppLayout>} />
+            <Route path="/admin/academy/lessons" element={<AppLayout><AdminGuard><AdminAcademyLessons /></AdminGuard></AppLayout>} />
+            <Route path="/admin/academy/scheduling" element={<AppLayout><AdminGuard><AdminAcademyScheduling /></AdminGuard></AppLayout>} />
+            <Route path="/admin/academy/analytics" element={<AppLayout><AdminGuard><AdminAcademyAnalytics /></AdminGuard></AppLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
