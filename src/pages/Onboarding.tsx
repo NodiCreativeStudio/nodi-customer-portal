@@ -118,7 +118,7 @@ export default function Onboarding() {
         pagina_1_dati: dati[1] || {},
         pagina_2_dati: dati[2] || {},
         pagina_3_dati: dati[3] || {},
-        status: "completed" as const,
+        status: "submitted" as const,
         submitted_at: new Date().toISOString(),
         completato_il: new Date().toISOString(),
         // Compat with old schema
